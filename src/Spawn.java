@@ -31,7 +31,8 @@ public class Spawn {
                 }
             }
             row++;
-        } // 1300 delay speed = 3; (1.5 factor)
+        } // 1350 delay speed = 3; (1.5 factor) with no opengl acceleration
+          // 1350 delay speed = 3 with opengl acceleration
     }
 
     public void render(Graphics2D g2d){

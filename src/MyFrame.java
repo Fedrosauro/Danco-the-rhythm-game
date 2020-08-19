@@ -1,4 +1,5 @@
 import javax.swing.*;
+import java.util.Scanner;
 
 public class MyFrame extends JFrame {
 
@@ -25,6 +26,14 @@ public class MyFrame extends JFrame {
     }
 
     public static void main(String args[]) {
+        System.setProperty("sun.java2d.opengl", "True");
+
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
         MyFrame myFrame = new MyFrame();
     }
 }

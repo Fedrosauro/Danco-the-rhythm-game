@@ -51,14 +51,13 @@ public class HUD {
         g2d.drawString("Total score : " + score, 5, 20);
 
         g2d.setFont(new Font("Arial", Font.PLAIN, 14));
-        g2d.drawString(500 + "", 20, 70);
-        g2d.drawString(scoreCounts[3] + "", 25, 90);
-        g2d.drawString(250 + "", 50, 70);
-        g2d.drawString(scoreCounts[2] + "", 55, 90);
-        g2d.drawString(100 + "", 80, 70);
-        g2d.drawString(scoreCounts[1] + "", 85, 90);
-        g2d.drawString("  X  ", 110, 70);
-        g2d.drawString(scoreCounts[0] + "", 115, 90);
+
+        int xPos = 20;
+        for(int i = 3; i >= 0; i--){
+            g2d.drawString((i == 3 ? 500 : i == 2 ? 250 : i == 1 ? 100 : " X ") + "", xPos, 70);
+            g2d.drawString(scoreCounts[i] + "", xPos + 5, 90);
+            xPos += 30;
+        }
 
         g2d.setFont(new Font("Arial", Font.PLAIN, 18));
     }

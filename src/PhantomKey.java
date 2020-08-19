@@ -55,7 +55,7 @@ public class PhantomKey extends GamePhantomObject{
     public void tick() {
         y += velY;
         updateLine();
-        if (getLine().getY1() > RCoordinateY) checkScoreHIT();
+        if (getLine().getY1() >= RCoordinateY) checkScoreHIT();
     }
 
     public void checkScoreHIT(){
@@ -79,10 +79,6 @@ public class PhantomKey extends GamePhantomObject{
                         try {
                             clickSound.createAudio();
                             clickSound.playTrack();
-                        } catch (LineUnavailableException e) {
-                            e.printStackTrace();
-                        } catch (IOException e) {
-                            e.printStackTrace();
                         } catch (Exception e) {
                             e.printStackTrace();
                         }

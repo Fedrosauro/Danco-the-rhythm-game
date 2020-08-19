@@ -14,6 +14,8 @@ public class Game extends Canvas implements Runnable {
     private boolean running = false;
     private int frames;
 
+    private BufferStrategy bs;
+
     public Handler handler;
 
     public static BufferedImage spriteSheet;
@@ -36,6 +38,9 @@ public class Game extends Canvas implements Runnable {
     public static int REDLINESY;
 
     public static StopWatch stopWatch;
+    public static StopWatch stopWatch2;
+    private boolean started;
+
     private MusicPlayer song;
 
     private int checkFPS;
@@ -48,6 +53,8 @@ public class Game extends Canvas implements Runnable {
         handler = new Handler();
 
         stopWatch = new StopWatch();
+        stopWatch2 = new StopWatch();
+        started = false;
 
         LettersTiming = new ArrayList[26];
 
@@ -77,19 +84,13 @@ public class Game extends Canvas implements Runnable {
         showHitScores = new ShowHitScores(handler);
 
         song = new MusicPlayer("res/completedsong.wav");
-        try {
-            song.createAudio();
-            song.playTrack();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     public synchronized void start() {
         thread = new Thread(this);
         thread.start();
         running = true;
-        stopWatch.start();
+        stopWatch2.start();
     }
 
     public synchronized void stop() {
@@ -137,6 +138,17 @@ public class Game extends Canvas implements Runnable {
     }
 
     private void tick(){
+        if(stopWatch2.getTime() >= 2000 && !started) {
+            stopWatch.start();
+            try {
+                song.createAudio();
+                song.playTrack();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            started = true;
+            stopWatch2.stop();
+        }
         handler.tick();
         showHitScores.tick();
         hud.tick();
@@ -146,11 +158,12 @@ public class Game extends Canvas implements Runnable {
     private void render(){
         BufferStrategy bs = this.getBufferStrategy();
         if(bs == null) {
-            this.createBufferStrategy(3);
+            this.createBufferStrategy(2);
             return;
         }
 
         Graphics g = bs.getDrawGraphics();
+
         Graphics2D g2d = (Graphics2D) g;
 
         RenderingHints rh =
