@@ -20,6 +20,15 @@ public class MyFrame extends JFrame {
         /*OverlayPanel overlayPanel = new OverlayPanel(this);
         setContentPane(overlayPanel);*/
 
+        /*int[] results = new int[4];
+        results[0] = 1;
+        results[1] = 5;
+        results[2] = 10;
+        results[3] = 144;
+
+        ResultPane resultPane = new ResultPane(this, "Granat - Drop", 75500, results);
+        setContentPane(resultPane);*/
+
         setTitle("Game Test");
         setResizable(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -32,14 +41,13 @@ public class MyFrame extends JFrame {
     }
 
     public static void main(String args[]) {
-        /*System.setProperty("sun.java2d.opengl", "True");
+        System.setProperty("sun.java2d.opengl", "True");
 
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception e){
             e.printStackTrace();
         }
-*/
         MyFrame myFrame = new MyFrame();
     }
 }

@@ -11,7 +11,11 @@ import java.util.ArrayList;
 
 import org.apache.commons.lang3.time.StopWatch;
 
+import javax.swing.*;
+
 public class Game extends Canvas implements Runnable {
+
+    private JFrame jFrame;
 
     private Thread thread;
     private boolean running = false;
@@ -48,10 +52,13 @@ public class Game extends Canvas implements Runnable {
 
     private int checkFPS;
 
-    public Game(){
-        BufferedImageLoader loader = new BufferedImageLoader();
+    private String selectedSong;
 
+    public Game(JFrame jFrame, String selectedSong){
+        BufferedImageLoader loader = new BufferedImageLoader();
         spriteSheet = loader.loadImage("/spriteSheet.png");
+
+        this.jFrame = jFrame;
 
         handler = new Handler();
 
@@ -61,19 +68,16 @@ public class Game extends Canvas implements Runnable {
 
         LettersTiming = new ArrayList[26];
 
+        this.selectedSong = selectedSong;
+
         REDLINESY = 210;
 
         for(int i = 0; i < 26; i++){
             LettersTiming[i] = new ArrayList<>();
         }
 
-        /*LettersTiming[0].add(new gameplay.Coordinate(10000, 6000));
-        LettersTiming[1].add(new gameplay.Coordinate(11000, 6000));
-        LettersTiming[2].add(new gameplay.Coordinate(12000, 6000));
-        LettersTiming[3].add(new gameplay.Coordinate(13000, 6000));*/
-
         try { //gets notes from a file.txt
-            getNotes("res/notes/notes_Granat - Drop.txt");
+            getNotes("res/notes/notes_" + selectedSong + ".txt");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -86,7 +90,7 @@ public class Game extends Canvas implements Runnable {
 
         showHitScores = new ShowHitScores(handler);
 
-        song = new MusicPlayer("res/songs/Granat - Drop.wav");
+        song = new MusicPlayer("res/songs/" + selectedSong + ".wav");
     }
 
     public synchronized void start() {
@@ -152,6 +156,14 @@ public class Game extends Canvas implements Runnable {
             started = true;
             stopWatch2.stop();
         }
+        if(stopWatch.getTime() >= 10000 && song.clip != null && !song.clip.isActive()){ //the game ends
+            stopWatch.stop();
+            ResultPane resultPane = new ResultPane(jFrame, selectedSong, hud.getScore(), hud.getScoreCounts());
+            jFrame.setContentPane(resultPane);
+            jFrame.revalidate();
+            stop();
+        }
+
         handler.tick();
         showHitScores.tick();
         hud.tick();
@@ -229,9 +241,7 @@ public class Game extends Canvas implements Runnable {
                 } else word += (char) data;
             }
             data = input.read();
-        }
-
-        input.close();
+        } input.close();
     }
 
     public void physicalLettersCreation(){

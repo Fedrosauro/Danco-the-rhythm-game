@@ -10,7 +10,7 @@ public class HUD {
 
     private static int DELAY = 200;
 
-    public int[] scoreCounts;
+    private int[] scoreCounts;
 
     public HUD(Handler handler){
         this.handler = handler;
@@ -64,4 +64,11 @@ public class HUD {
         g2d.setFont(new Font("Arial", Font.PLAIN, 18));
     }
 
+    public int getScore() {
+        return score;
+    }
+
+    public int[] getScoreCounts() {
+        return scoreCounts;
+    }
 }

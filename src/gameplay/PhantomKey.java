@@ -41,7 +41,7 @@ public class PhantomKey extends GamePhantomObject{
             }
         }
 
-        clickSound = new MusicPlayer("res/clickSoundReal.wav");
+        clickSound = new MusicPlayer("res/songs/clickSoundReal.wav");
 
         rectHeight = 48;
         heightR = 10;

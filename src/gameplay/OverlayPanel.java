@@ -12,8 +12,11 @@ public class OverlayPanel extends JPanel {
 
     public static KeyInput keyInput;
 
-    public OverlayPanel(JFrame jFrame){
+    private String selectedSong;
+
+    public OverlayPanel(JFrame jFrame, String selectedSong){
         this.jFrame = jFrame;
+        this.selectedSong = selectedSong;
         setPreferredSize(new Dimension(MyFrame.WIDTH, MyFrame.HEIGHT));
     }
 
@@ -22,7 +25,7 @@ public class OverlayPanel extends JPanel {
     }
 
     public void setup(){
-        game = new Game();
+        game = new Game(jFrame, selectedSong);
 
         keyInput = new KeyInput(this);
         Stream.iterate(0, i -> i + 1).limit(65).forEach(i -> keyInput.addAction("" + (char)(i + 65)));

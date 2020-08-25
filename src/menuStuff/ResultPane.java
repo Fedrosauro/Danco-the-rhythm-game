@@ -1,24 +1,31 @@
 package menuStuff;
 
+import gameplay.Game;
 import gameplay.OverlayPanel;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.Rectangle2D;
-import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.stream.IntStream;
 
-public class SubSongSelectionP extends JPanel implements MouseListener, MouseMotionListener, ActionListener {
+public class ResultPane extends JPanel implements ActionListener, MouseListener, MouseMotionListener {
 
     private JFrame jFrame;
-    private SongSelectionP songSelectionP;
-
-    private Font buttonsFont;
+    private int score;
+    private int[] scoreCounts;
+    private double acc;
+    private char vote;
+    private String songName;
 
     private final int DELAY = 10;
     private Timer timer;
 
-    private Stroke defaultStroke;
+    public static Stroke defaultStroke;
+
+    private Font buttonsFont;
+    private Font textFont;
 
     private Rectangle2D rect1; //go back
     private int x1, y1;
@@ -33,9 +40,11 @@ public class SubSongSelectionP extends JPanel implements MouseListener, MouseMot
     private int x3;
     private boolean change3;
 
-    public SubSongSelectionP(SongSelectionP songSelectionP, JFrame jFrame){
+    public ResultPane(JFrame jFrame, String songName, int score, int[] scoreCounts){
         this.jFrame = jFrame;
-        this.songSelectionP = songSelectionP;
+        this.score = score;
+        this.scoreCounts = scoreCounts;
+        this.songName = songName;
         setup();
         initTimer();
     }
@@ -44,11 +53,14 @@ public class SubSongSelectionP extends JPanel implements MouseListener, MouseMot
         addMouseListener(this);
         addMouseMotionListener(this);
 
+        setPreferredSize(new Dimension(MyFrame.WIDTH, MyFrame.HEIGHT));
+        //setBounds(0, 0, MyFrame.WIDTH, MyFrame.HEIGHT); //for the real game
+
         setBackground(Color.black);
         setOpaque(true);
-        setBounds(0, 0, MyFrame.WIDTH,  MyFrame.HEIGHT);
 
-        buttonsFont = new Font("Arial", Font.PLAIN, 20);
+        buttonsFont = new Font("Arial", Font.PLAIN, 25);
+        textFont = new Font("Arial", Font.PLAIN, 30);
 
         width1 = 200;
         height1 = 50;
@@ -65,6 +77,12 @@ public class SubSongSelectionP extends JPanel implements MouseListener, MouseMot
         change1 = false;
         change2 = false;
         change3 = false;
+
+        acc = (((scoreCounts[3] * 500) + (scoreCounts[2] * 250) + (scoreCounts[1] * 100)) /
+                (IntStream.of(3, 2, 1, 0).map(i -> scoreCounts[i]).sum())) * 0.2;
+
+        vote = acc == 100 ? 'P' : acc < 100 && acc >= 97 ? 'A' : acc < 97 && acc >= 94 ? 'B'
+                : acc < 94 && acc >= 90 ? 'C' : acc < 90 && acc >= 50 ? 'D' : 'F';
     }
 
     public void initTimer(){
@@ -97,55 +115,71 @@ public class SubSongSelectionP extends JPanel implements MouseListener, MouseMot
 
         g2d.setRenderingHints(rh);
 
-        drawButtons(g2d);
+        g2d.setFont(textFont);
 
         g2d.setColor(Color.white);
 
-        g2d.drawString("Song list :", (MyFrame.WIDTH - SongSelectionP.WIDTH) / 2, (MyFrame.HEIGHT - SongSelectionP.HEIGHT) / 2 - 75);
+        g2d.drawString("Song : " + songName, x1, 60);
+
+        g2d.drawString("Your score : " + score, x1, 100);
+        int xPos = x1;
+        for(int i = 3; i >= 0; i--){
+            g2d.drawString((i == 3 ? 500 : i == 2 ? 250 : i == 1 ? 100 : "X") + "", xPos, 150);
+            g2d.drawString(scoreCounts[i] + "", xPos, 200);
+            xPos += 120;
+        }
+
+        g2d.drawString("Accuracy : "
+                + new BigDecimal(String.valueOf(acc)).setScale(2, BigDecimal.ROUND_FLOOR)
+                + "%", x1, 240);
+
+        g2d.drawString("Vote : " + vote, x1, 280);
+
+        drawButtons(g2d);
 
         g2d.setStroke(defaultStroke);
     }
 
     public void drawButtons(Graphics2D g2d){
         g2d.setFont(buttonsFont);
-        int button1W = g2d.getFontMetrics().stringWidth("GO BACK");
-        int button2W = g2d.getFontMetrics().stringWidth("PLAY SONG");
-        int button3W = g2d.getFontMetrics().stringWidth("VIEW SCORES");
+        int button1W = g2d.getFontMetrics().stringWidth("SAVE SCORE");
+        int button2W = g2d.getFontMetrics().stringWidth("RETRY");
+        int button3W = g2d.getFontMetrics().stringWidth("GO BACK");
 
         if(change1){
             g2d.setColor(Color.white);
             g2d.fillRect(x1, y1, width1, height1);
             g2d.setColor(Color.black);
-            g2d.drawString("GO BACK",x1 + (width1 - button1W)/2, y1 + height1/2 + 8);
+            g2d.drawString("SAVE SCORE",x1 + (width1 - button1W)/2, y1 + height1/2 + 8);
         } else{
             g2d.setColor(Color.white);
             g2d.drawRect(x1, y1, width1, height1);
             g2d.setColor(Color.white);
-            g2d.drawString("GO BACK",x1 + (width1 - button1W)/2, y1 + height1/2 + 8);
+            g2d.drawString("SAVE SCORE",x1 + (width1 - button1W)/2, y1 + height1/2 + 8);
         }
 
         if(change2){
             g2d.setColor(Color.white);
             g2d.fillRect(x2, y1, width1, height1);
             g2d.setColor(Color.black);
-            g2d.drawString("PLAY SONG",x2 + (width1 - button2W)/2, y1 + height1/2 + 8);
+            g2d.drawString("RETRY",x2 + (width1 - button2W)/2, y1 + height1/2 + 8);
         } else{
             g2d.setColor(Color.white);
             g2d.drawRect(x2, y1, width1, height1);
             g2d.setColor(Color.white);
-            g2d.drawString("PLAY SONG",x2 + (width1 - button2W)/2, y1 + height1/2 + 8);
+            g2d.drawString("RETRY",x2 + (width1 - button2W)/2, y1 + height1/2 + 8);
         }
 
         if(change3){
             g2d.setColor(Color.white);
             g2d.fillRect(x3, y1, width1, height1);
             g2d.setColor(Color.black);
-            g2d.drawString("VIEW SCORES",x3 + (width1 - button3W)/2, y1 + height1/2 + 8);
+            g2d.drawString("GO BACK",x3 + (width1 - button3W)/2, y1 + height1/2 + 8);
         } else{
             g2d.setColor(Color.white);
             g2d.drawRect(x3, y1, width1, height1);
             g2d.setColor(Color.white);
-            g2d.drawString("VIEW SCORES",x3 + (width1 - button3W)/2, y1 + height1/2 + 8);
+            g2d.drawString("GO BACK",x3 + (width1 - button3W)/2, y1 + height1/2 + 8);
         }
     }
 
@@ -154,30 +188,22 @@ public class SubSongSelectionP extends JPanel implements MouseListener, MouseMot
         int x = e.getX();
         int y = e.getY();
 
-        if (rect1.contains(x, y)) {
-            MainPage mainPage = new MainPage(jFrame);
-            timer.stop();
-            jFrame.setContentPane(mainPage);
-            jFrame.revalidate();
+        if(rect1.contains(x, y)){ //ACCEPT
+
         }
 
-        if(rect2.contains(x, y)){
+        if(rect2.contains(x, y)){ //RETRY / RESTART
             timer.stop();
-            OverlayPanel overlayPanel = new OverlayPanel(jFrame, (String)songSelectionP.getjList().getSelectedValue());
+            OverlayPanel overlayPanel = new OverlayPanel(jFrame, songName);
             jFrame.setContentPane(overlayPanel);
             overlayPanel.doSetup();
             jFrame.revalidate();
         }
 
-        if(rect3.contains(x, y)){
-            ScoreGlass scoreGlass = null;
-            try {
-                scoreGlass = new ScoreGlass(jFrame, (String)songSelectionP.getjList().getSelectedValue());
-            } catch (IOException ioException) {
-                ioException.printStackTrace();
-            }
+        if(rect3.contains(x, y)){ //BACK TO SONG SELECTION = REFUSE
+            SelectGlass selectGlass = new SelectGlass(jFrame);
             timer.stop();
-            jFrame.setContentPane(scoreGlass);
+            jFrame.setContentPane(selectGlass);
             jFrame.revalidate();
         }
     }
@@ -207,5 +233,4 @@ public class SubSongSelectionP extends JPanel implements MouseListener, MouseMot
     @Override public void mouseExited(MouseEvent e) { }
     @Override public void mouseDragged(MouseEvent e) { }
     ////////////////////////////////////////////////////
-
 }
