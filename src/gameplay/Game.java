@@ -104,7 +104,6 @@ public class Game extends Canvas implements Runnable {
         try{
             thread.join();
             running = false;
-            stopWatch.stop();
         } catch(Exception e){
             e.printStackTrace();
         }

@@ -24,6 +24,10 @@ public class OverlayPanel extends JPanel {
         setup();
     }
 
+    public void startGame(){
+        game.start();
+    }
+
     public void setup(){
         game = new Game(jFrame, selectedSong);
 
@@ -32,7 +36,5 @@ public class OverlayPanel extends JPanel {
 
         setLayout(new BorderLayout());
         add(game);
-
-        game.start();
     }
 }

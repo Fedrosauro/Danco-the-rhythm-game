@@ -7,6 +7,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.Rectangle2D;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.math.BigDecimal;
 import java.util.stream.IntStream;
 
@@ -39,6 +43,8 @@ public class ResultPane extends JPanel implements ActionListener, MouseListener,
     private Rectangle2D rect3; //view scores of that song
     private int x3;
     private boolean change3;
+
+    private OutputStreamWriter output;
 
     public ResultPane(JFrame jFrame, String songName, int score, int[] scoreCounts){
         this.jFrame = jFrame;
@@ -189,7 +195,15 @@ public class ResultPane extends JPanel implements ActionListener, MouseListener,
         int y = e.getY();
 
         if(rect1.contains(x, y)){ //ACCEPT
-
+            try {
+                saveScore();
+            } catch (IOException fileNotFoundException) {
+                fileNotFoundException.printStackTrace();
+            }
+            SelectGlass selectGlass = new SelectGlass(jFrame);
+            timer.stop();
+            jFrame.setContentPane(selectGlass);
+            jFrame.revalidate();
         }
 
         if(rect2.contains(x, y)){ //RETRY / RESTART
@@ -198,6 +212,7 @@ public class ResultPane extends JPanel implements ActionListener, MouseListener,
             jFrame.setContentPane(overlayPanel);
             overlayPanel.doSetup();
             jFrame.revalidate();
+            overlayPanel.startGame();
         }
 
         if(rect3.contains(x, y)){ //BACK TO SONG SELECTION = REFUSE
@@ -206,6 +221,13 @@ public class ResultPane extends JPanel implements ActionListener, MouseListener,
             jFrame.setContentPane(selectGlass);
             jFrame.revalidate();
         }
+    }
+
+    public void saveScore() throws IOException {
+        output = new OutputStreamWriter(new FileOutputStream("res/scores/scores_" + songName + ".txt", true));
+        output.write(score + "|" + scoreCounts[3] + "," + scoreCounts[2] + "," + scoreCounts[1] + ","
+                + scoreCounts[0] + "#" + vote + "@" + acc + "-" + "\n");
+        output.close();
     }
 
     @Override

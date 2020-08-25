@@ -167,6 +167,7 @@ public class SubSongSelectionP extends JPanel implements MouseListener, MouseMot
             jFrame.setContentPane(overlayPanel);
             overlayPanel.doSetup();
             jFrame.revalidate();
+            overlayPanel.startGame();
         }
 
         if(rect3.contains(x, y)){
