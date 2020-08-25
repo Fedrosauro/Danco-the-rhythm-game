@@ -1,8 +1,8 @@
-import javax.sound.sampled.LineUnavailableException;
+package gameplay;
+
 import java.awt.*;
 import java.awt.geom.Line2D;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 
 public class PhantomKey extends GamePhantomObject{
 

@@ -1,3 +1,5 @@
+package gameplay;
+
 public enum ID_PHY {
 
     A_PY(), B_PY(), C_PY(), D_PY(), E_PY(), F_PY(),

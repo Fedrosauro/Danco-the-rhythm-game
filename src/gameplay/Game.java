@@ -1,3 +1,6 @@
+package gameplay;
+
+import menuStuff.*;
 import java.awt.*;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
@@ -48,7 +51,7 @@ public class Game extends Canvas implements Runnable {
     public Game(){
         BufferedImageLoader loader = new BufferedImageLoader();
 
-        spriteSheet = loader.loadImage("spriteSheet.png");
+        spriteSheet = loader.loadImage("/spriteSheet.png");
 
         handler = new Handler();
 
@@ -64,13 +67,13 @@ public class Game extends Canvas implements Runnable {
             LettersTiming[i] = new ArrayList<>();
         }
 
-        /*LettersTiming[0].add(new Coordinate(10000, 6000));
-        LettersTiming[1].add(new Coordinate(11000, 6000));
-        LettersTiming[2].add(new Coordinate(12000, 6000));
-        LettersTiming[3].add(new Coordinate(13000, 6000));*/
+        /*LettersTiming[0].add(new gameplay.Coordinate(10000, 6000));
+        LettersTiming[1].add(new gameplay.Coordinate(11000, 6000));
+        LettersTiming[2].add(new gameplay.Coordinate(12000, 6000));
+        LettersTiming[3].add(new gameplay.Coordinate(13000, 6000));*/
 
         try { //gets notes from a file.txt
-            getNotes("res/notes.txt");
+            getNotes("res/notes/notes_Granat - Drop.txt");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -83,7 +86,7 @@ public class Game extends Canvas implements Runnable {
 
         showHitScores = new ShowHitScores(handler);
 
-        song = new MusicPlayer("res/completedsong.wav");
+        song = new MusicPlayer("res/songs/Granat - Drop.wav");
     }
 
     public synchronized void start() {

@@ -1,5 +1,8 @@
+package menuStuff;
+
+import gameplay.*;
+
 import javax.swing.*;
-import java.util.Scanner;
 
 public class MyFrame extends JFrame {
 
@@ -11,29 +14,32 @@ public class MyFrame extends JFrame {
 
     public void initUI(){
 
-        OverlayPanel overlayPanel = new OverlayPanel(this);
-        setContentPane(overlayPanel);
+        MainPage mainPage = new MainPage(this);
+        setContentPane(mainPage);
+
+        /*OverlayPanel overlayPanel = new OverlayPanel(this);
+        setContentPane(overlayPanel);*/
 
         setTitle("Game Test");
         setResizable(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         pack();
         setLocationRelativeTo(null);
-
-        overlayPanel.doSetup();
-
         setVisible(true);
+
+        //overlayPanel.doSetup();
+
     }
 
     public static void main(String args[]) {
-        System.setProperty("sun.java2d.opengl", "True");
+        /*System.setProperty("sun.java2d.opengl", "True");
 
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception e){
             e.printStackTrace();
         }
-
+*/
         MyFrame myFrame = new MyFrame();
     }
 }

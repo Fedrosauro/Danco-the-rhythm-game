@@ -1,3 +1,6 @@
+package gameplay;
+
+import menuStuff.*;
 import javax.swing.*;
 import java.awt.*;
 import java.util.stream.Stream;

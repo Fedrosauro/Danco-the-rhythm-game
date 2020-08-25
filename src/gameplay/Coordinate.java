@@ -1,3 +1,5 @@
+package gameplay;
+
 public class Coordinate {
 
     private long start;

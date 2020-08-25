@@ -1,3 +1,5 @@
+package gameplay;
+
 import java.awt.*;
 import java.awt.geom.Line2D;
 import java.awt.image.BufferedImage;
@@ -13,7 +15,7 @@ public class PhysicalKey extends GameObject{
 
     private int RCoordinateX, RCoordinateY, rectHeight, heightR, heightY, heightG, heightB; //for drawing stuff
 
-    //private HUD hud; //just for CPU tests
+    //private gameplay.HUD hud; //just for CPU tests
     private Handler handler;
     private long timeShow[]; // ""
     private static int DELAY = 120;

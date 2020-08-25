@@ -1,3 +1,5 @@
+package gameplay;
+
 public enum ID_PHA {
 
     A_PA(), B_PA(), C_PA(), D_PA(), E_PA(), F_PA(),
