@@ -36,7 +36,6 @@ public class SongSelectionP extends JPanel {
 
         jList = new MyJList(list);
         jScrollPane = new MyJScrollPane(jList, 0, 0, WIDTH, HEIGHT);
-
         add(jScrollPane);
     }
 

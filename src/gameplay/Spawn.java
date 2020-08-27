@@ -10,7 +10,7 @@ public class Spawn {
 
     private PhantomKey GENERAL;
 
-    private int row, col;
+    private int row, col, calcDelay;
 
     public Spawn(Handler handler, ArrayList<Coordinate>[] lettersTiming){
         this.handler = handler;
@@ -25,16 +25,20 @@ public class Spawn {
                 row = 1;
             }
             if (!lettersTiming[i].isEmpty()) {
-                if (Game.stopWatch.getTime() >= lettersTiming[i].get(0).getStart() - 1300 - 4000) {
-                    GENERAL = new PhantomKey(Game.ArrayLetters[i].getX(),-50,
+                switch (OverlayPanel.gameLaunched){
+                    case 0 : { calcDelay = - 1325 - 4000; break; }
+                    default : { calcDelay = - 1575 - 4000; break; }
+                }
+                if (Game.stopWatch.getTime() >= lettersTiming[i].get(0).getStart() + calcDelay) {
+                    GENERAL = new PhantomKey(Game.ArrayLetters[i].getX(),- 50,
                             ID_PHA.values()[i], ID_PHY.values()[i], handler, 3, (char)(i + 65), row, col);
                     handler.addPhantomObject(GENERAL, i);
                     lettersTiming[i].remove(0);
                 }
             }
             row++;
-        } // 1350 delay speed = 3; (1.5 factor) with no opengl acceleration
-          // 1350 delay speed = 3 with opengl acceleration
+        } // 1325 delay first run
+          // 1575 delay after the first run
     }
 
     public void render(Graphics2D g2d){

@@ -14,10 +14,13 @@ public class OverlayPanel extends JPanel {
 
     private String selectedSong;
 
+    public static int gameLaunched = -1;
+
     public OverlayPanel(JFrame jFrame, String selectedSong){
         this.jFrame = jFrame;
         this.selectedSong = selectedSong;
         setPreferredSize(new Dimension(MyFrame.WIDTH, MyFrame.HEIGHT));
+        gameLaunched++;
     }
 
     public void doSetup(){

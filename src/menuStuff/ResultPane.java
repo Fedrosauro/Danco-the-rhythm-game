@@ -12,6 +12,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.stream.IntStream;
 
 public class ResultPane extends JPanel implements ActionListener, MouseListener, MouseMotionListener {
@@ -45,6 +48,9 @@ public class ResultPane extends JPanel implements ActionListener, MouseListener,
     private boolean change3;
 
     private OutputStreamWriter output;
+
+    private LocalDateTime ldt;
+    private String dateNow;
 
     public ResultPane(JFrame jFrame, String songName, int score, int[] scoreCounts){
         this.jFrame = jFrame;
@@ -88,7 +94,10 @@ public class ResultPane extends JPanel implements ActionListener, MouseListener,
                 (IntStream.of(3, 2, 1, 0).map(i -> scoreCounts[i]).sum())) * 0.2;
 
         vote = acc == 100 ? 'P' : acc < 100 && acc >= 97 ? 'A' : acc < 97 && acc >= 94 ? 'B'
-                : acc < 94 && acc >= 90 ? 'C' : acc < 90 && acc >= 50 ? 'D' : 'F';
+                : acc < 94 && acc >= 90 ? 'C' : acc < 90 && acc >= 50 ? 'D' : 'E';
+
+        ldt = LocalDateTime.now();
+        dateNow = ldt.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT));
     }
 
     public void initTimer(){
@@ -140,6 +149,7 @@ public class ResultPane extends JPanel implements ActionListener, MouseListener,
                 + "%", x1, 240);
 
         g2d.drawString("Vote : " + vote, x1, 280);
+        g2d.drawString("Date : " + dateNow + "", x1, 330);
 
         drawButtons(g2d);
 
@@ -226,7 +236,7 @@ public class ResultPane extends JPanel implements ActionListener, MouseListener,
     public void saveScore() throws IOException {
         output = new OutputStreamWriter(new FileOutputStream("res/scores/scores_" + songName + ".txt", true));
         output.write(score + "|" + scoreCounts[3] + "," + scoreCounts[2] + "," + scoreCounts[1] + ","
-                + scoreCounts[0] + "#" + vote + "@" + acc + "-" + "\n");
+                + scoreCounts[0] + "#" + vote + "@" + acc + "[" + dateNow + "-" + "\n");
         output.close();
     }
 

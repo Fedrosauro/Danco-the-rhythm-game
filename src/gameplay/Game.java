@@ -91,6 +91,11 @@ public class Game extends Canvas implements Runnable {
         showHitScores = new ShowHitScores(handler);
 
         song = new MusicPlayer("res/songs/" + selectedSong + ".wav");
+        try {
+            song.createAudio();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public synchronized void start() {
@@ -147,7 +152,6 @@ public class Game extends Canvas implements Runnable {
         if(stopWatch2.getTime() >= 2000 && !started) {
             stopWatch.start();
             try {
-                song.createAudio();
                 song.playTrack();
             } catch (Exception e) {
                 e.printStackTrace();
@@ -155,18 +159,19 @@ public class Game extends Canvas implements Runnable {
             started = true;
             stopWatch2.stop();
         }
-        if(stopWatch.getTime() >= 10000 && song.clip != null && !song.clip.isActive()){ //the game ends
-            stopWatch.stop();
-            ResultPane resultPane = new ResultPane(jFrame, selectedSong, hud.getScore(), hud.getScoreCounts());
-            jFrame.setContentPane(resultPane);
-            jFrame.revalidate();
-            stop();
-        }
 
         handler.tick();
         showHitScores.tick();
         hud.tick();
         spawn.tick();
+
+        if(stopWatch.getTime() >= 10000 && song.clip != null && !song.clip.isActive()){ //the game ends
+            stopWatch.stop();
+            ResultPane resultPane = new ResultPane(jFrame, selectedSong, hud.getScore(), hud.getScoreCounts());
+            jFrame.setContentPane(resultPane);
+            jFrame.revalidate();
+            running = false;
+        }
     }
 
     private void render(){
@@ -206,6 +211,8 @@ public class Game extends Canvas implements Runnable {
 
         g2d.drawString("FPS : " + checkFPS, MyFrame.WIDTH - 93, MyFrame.HEIGHT - 10);
         g2d.drawString(stopWatch.toString() + "", 8, 45);
+        g2d.drawString(stopWatch2.toString() + "", 20, 260);
+        g2d.drawString(OverlayPanel.gameLaunched + "", 20, 280);
 
         g2d.drawLine(posINX, REDLINESY + 64 / 8 + 10, posINX + 70 * 10, REDLINESY + 64 / 8 + 10);
 
@@ -213,6 +220,8 @@ public class Game extends Canvas implements Runnable {
             g2d.setFont(new Font("Arial", Font.BOLD, 25));
             g2d.drawString((((stopWatch.getTime() - 6000) / 1000) * -1) + "", 470, 100);
         }
+
+        if(song.clip != null) g2d.drawString(song.clip.getLongFramePosition() + "", 20, 230);
 
         g2d.dispose();
         bs.show();
