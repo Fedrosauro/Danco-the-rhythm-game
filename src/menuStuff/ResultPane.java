@@ -26,6 +26,8 @@ public class ResultPane extends JPanel implements ActionListener, MouseListener,
     private char vote;
     private String songName;
 
+    private boolean CAM;
+
     private final int DELAY = 10;
     private Timer timer;
 
@@ -52,11 +54,12 @@ public class ResultPane extends JPanel implements ActionListener, MouseListener,
     private LocalDateTime ldt;
     private String dateNow;
 
-    public ResultPane(JFrame jFrame, String songName, int score, int[] scoreCounts){
+    public ResultPane(JFrame jFrame, String songName, boolean CAM, int score, int[] scoreCounts){
         this.jFrame = jFrame;
         this.score = score;
         this.scoreCounts = scoreCounts;
         this.songName = songName;
+        this.CAM = CAM;
         setup();
         initTimer();
     }
@@ -165,28 +168,32 @@ public class ResultPane extends JPanel implements ActionListener, MouseListener,
         int button2W = g2d.getFontMetrics().stringWidth("RETRY");
         int button3W = g2d.getFontMetrics().stringWidth("GO BACK");
 
-        if(change1){
-            g2d.setColor(Color.white);
-            g2d.fillRect(x1, y1, width1, height1);
-            g2d.setColor(Color.black);
-            g2d.drawString("SAVE SCORE",x1 + (width1 - button1W)/2, y1 + height1/2 + 8);
-        } else{
-            g2d.setColor(Color.white);
-            g2d.drawRect(x1, y1, width1, height1);
-            g2d.setColor(Color.white);
-            g2d.drawString("SAVE SCORE",x1 + (width1 - button1W)/2, y1 + height1/2 + 8);
+        if(!CAM) {
+            if (change1) {
+                g2d.setColor(Color.white);
+                g2d.fillRect(x1, y1, width1, height1);
+                g2d.setColor(Color.black);
+                g2d.drawString("SAVE SCORE", x1 + (width1 - button1W) / 2, y1 + height1 / 2 + 8);
+            } else {
+                g2d.setColor(Color.white);
+                g2d.drawRect(x1, y1, width1, height1);
+                g2d.setColor(Color.white);
+                g2d.drawString("SAVE SCORE", x1 + (width1 - button1W) / 2, y1 + height1 / 2 + 8);
+            }
         }
 
-        if(change2){
-            g2d.setColor(Color.white);
-            g2d.fillRect(x2, y1, width1, height1);
-            g2d.setColor(Color.black);
-            g2d.drawString("RETRY",x2 + (width1 - button2W)/2, y1 + height1/2 + 8);
-        } else{
-            g2d.setColor(Color.white);
-            g2d.drawRect(x2, y1, width1, height1);
-            g2d.setColor(Color.white);
-            g2d.drawString("RETRY",x2 + (width1 - button2W)/2, y1 + height1/2 + 8);
+        if(!CAM) {
+            if (change2) {
+                g2d.setColor(Color.white);
+                g2d.fillRect(x2, y1, width1, height1);
+                g2d.setColor(Color.black);
+                g2d.drawString("RETRY", x2 + (width1 - button2W) / 2, y1 + height1 / 2 + 8);
+            } else {
+                g2d.setColor(Color.white);
+                g2d.drawRect(x2, y1, width1, height1);
+                g2d.setColor(Color.white);
+                g2d.drawString("RETRY", x2 + (width1 - button2W) / 2, y1 + height1 / 2 + 8);
+            }
         }
 
         if(change3){
@@ -207,25 +214,29 @@ public class ResultPane extends JPanel implements ActionListener, MouseListener,
         int x = e.getX();
         int y = e.getY();
 
-        if(rect1.contains(x, y)){ //ACCEPT
-            try {
-                saveScore();
-            } catch (IOException fileNotFoundException) {
-                fileNotFoundException.printStackTrace();
+        if(!CAM) {
+            if (rect1.contains(x, y)) { //ACCEPT
+                try {
+                    saveScore();
+                } catch (IOException fileNotFoundException) {
+                    fileNotFoundException.printStackTrace();
+                }
+                SelectGlass selectGlass = new SelectGlass(jFrame);
+                timer.stop();
+                jFrame.setContentPane(selectGlass);
+                jFrame.revalidate();
             }
-            SelectGlass selectGlass = new SelectGlass(jFrame);
-            timer.stop();
-            jFrame.setContentPane(selectGlass);
-            jFrame.revalidate();
         }
 
-        if(rect2.contains(x, y)){ //RETRY / RESTART
-            timer.stop();
-            OverlayPanel overlayPanel = new OverlayPanel(jFrame, songName);
-            jFrame.setContentPane(overlayPanel);
-            overlayPanel.doSetup();
-            jFrame.revalidate();
-            overlayPanel.startGame();
+        if(!CAM) {
+            if (rect2.contains(x, y)) { //RETRY / RESTART
+                timer.stop();
+                OverlayPanel overlayPanel = new OverlayPanel(jFrame, songName);
+                jFrame.setContentPane(overlayPanel);
+                overlayPanel.doSetup();
+                jFrame.revalidate();
+                overlayPanel.startGame();
+            }
         }
 
         if(rect3.contains(x, y)){ //BACK TO SONG SELECTION = REFUSE

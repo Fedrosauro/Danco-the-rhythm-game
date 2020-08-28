@@ -53,8 +53,9 @@ public class Game extends Canvas implements Runnable {
     private int checkFPS;
 
     private String selectedSong;
+    private boolean checkAutoMode;
 
-    public Game(JFrame jFrame, String selectedSong){
+    public Game(JFrame jFrame, String selectedSong, boolean checkAutoMode){
         BufferedImageLoader loader = new BufferedImageLoader();
         spriteSheet = loader.loadImage("/spriteSheet.png");
 
@@ -69,6 +70,7 @@ public class Game extends Canvas implements Runnable {
         LettersTiming = new ArrayList[26];
 
         this.selectedSong = selectedSong;
+        this.checkAutoMode = checkAutoMode;
 
         REDLINESY = 210;
 
@@ -86,7 +88,7 @@ public class Game extends Canvas implements Runnable {
 
         hud = new HUD(handler);
 
-        spawn = new Spawn(handler, LettersTiming);
+        spawn = new Spawn(handler, LettersTiming, checkAutoMode);
 
         showHitScores = new ShowHitScores(handler);
 
@@ -167,7 +169,7 @@ public class Game extends Canvas implements Runnable {
 
         if(stopWatch.getTime() >= 10000 && song.clip != null && !song.clip.isActive()){ //the game ends
             stopWatch.stop();
-            ResultPane resultPane = new ResultPane(jFrame, selectedSong, hud.getScore(), hud.getScoreCounts());
+            ResultPane resultPane = new ResultPane(jFrame, selectedSong, checkAutoMode, hud.getScore(), hud.getScoreCounts());
             jFrame.setContentPane(resultPane);
             jFrame.revalidate();
             running = false;

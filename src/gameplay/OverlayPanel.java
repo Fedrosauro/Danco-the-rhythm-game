@@ -13,8 +13,17 @@ public class OverlayPanel extends JPanel {
     public static KeyInput keyInput;
 
     private String selectedSong;
+    private boolean CAM;
 
     public static int gameLaunched = -1;
+
+    public OverlayPanel(JFrame jFrame, String selectedSong, boolean checkedAutoMode){
+        this.jFrame = jFrame;
+        this.selectedSong = selectedSong;
+        this.CAM = checkedAutoMode;
+        setPreferredSize(new Dimension(MyFrame.WIDTH, MyFrame.HEIGHT));
+        gameLaunched++;
+    }
 
     public OverlayPanel(JFrame jFrame, String selectedSong){
         this.jFrame = jFrame;
@@ -32,7 +41,7 @@ public class OverlayPanel extends JPanel {
     }
 
     public void setup(){
-        game = new Game(jFrame, selectedSong);
+        game = new Game(jFrame, selectedSong, CAM);
 
         keyInput = new KeyInput(this);
         Stream.iterate(0, i -> i + 1).limit(65).forEach(i -> keyInput.addAction("" + (char)(i + 65)));

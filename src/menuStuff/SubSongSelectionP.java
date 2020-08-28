@@ -33,6 +33,8 @@ public class SubSongSelectionP extends JPanel implements MouseListener, MouseMot
     private int x3;
     private boolean change3;
 
+    private JCheckBox jCheckBox;
+
     public SubSongSelectionP(SongSelectionP songSelectionP, JFrame jFrame){
         this.jFrame = jFrame;
         this.songSelectionP = songSelectionP;
@@ -45,6 +47,7 @@ public class SubSongSelectionP extends JPanel implements MouseListener, MouseMot
         addMouseMotionListener(this);
 
         setBackground(Color.black);
+        setLayout(null);
         setOpaque(true);
         setBounds(0, 0, MyFrame.WIDTH,  MyFrame.HEIGHT);
 
@@ -65,6 +68,14 @@ public class SubSongSelectionP extends JPanel implements MouseListener, MouseMot
         change1 = false;
         change2 = false;
         change3 = false;
+
+        jCheckBox = new JCheckBox("AutoMode", false);
+        jCheckBox.setBounds(x2 + 50, 450, 150, 20);
+        jCheckBox.setBackground(Color.black);
+        jCheckBox.setForeground(Color.yellow);
+        jCheckBox.setFont(new Font("Arial", Font.BOLD, 15));
+        add(jCheckBox);
+
     }
 
     public void initTimer(){
@@ -163,7 +174,9 @@ public class SubSongSelectionP extends JPanel implements MouseListener, MouseMot
 
         if(rect2.contains(x, y)){
             timer.stop();
-            OverlayPanel overlayPanel = new OverlayPanel(jFrame, (String)songSelectionP.getjList().getSelectedValue());
+            OverlayPanel overlayPanel = new OverlayPanel(jFrame
+                    , (String)songSelectionP.getjList().getSelectedValue()
+                    , jCheckBox.isSelected());
             jFrame.setContentPane(overlayPanel);
             overlayPanel.doSetup();
             jFrame.revalidate();

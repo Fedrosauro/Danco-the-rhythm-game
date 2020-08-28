@@ -12,9 +12,12 @@ public class Spawn {
 
     private int row, col, calcDelay;
 
-    public Spawn(Handler handler, ArrayList<Coordinate>[] lettersTiming){
+    private boolean CAM;
+
+    public Spawn(Handler handler, ArrayList<Coordinate>[] lettersTiming, boolean checkAutoMode){
         this.handler = handler;
         this.lettersTiming = lettersTiming;
+        this.CAM = checkAutoMode;
     }
 
     public void tick(){
@@ -31,7 +34,7 @@ public class Spawn {
                 }
                 if (Game.stopWatch.getTime() >= lettersTiming[i].get(0).getStart() + calcDelay) {
                     GENERAL = new PhantomKey(Game.ArrayLetters[i].getX(),- 50,
-                            ID_PHA.values()[i], ID_PHY.values()[i], handler, 3, (char)(i + 65), row, col);
+                            ID_PHA.values()[i], ID_PHY.values()[i], handler, 3, (char)(i + 65), row, col, CAM);
                     handler.addPhantomObject(GENERAL, i);
                     lettersTiming[i].remove(0);
                 }
