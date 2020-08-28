@@ -45,6 +45,7 @@ public class OverlayPanel extends JPanel {
 
         keyInput = new KeyInput(this);
         Stream.iterate(0, i -> i + 1).limit(65).forEach(i -> keyInput.addAction("" + (char)(i + 65)));
+        keyInput.addAction("SPACE");
 
         setLayout(new BorderLayout());
         add(game);

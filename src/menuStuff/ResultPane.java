@@ -68,8 +68,7 @@ public class ResultPane extends JPanel implements ActionListener, MouseListener,
         addMouseListener(this);
         addMouseMotionListener(this);
 
-        setPreferredSize(new Dimension(MyFrame.WIDTH, MyFrame.HEIGHT));
-        //setBounds(0, 0, MyFrame.WIDTH, MyFrame.HEIGHT); //for the real game
+        setBounds(0, 0, MyFrame.WIDTH, MyFrame.HEIGHT); //for the real game
 
         setBackground(Color.black);
         setOpaque(true);

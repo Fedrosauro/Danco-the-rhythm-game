@@ -49,11 +49,14 @@ public class Game extends Canvas implements Runnable {
     private boolean started;
 
     private MusicPlayer song;
+    private int songPos;
 
     private int checkFPS;
 
     private String selectedSong;
     private boolean checkAutoMode;
+
+    private boolean pause;
 
     public Game(JFrame jFrame, String selectedSong, boolean checkAutoMode){
         BufferedImageLoader loader = new BufferedImageLoader();
@@ -71,6 +74,8 @@ public class Game extends Canvas implements Runnable {
 
         this.selectedSong = selectedSong;
         this.checkAutoMode = checkAutoMode;
+
+        pause = false;
 
         REDLINESY = 210;
 
@@ -151,28 +156,44 @@ public class Game extends Canvas implements Runnable {
     }
 
     private void tick(){
-        if(stopWatch2.getTime() >= 2000 && !started) {
-            stopWatch.start();
-            try {
-                song.playTrack();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            started = true;
-            stopWatch2.stop();
+        if(OverlayPanel.keyInput.pressedKeys.get("SPACE") != null && OverlayPanel.keyInput.pressedKeys.get("SPACE")){
+            pause = true;
+        } else pause = false;
+
+        if(pause && !stopWatch.isSuspended()){
+            stopWatch.suspend();
+            song.stopTrack();
+            songPos = song.clip.getFramePosition();
+        }
+        if(!pause && stopWatch.isSuspended()){
+            stopWatch.resume();
+            song.startFromPos(songPos);
         }
 
-        handler.tick();
-        showHitScores.tick();
-        hud.tick();
-        spawn.tick();
+        if(!pause) {
+            if (stopWatch2.getTime() >= 2000 && !started) {
+                stopWatch.start();
+                try {
+                    song.playTrack();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                started = true;
+                stopWatch2.stop();
+            }
 
-        if(stopWatch.getTime() >= 10000 && song.clip != null && !song.clip.isActive()){ //the game ends
-            stopWatch.stop();
-            ResultPane resultPane = new ResultPane(jFrame, selectedSong, checkAutoMode, hud.getScore(), hud.getScoreCounts());
-            jFrame.setContentPane(resultPane);
-            jFrame.revalidate();
-            running = false;
+            handler.tick();
+            showHitScores.tick();
+            hud.tick();
+            spawn.tick();
+
+            if (stopWatch.getTime() >= 10000 && song.clip != null && !song.clip.isActive()) { //the game ends
+                stopWatch.stop();
+                ResultPane resultPane = new ResultPane(jFrame, selectedSong, checkAutoMode, hud.getScore(), hud.getScoreCounts());
+                jFrame.setContentPane(resultPane);
+                jFrame.revalidate();
+                running = false;
+            }
         }
     }
 
@@ -197,28 +218,30 @@ public class Game extends Canvas implements Runnable {
 
         g2d.setRenderingHints(rh);
 
-        g2d.setColor(Color.black);
-        g2d.fillRect(0, 0, MyFrame.WIDTH, MyFrame.HEIGHT);
+        if(!pause) {
+            g2d.setColor(Color.black);
+            g2d.fillRect(0, 0, MyFrame.WIDTH, MyFrame.HEIGHT);
 
-        handler.render(g2d);
-        showHitScores.render(g2d);
-        hud.render(g2d);
+            handler.render(g2d);
+            showHitScores.render(g2d);
+            hud.render(g2d);
 
-        g2d.setColor(new Color(45, 45, 45));
-        g2d.drawLine(posINX, REDLINESY + 64 / 2 + 32, posINX + 70 * 10, REDLINESY + 64 / 2 + 32);
-        g2d.drawLine(posINX, REDLINESY + 64 / 2 - 32, posINX + 70 * 10, REDLINESY + 64 / 2 - 32);
+            g2d.setColor(new Color(45, 45, 45));
+            g2d.drawLine(posINX, REDLINESY + 64 / 2 + 32, posINX + 70 * 10, REDLINESY + 64 / 2 + 32);
+            g2d.drawLine(posINX, REDLINESY + 64 / 2 - 32, posINX + 70 * 10, REDLINESY + 64 / 2 - 32);
 
-        g2d.setFont(new Font("Arial", Font.PLAIN, 18));
-        g2d.setColor(Color.white);
+            g2d.setFont(new Font("Arial", Font.PLAIN, 18));
+            g2d.setColor(Color.white);
 
-        g2d.drawString("FPS : " + checkFPS, MyFrame.WIDTH - 93, MyFrame.HEIGHT - 10);
-        g2d.drawString(stopWatch.toString() + "", 8, 45);
+            g2d.drawString("FPS : " + checkFPS, MyFrame.WIDTH - 93, MyFrame.HEIGHT - 10);
+            g2d.drawString(stopWatch.toString() + "", 8, 45);
 
-        g2d.drawLine(posINX, REDLINESY + 64 / 8 + 10, posINX + 70 * 10, REDLINESY + 64 / 8 + 10);
+            g2d.drawLine(posINX, REDLINESY + 64 / 8 + 10, posINX + 70 * 10, REDLINESY + 64 / 8 + 10);
 
-        if(stopWatch.getTime() <= 6000) {
-            g2d.setFont(new Font("Arial", Font.BOLD, 25));
-            g2d.drawString((((stopWatch.getTime() - 6000) / 1000) * -1) + "", 470, 100);
+            if (stopWatch.getTime() <= 6000) {
+                g2d.setFont(new Font("Arial", Font.BOLD, 25));
+                g2d.drawString((((stopWatch.getTime() - 6000) / 1000) * -1) + "", 470, 100);
+            }
         }
 
         g2d.dispose();
