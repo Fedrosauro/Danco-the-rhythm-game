@@ -63,10 +63,10 @@ public class PhantomKey extends GamePhantomObject{
             GameObject tempObject = handler.objects.get(i);
             if (tempObject.getId() == id_phy) {
                 if (getLine().getY1() >= tempObject.getLine().getY1()) scoreHIT = 0;
-                if (getLine().getY1() >= RCoordinateY + heightR + heightY + heightG + heightB/2
+                /*if (getLine().getY1() >= RCoordinateY + heightR + heightY + heightG + heightB/2
                         && getLine().getY1() < RCoordinateY + heightR + heightY + heightG + heightB){
                     scoreHIT = 500; //this if was made only for NPC tests
-                }
+                }*/
                     if (OverlayPanel.keyInput.pressedKeys.get(c + "") != null && OverlayPanel.keyInput.pressedKeys.get(c + "")) {
                         if (getLine().getY1() >= RCoordinateY
                                 && getLine().getY1() < RCoordinateY + heightR) scoreHIT = 0;
