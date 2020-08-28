@@ -134,7 +134,10 @@ public class ResultPane extends JPanel implements ActionListener, MouseListener,
 
         g2d.setColor(Color.white);
 
-        g2d.drawString("Song : " + songName, x1, 60);
+        int songNameWidth = g2d.getFontMetrics().stringWidth(songName);
+        if(x1 + songNameWidth >= MyFrame.WIDTH) {
+            g2d.drawString("Song : " + songName.substring(0, songName.length() - 18) + "...", x1, 60);
+        } else g2d.drawString("Song : " + songName, x1, 60);
 
         g2d.drawString("Your score : " + score, x1, 100);
         int xPos = x1;

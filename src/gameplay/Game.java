@@ -211,8 +211,6 @@ public class Game extends Canvas implements Runnable {
 
         g2d.drawString("FPS : " + checkFPS, MyFrame.WIDTH - 93, MyFrame.HEIGHT - 10);
         g2d.drawString(stopWatch.toString() + "", 8, 45);
-        g2d.drawString(stopWatch2.toString() + "", 20, 260);
-        g2d.drawString(OverlayPanel.gameLaunched + "", 20, 280);
 
         g2d.drawLine(posINX, REDLINESY + 64 / 8 + 10, posINX + 70 * 10, REDLINESY + 64 / 8 + 10);
 
@@ -220,8 +218,6 @@ public class Game extends Canvas implements Runnable {
             g2d.setFont(new Font("Arial", Font.BOLD, 25));
             g2d.drawString((((stopWatch.getTime() - 6000) / 1000) * -1) + "", 470, 100);
         }
-
-        if(song.clip != null) g2d.drawString(song.clip.getLongFramePosition() + "", 20, 230);
 
         g2d.dispose();
         bs.show();
