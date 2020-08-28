@@ -5,3 +5,12 @@ that are in the res/songs/ folder (except for the testing.wav song). MyFrame.jav
 everything is "local" (for now). So notes for each songs are stored into files. Scores are stored into files etc.. I'm still trying to find a
 better method to sync the song with notes (atm I'm using a stopwatch of this [library](http://commons.apache.org/proper/commons-lang/download_lang.cgi))
 But it works pretty well for now. After 10 games played the songs are still in sync with notes, ...so great. I'm still fixing some bugs and I'm starting working on graphics too, but that is going to be the last thing I do. Thanks for reading this if you've really read hihi
+
+
+Btw if you want to play with AUTO-mode "on", go on the PhantomKey.java and take off the comment from the if : 
+```
+if (getLine().getY1() >= RCoordinateY + heightR + heightY + heightG + heightB/2
+                        && getLine().getY1() < RCoordinateY + heightR + heightY + heightG + heightB){
+   scoreHIT = 500; 
+}
+```
