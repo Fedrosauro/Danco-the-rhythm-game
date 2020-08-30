@@ -26,9 +26,6 @@ public class MainPage extends JPanel implements MouseListener, MouseMotionListen
     private Font titleFont;
     private Font buttonsFont;
 
-    private int alpha;
-    private int decrement = - 5;
-
     public MainPage(JFrame jFrame){
         this.jFrame = jFrame;
         setup();
@@ -41,10 +38,10 @@ public class MainPage extends JPanel implements MouseListener, MouseMotionListen
 
         setPreferredSize(new Dimension(MyFrame.WIDTH, MyFrame.HEIGHT));
 
+        setBackground(Color.black);
+
         titleFont = new Font("Arial", Font.PLAIN, 30);
         buttonsFont = new Font("Arial", Font.PLAIN, 25);
-
-        alpha = 255;
 
         width1 = 250; //things for buttons
         height1 = 80;
@@ -87,8 +84,6 @@ public class MainPage extends JPanel implements MouseListener, MouseMotionListen
                 RenderingHints.VALUE_RENDER_QUALITY);
 
         g2d.setRenderingHints(rh);
-
-        setBackground(new Color(0, 0, 0, alpha));
 
         g2d.setColor(Color.white);
 

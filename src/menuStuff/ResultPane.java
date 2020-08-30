@@ -230,7 +230,7 @@ public class ResultPane extends JPanel implements ActionListener, MouseListener,
         if(!CAM) {
             if (rect2.contains(x, y)) { //RETRY / RESTART
                 timer.stop();
-                OverlayPanel overlayPanel = new OverlayPanel(jFrame, songName);
+                OverlayPanel overlayPanel = new OverlayPanel(jFrame, songName, false);
                 jFrame.setContentPane(overlayPanel);
                 overlayPanel.doSetup();
                 jFrame.revalidate();

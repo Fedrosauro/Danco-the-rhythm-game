@@ -2,6 +2,10 @@ package gameplay;
 
 import menuStuff.*;
 import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
@@ -13,15 +17,13 @@ import org.apache.commons.lang3.time.StopWatch;
 
 import javax.swing.*;
 
-public class Game extends Canvas implements Runnable {
+public class Game extends JPanel implements Runnable, MouseListener, MouseMotionListener {
 
     private JFrame jFrame;
 
     private Thread thread;
     private boolean running = false;
     private int frames;
-
-    private BufferStrategy bs;
 
     public Handler handler;
 
@@ -49,16 +51,29 @@ public class Game extends Canvas implements Runnable {
     private boolean started;
 
     private MusicPlayer song;
-    private int songPos;
 
     private int checkFPS;
 
     private String selectedSong;
     private boolean checkAutoMode;
 
-    private boolean pause;
+    private Font buttonsFont;
+
+    private Rectangle2D rect1;
+    private int x1, y1;
+    private int width1, height1;
+    private boolean change1;
+
+    private Rectangle2D rect2;
+    private int y2;
+    private boolean change2;
+
+    private boolean stopClick;
 
     public Game(JFrame jFrame, String selectedSong, boolean checkAutoMode){
+        addMouseListener(this);
+        addMouseMotionListener(this);
+
         BufferedImageLoader loader = new BufferedImageLoader();
         spriteSheet = loader.loadImage("/spriteSheet.png");
 
@@ -74,8 +89,6 @@ public class Game extends Canvas implements Runnable {
 
         this.selectedSong = selectedSong;
         this.checkAutoMode = checkAutoMode;
-
-        pause = false;
 
         REDLINESY = 210;
 
@@ -103,6 +116,21 @@ public class Game extends Canvas implements Runnable {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        buttonsFont = new Font("Arial", Font.PLAIN, 25);
+
+        width1 = 80;
+        height1 = 80;
+        x1 = MyFrame.WIDTH - width1 - 10;
+        y1 = 50;
+        rect1= new Rectangle2D.Float(x1, y1, width1, height1);
+        change1 = false;
+
+        y2 = y1 + height1 + 60;
+        rect2= new Rectangle2D.Float(x1, y2, width1, height1);
+        change2 = false;
+
+        stopClick = false;
     }
 
     public synchronized void start() {
@@ -114,8 +142,8 @@ public class Game extends Canvas implements Runnable {
 
     public synchronized void stop() {
         try{
-            thread.join();
             running = false;
+            thread.join();
         } catch(Exception e){
             e.printStackTrace();
         }
@@ -143,7 +171,7 @@ public class Game extends Canvas implements Runnable {
                 tick();
                 delta--;  // lower our delta back to 0 to start our next frame wait
             }
-            if(running) render(); // render the visuals of the game
+            if(running) repaint(); // render the visuals of the game
             frames++; // note that a frame has passed
             if(System.currentTimeMillis() - timer > 1000 ){ // if one second has passed
                 timer+= 1000; // add a thousand to our timer for next time
@@ -155,57 +183,39 @@ public class Game extends Canvas implements Runnable {
         stop(); // no longer running stop the thread
     }
 
+    @Override
+    public void paintComponent(Graphics g){
+        super.paintComponent(g);
+        if(running) render(g);
+    }
+
     private void tick(){
-        if(OverlayPanel.keyInput.pressedKeys.get("SPACE") != null && OverlayPanel.keyInput.pressedKeys.get("SPACE")){
-            pause = true;
-        } else pause = false;
-
-        if(pause && !stopWatch.isSuspended()){
-            stopWatch.suspend();
-            song.stopTrack();
-            songPos = song.clip.getFramePosition();
-        }
-        if(!pause && stopWatch.isSuspended()){
-            stopWatch.resume();
-            song.startFromPos(songPos);
+        if (stopWatch2.getTime() >= 2000 && !started) {
+            stopWatch.start();
+            try {
+                song.playTrack();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            started = true;
+            stopWatch2.stop();
         }
 
-        if(!pause) {
-            if (stopWatch2.getTime() >= 2000 && !started) {
-                stopWatch.start();
-                try {
-                    song.playTrack();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                started = true;
-                stopWatch2.stop();
-            }
+        handler.tick();
+        showHitScores.tick();
+        hud.tick();
+        spawn.tick();
 
-            handler.tick();
-            showHitScores.tick();
-            hud.tick();
-            spawn.tick();
-
-            if (stopWatch.getTime() >= 10000 && song.clip != null && !song.clip.isActive()) { //the game ends
-                stopWatch.stop();
-                ResultPane resultPane = new ResultPane(jFrame, selectedSong, checkAutoMode, hud.getScore(), hud.getScoreCounts());
-                jFrame.setContentPane(resultPane);
-                jFrame.revalidate();
-                running = false;
-            }
+        if (stopWatch.getTime() >= 10000 && song.clip != null && !song.clip.isActive() && !stopClick) { //the game ends (OK)
+            stopWatch.stop();
+            ResultPane resultPane = new ResultPane(jFrame, selectedSong, checkAutoMode, hud.getScore(), hud.getScoreCounts());
+            jFrame.setContentPane(resultPane);
+            jFrame.revalidate();
+            running = false;
         }
     }
 
-    private void render(){
-        BufferStrategy bs = this.getBufferStrategy();
-        if(bs == null) {
-            this.createBufferStrategy(2);
-            return;
-        }
-
-        Graphics g = bs.getDrawGraphics();
-
+    private void render(Graphics g){
         Graphics2D g2d = (Graphics2D) g;
 
         RenderingHints rh =
@@ -218,34 +228,64 @@ public class Game extends Canvas implements Runnable {
 
         g2d.setRenderingHints(rh);
 
-        if(!pause) {
-            g2d.setColor(Color.black);
-            g2d.fillRect(0, 0, MyFrame.WIDTH, MyFrame.HEIGHT);
+        g2d.setColor(Color.black);
+        g2d.fillRect(0, 0, MyFrame.WIDTH, MyFrame.HEIGHT);
 
-            handler.render(g2d);
-            showHitScores.render(g2d);
-            hud.render(g2d);
+        handler.render(g2d);
+        showHitScores.render(g2d);
+        hud.render(g2d);
 
-            g2d.setColor(new Color(45, 45, 45));
-            g2d.drawLine(posINX, REDLINESY + 64 / 2 + 32, posINX + 70 * 10, REDLINESY + 64 / 2 + 32);
-            g2d.drawLine(posINX, REDLINESY + 64 / 2 - 32, posINX + 70 * 10, REDLINESY + 64 / 2 - 32);
+        g2d.setColor(new Color(45, 45, 45));
+        g2d.drawLine(posINX, REDLINESY + 64 / 2 + 32, posINX + 70 * 10, REDLINESY + 64 / 2 + 32);
+        g2d.drawLine(posINX, REDLINESY + 64 / 2 - 32, posINX + 70 * 10, REDLINESY + 64 / 2 - 32);
 
-            g2d.setFont(new Font("Arial", Font.PLAIN, 18));
-            g2d.setColor(Color.white);
+        g2d.setFont(new Font("Arial", Font.PLAIN, 18));
+        g2d.setColor(Color.white);
 
-            g2d.drawString("FPS : " + checkFPS, MyFrame.WIDTH - 93, MyFrame.HEIGHT - 10);
-            g2d.drawString(stopWatch.toString() + "", 8, 45);
+        g2d.drawString("FPS : " + checkFPS, MyFrame.WIDTH - 130, MyFrame.HEIGHT - 10);
+        g2d.drawString(stopWatch.toString() + "", 8, 45);
 
-            g2d.drawLine(posINX, REDLINESY + 64 / 8 + 10, posINX + 70 * 10, REDLINESY + 64 / 8 + 10);
+        g2d.drawLine(posINX, REDLINESY + 64 / 8 + 10, posINX + 70 * 10, REDLINESY + 64 / 8 + 10);
 
-            if (stopWatch.getTime() <= 6000) {
-                g2d.setFont(new Font("Arial", Font.BOLD, 25));
-                g2d.drawString((((stopWatch.getTime() - 6000) / 1000) * -1) + "", 470, 100);
+        if (stopWatch.getTime() <= 6000) {
+            g2d.setFont(new Font("Arial", Font.BOLD, 25));
+            g2d.drawString((((stopWatch.getTime() - 6000) / 1000) * -1) + "", 470, 100);
+        }
+
+        drawButtons(g2d);
+
+        g2d.dispose();
+    }
+
+    public void drawButtons(Graphics2D g2d){
+        g2d.setFont(buttonsFont);
+        int button1W = g2d.getFontMetrics().stringWidth("RESET");
+        int button2W = g2d.getFontMetrics().stringWidth("ABORT");
+        if(!checkAutoMode) {
+            if (change1) {
+                g2d.setColor(Color.white);
+                g2d.fillRect(x1, y1, width1, height1);
+                g2d.setColor(Color.black);
+                g2d.drawString("RESET", x1 + (width1 - button1W) / 2, y1 + height1 / 2 + 8);
+            } else {
+                g2d.setColor(Color.white);
+                g2d.drawRect(x1, y1, width1, height1);
+                g2d.setColor(Color.white);
+                g2d.drawString("RESET", x1 + (width1 - button1W) / 2, y1 + height1 / 2 + 8);
             }
         }
 
-        g2d.dispose();
-        bs.show();
+        if(change2){
+            g2d.setColor(Color.white);
+            g2d.fillRect(x1, y2, width1, height1);
+            g2d.setColor(Color.black);
+            g2d.drawString("ABORT",x1 + (width1 - button2W)/2, y2 + height1/2 + 8);
+        } else{
+            g2d.setColor(Color.white);
+            g2d.drawRect(x1, y2, width1, height1);
+            g2d.setColor(Color.white);
+            g2d.drawString("ABORT",x1 + (width1 - button2W)/2, y2 + height1/2 + 8);
+        }
     }
 
     public void getNotes(String file) throws IOException {
@@ -321,4 +361,58 @@ public class Game extends Canvas implements Runnable {
         positionLetters[20] = 'X'; positionLetters[21] = 'C'; positionLetters[22] = 'V'; positionLetters[23] = 'B';
         positionLetters[24] = 'N'; positionLetters[25] = 'M';
     }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        int x = e.getX();
+        int y = e.getY();
+
+        if(!checkAutoMode) {
+            if (rect1.contains(x, y)) {
+                stopWatch.stop();
+                song.clip.stop();
+                stopClick = true;
+                OverlayPanel overlayPanel = new OverlayPanel(jFrame, selectedSong, false);
+                jFrame.setContentPane(overlayPanel);
+                overlayPanel.doSetup();
+                jFrame.revalidate();
+                overlayPanel.startGame();
+            }
+        }
+
+        if (rect2.contains(x, y)) {
+            stopWatch.stop();
+            song.clip.stop();
+            stopClick = true;
+            SelectGlass selectGlass = new SelectGlass(jFrame);
+            jFrame.setContentPane(selectGlass);
+            jFrame.revalidate();
+            running = false;
+        }
+    }
+
+    @Override
+    public void mouseMoved(MouseEvent e) {
+        int x = e.getX();
+        int y = e.getY();
+
+        if(!checkAutoMode) {
+            if (rect1.contains(x, y)) {
+                change1 = true;
+            } else change1 = false;
+        }
+
+        if (rect2.contains(x, y)) {
+            change2 = true;
+        } else change2 = false;
+    }
+
+    ////////////////////////////////////////////////////
+    @Override public void mousePressed(MouseEvent e) { }
+    @Override public void mouseReleased(MouseEvent e) { }
+    @Override public void mouseEntered(MouseEvent e) { }
+    @Override public void mouseExited(MouseEvent e) { }
+    @Override public void mouseDragged(MouseEvent e) { }
+    ////////////////////////////////////////////////////
+
 }
