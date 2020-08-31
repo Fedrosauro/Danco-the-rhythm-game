@@ -3,6 +3,7 @@ package menuStuff;
 import gameplay.OverlayPanel;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.Rectangle2D;
@@ -34,6 +35,9 @@ public class SubSongSelectionP extends JPanel implements MouseListener, MouseMot
     private boolean change3;
 
     private JCheckBox jCheckBox;
+    private JTextField jTextField;
+
+    private String oldText, newText;
 
     public SubSongSelectionP(SongSelectionP songSelectionP, JFrame jFrame){
         this.jFrame = jFrame;
@@ -76,6 +80,20 @@ public class SubSongSelectionP extends JPanel implements MouseListener, MouseMot
         jCheckBox.setFont(new Font("Arial", Font.BOLD, 15));
         add(jCheckBox);
 
+        jTextField = new JTextField();
+        jTextField.setBounds((MyFrame.WIDTH - SongSelectionP.WIDTH) / 2 + 400
+                ,(MyFrame.HEIGHT - SongSelectionP.HEIGHT) / 2 - 97
+                , ((MyFrame.WIDTH - SongSelectionP.WIDTH) / 2 + SongSelectionP.WIDTH) - ((MyFrame.WIDTH - SongSelectionP.WIDTH) / 2 + 400), 30);
+        jTextField.setBackground(Color.black);
+        jTextField.setForeground(Color.white);
+        jTextField.setFont(buttonsFont);
+        Border border = BorderFactory.createLineBorder(Color.white);
+        jTextField.setBorder(BorderFactory.createCompoundBorder(border,
+                BorderFactory.createEmptyBorder(1, 10, 1, 1)));
+        jTextField.setHorizontalAlignment(JLabel.LEFT);
+
+        oldText = "";
+        add(jTextField);
     }
 
     public void initTimer(){
@@ -86,6 +104,11 @@ public class SubSongSelectionP extends JPanel implements MouseListener, MouseMot
     @Override
     public void actionPerformed(ActionEvent e) {
         repaint();
+        newText = jTextField.getText();
+        if(!oldText.equals(newText)) {
+            songSelectionP.updateList(newText, true);
+        }
+        oldText = newText;
     }
 
     @Override
@@ -113,8 +136,11 @@ public class SubSongSelectionP extends JPanel implements MouseListener, MouseMot
         g2d.setColor(Color.white);
 
         g2d.drawString("Song list :", (MyFrame.WIDTH - SongSelectionP.WIDTH) / 2, (MyFrame.HEIGHT - SongSelectionP.HEIGHT) / 2 - 75);
+        g2d.drawString("Search :", jTextField.getX() - 90, (MyFrame.HEIGHT - SongSelectionP.HEIGHT) / 2 - 75);
 
         g2d.setStroke(defaultStroke);
+
+        //g2d.drawString("\"" + oldText + "\"" + ", \"" + newText + "\"", 10, 10);
     }
 
     public void drawButtons(Graphics2D g2d){

@@ -15,31 +15,43 @@ public class SongSelectionP extends JPanel {
 
     public SongSelectionP() {
         setup();
+        updateList("", false);
+        jScrollPane = new MyJScrollPane(jList, 0, 0, WIDTH, HEIGHT);
+        add(jScrollPane);
     }
 
-    public void setup() {
-        setLayout(null);
-        setOpaque(true);
-        setBounds((MyFrame.WIDTH - WIDTH) / 2, (MyFrame.HEIGHT - HEIGHT) / 2 - 50, WIDTH, HEIGHT);
-
+    public void updateList(String s, boolean updating){
         list = new DefaultListModel<>();
 
         File dir = new File(dirSongs);
         if (dir.isDirectory()) {
             File[] dirListing = dir.listFiles();
             for (File f : dirListing) {
-                list.addElement(f.getName().substring(0, f.getName().length() - 4));
+                if(s.isEmpty()){
+                    list.addElement(f.getName().substring(0, f.getName().length() - 4));
+                } else if((f.getName().substring(0, f.getName().length() - 4)).contains(s)){
+                    list.addElement(f.getName().substring(0, f.getName().length() - 4));
+                }
             }
         } else {
             System.out.println(dirSongs + "is not a directory");
         }
 
-        jList = new MyJList(list);
-        jScrollPane = new MyJScrollPane(jList, 0, 0, WIDTH, HEIGHT);
-        add(jScrollPane);
+       if(!updating)jList = new MyJList(list);
+       else jList.setModel(list);
+    }
+
+    public void setup() {
+        setLayout(null);
+        setOpaque(true);
+        setBounds((MyFrame.WIDTH - WIDTH) / 2, (MyFrame.HEIGHT - HEIGHT) / 2 - 50, WIDTH, HEIGHT);
     }
 
     public MyJList getjList() {
         return jList;
+    }
+
+    public MyJScrollPane getjScrollPane() {
+        return jScrollPane;
     }
 }
