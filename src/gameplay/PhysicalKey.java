@@ -57,7 +57,7 @@ public class PhysicalKey extends GameObject{
         /////-------------tests-------------/////
 
         //real gameplay
-        if(OverlayPanel.keyInput.pressedKeys.get(c + "") != null && OverlayPanel.keyInput.pressedKeys.get(c + ""))
+        if(Game.keyInput.pressedKeys.get(c + "") != null && Game.keyInput.pressedKeys.get(c + ""))
             g2d.drawImage(PY_Key_img_h, (int)x, (int)y, null);
         else g2d.drawImage(PY_Key_img_b, (int)x, (int)y, null);
 

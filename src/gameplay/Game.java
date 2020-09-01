@@ -2,28 +2,28 @@ package gameplay;
 
 import menuStuff.*;
 import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
+import java.awt.event.*;
 import java.awt.geom.Rectangle2D;
-import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.stream.Stream;
 
 import org.apache.commons.lang3.time.StopWatch;
 
 import javax.swing.*;
 
-public class Game extends JPanel implements Runnable, MouseListener, MouseMotionListener {
+public class Game extends JPanel implements Runnable, MouseListener, MouseMotionListener{
 
     private JFrame jFrame;
 
     private Thread thread;
     private boolean running = false;
     private int frames;
+
+    public static KeyInput keyInput;
 
     public Handler handler;
 
@@ -73,6 +73,10 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
     public Game(JFrame jFrame, String selectedSong, boolean checkAutoMode){
         addMouseListener(this);
         addMouseMotionListener(this);
+
+        keyInput = new KeyInput(this);
+        Stream.iterate(0, i -> i + 1).limit(65).forEach(i -> keyInput.addAction("" + (char)(i + 65)));
+        keyInput.addAction("SPACE");
 
         BufferedImageLoader loader = new BufferedImageLoader();
         spriteSheet = loader.loadImage("/spriteSheet.png");
@@ -186,7 +190,7 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
     @Override
     public void paintComponent(Graphics g){
         super.paintComponent(g);
-        if(running) render(g);
+        render(g);
     }
 
     private void tick(){
@@ -367,27 +371,29 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
         int x = e.getX();
         int y = e.getY();
 
-        if(!checkAutoMode) {
-            if (rect1.contains(x, y)) {
+        if(started) {
+            if (!checkAutoMode) {
+                if (rect1.contains(x, y)) {
+                    stopWatch.stop();
+                    song.clip.stop();
+                    stopClick = true;
+                    OverlayPanel overlayPanel = new OverlayPanel(jFrame, selectedSong, false);
+                    jFrame.setContentPane(overlayPanel);
+                    overlayPanel.doSetup();
+                    jFrame.revalidate();
+                    overlayPanel.startGame();
+                }
+            }
+
+            if (rect2.contains(x, y)) {
                 stopWatch.stop();
                 song.clip.stop();
                 stopClick = true;
-                OverlayPanel overlayPanel = new OverlayPanel(jFrame, selectedSong, false);
-                jFrame.setContentPane(overlayPanel);
-                overlayPanel.doSetup();
+                SelectGlass selectGlass = new SelectGlass(jFrame);
+                jFrame.setContentPane(selectGlass);
                 jFrame.revalidate();
-                overlayPanel.startGame();
+                running = false;
             }
-        }
-
-        if (rect2.contains(x, y)) {
-            stopWatch.stop();
-            song.clip.stop();
-            stopClick = true;
-            SelectGlass selectGlass = new SelectGlass(jFrame);
-            jFrame.setContentPane(selectGlass);
-            jFrame.revalidate();
-            running = false;
         }
     }
 

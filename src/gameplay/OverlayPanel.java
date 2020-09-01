@@ -9,8 +9,6 @@ public class OverlayPanel extends JPanel {
     private Game game;
     private JFrame jFrame;
 
-    public static KeyInput keyInput;
-
     private String selectedSong;
     private boolean CAM;
 
@@ -24,22 +22,15 @@ public class OverlayPanel extends JPanel {
         gameLaunched++;
     }
 
-    public void doSetup(){
-        setup();
+    public void doSetup() {
+        game = new Game(jFrame, selectedSong, CAM);
+
+        jFrame.setContentPane(game);
+        jFrame.revalidate();
     }
 
     public void startGame(){
         game.start();
     }
 
-    private void setup(){
-        game = new Game(jFrame, selectedSong, CAM);
-
-        keyInput = new KeyInput(this);
-        Stream.iterate(0, i -> i + 1).limit(65).forEach(i -> keyInput.addAction("" + (char)(i + 65)));
-        keyInput.addAction("SPACE");
-
-        jFrame.setContentPane(game);
-        jFrame.revalidate();
-    }
 }

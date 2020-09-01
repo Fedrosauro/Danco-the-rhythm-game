@@ -1,5 +1,6 @@
 package menuStuff;
 
+import gameplay.Game;
 import gameplay.OverlayPanel;
 
 import javax.swing.*;
