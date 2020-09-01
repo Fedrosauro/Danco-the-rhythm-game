@@ -1,7 +1,6 @@
 package menuStuff;
 
 import gameplay.Game;
-import gameplay.OverlayPanel;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -140,8 +139,6 @@ public class SubSongSelectionP extends JPanel implements MouseListener, MouseMot
         g2d.drawString("Search :", jTextField.getX() - 90, (MyFrame.HEIGHT - SongSelectionP.HEIGHT) / 2 - 75);
 
         g2d.setStroke(defaultStroke);
-
-        //g2d.drawString("\"" + oldText + "\"" + ", \"" + newText + "\"", 10, 10);
     }
 
     public void drawButtons(Graphics2D g2d){
@@ -201,13 +198,10 @@ public class SubSongSelectionP extends JPanel implements MouseListener, MouseMot
 
         if(rect2.contains(x, y)){
             timer.stop();
-            OverlayPanel overlayPanel = new OverlayPanel(jFrame
-                    , (String)songSelectionP.getjList().getSelectedValue()
-                    , jCheckBox.isSelected());
-            jFrame.setContentPane(overlayPanel);
-            overlayPanel.doSetup();
+            Game game = new Game(jFrame, (String)songSelectionP.getjList().getSelectedValue(), jCheckBox.isSelected());
+            jFrame.setContentPane(game);
             jFrame.revalidate();
-            overlayPanel.startGame();
+            game.start();
         }
 
         if(rect3.contains(x, y)){

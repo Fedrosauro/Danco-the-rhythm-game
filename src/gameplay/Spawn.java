@@ -1,6 +1,5 @@
 package gameplay;
 
-import java.awt.*;
 import java.util.ArrayList;
 
 public class Spawn {
@@ -42,9 +41,5 @@ public class Spawn {
             row++;
         } // 1325 delay first run
           // 1575 delay after the first run
-    }
-
-    public void render(Graphics2D g2d){
-
     }
 }

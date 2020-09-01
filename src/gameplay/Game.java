@@ -146,7 +146,6 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
 
     public synchronized void stop() {
         try{
-            running = false;
             thread.join();
         } catch(Exception e){
             e.printStackTrace();
@@ -182,6 +181,11 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
                 checkFPS = frames;
                 //System.out.println("FPS: " + frames); // print out how many frames have happend in the last second
                 frames = 0; // reset the frame count for the next second
+            }
+            try {
+                Thread.sleep(1); //breath
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         }
         stop(); // no longer running stop the thread
@@ -377,11 +381,11 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
                     stopWatch.stop();
                     song.clip.stop();
                     stopClick = true;
-                    OverlayPanel overlayPanel = new OverlayPanel(jFrame, selectedSong, false);
-                    jFrame.setContentPane(overlayPanel);
-                    overlayPanel.doSetup();
+                    running = false;
+                    Game game = new Game(jFrame, selectedSong, false);
+                    jFrame.setContentPane(game);
                     jFrame.revalidate();
-                    overlayPanel.startGame();
+                    game.start();
                 }
             }
 
