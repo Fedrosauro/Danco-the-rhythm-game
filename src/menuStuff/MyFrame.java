@@ -14,7 +14,7 @@ public class MyFrame extends JFrame {
         MainPage mainPage = new MainPage(this);
         setContentPane(mainPage);
 
-        setTitle("Game Test");
+        setTitle("DANCO");
         setResizable(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         pack();

@@ -1,18 +1,27 @@
 package menuStuff;
 
+import gameplay.MusicPlayer;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
 
 public class MainPage extends JPanel implements MouseListener, MouseMotionListener, ActionListener {
 
     private JFrame jFrame;
 
-    private final int DELAY = 10;
+    private final int DELAY = 5;
     private Timer timer;
 
-    public static Stroke defaultStroke;
+    private MusicPlayer buttonAudio;
+
+    private BufferedImageLoader loader;
+
+    private BufferedImage background;
+    private BufferedImage[] playImages, exitImages, titleImages;
+    private Animation playAnim, exitAnim, titleAnim;
 
     private Rectangle2D rect1;
     private int x1, y1;
@@ -23,8 +32,7 @@ public class MainPage extends JPanel implements MouseListener, MouseMotionListen
     private int y2;
     private boolean change2;
 
-    private Font titleFont;
-    private Font buttonsFont;
+    private int playY, exitY;
 
     public MainPage(JFrame jFrame){
         this.jFrame = jFrame;
@@ -37,22 +45,58 @@ public class MainPage extends JPanel implements MouseListener, MouseMotionListen
         addMouseMotionListener(this);
 
         setPreferredSize(new Dimension(MyFrame.WIDTH, MyFrame.HEIGHT));
+        setLayout(null);
 
-        setBackground(Color.black);
+        loader = new BufferedImageLoader();
 
-        titleFont = new Font("Arial", Font.PLAIN, 30);
-        buttonsFont = new Font("Arial", Font.PLAIN, 25);
+        background = loader.loadImage("res/images/backgrounds/background_menu.png");
 
-        width1 = 250; //things for buttons
+        playY = 340;
+        width1 = 150; //things for buttons
         height1 = 80;
         x1 = (MyFrame.WIDTH - width1)/2;
-        y1 = 160;
+        y1 = playY + 19;
         rect1= new Rectangle2D.Float(x1, y1, width1, height1);
         change1 = false;
 
-        y2 = y1 + height1 + 60;
+        exitY = playY + 120;
+        y2 = exitY + 19;
         rect2= new Rectangle2D.Float(x1, y2, width1, height1);
         change2 = false;
+
+        playImages = new BufferedImage[7];
+        for(int i = 0; i < 7; i++) {
+            playImages[i] = loader.loadImage("res/images/playButton/play_button_white000" + i + ".png");
+        }
+
+        playAnim = new Animation(1, this
+                , playImages[0],  playImages[1], playImages[2], playImages[3]
+                , playImages[4],  playImages[5], playImages[6]);
+
+        exitImages = new BufferedImage[7];
+        for(int i = 0; i < 7; i++) {
+            exitImages[i] = loader.loadImage("res/images/exitButton/exit_button_white000" + i + ".png");
+        }
+
+        exitAnim = new Animation(1, this
+                , exitImages[0],  exitImages[1], exitImages[2], exitImages[3]
+                , exitImages[4],  exitImages[5], exitImages[6]);
+
+        titleImages = new BufferedImage[31];
+        for(int i = 0; i < 31; i++){
+            if(i <= 9) titleImages[i] = loader.loadImage("res/images/title/title_anim000" + i + ".png");
+            else titleImages[i] = loader.loadImage("res/images/title/title_anim00" + i + ".png");
+        }
+
+        titleAnim = new Animation(2, this
+                , titleImages[0], titleImages[1], titleImages[2], titleImages[3], titleImages[4], titleImages[5],
+                titleImages[6], titleImages[7], titleImages[8], titleImages[9], titleImages[10], titleImages[11],
+                titleImages[12], titleImages[13], titleImages[14], titleImages[15], titleImages[16], titleImages[17],
+                titleImages[18], titleImages[19], titleImages[20], titleImages[21], titleImages[22], titleImages[23],
+                titleImages[24], titleImages[25], titleImages[26], titleImages[27], titleImages[28], titleImages[29],
+                titleImages[30]);
+
+        buttonAudio = new MusicPlayer("res/songs/audioButton.wav");
     }
 
     public void initTimer(){
@@ -63,6 +107,9 @@ public class MainPage extends JPanel implements MouseListener, MouseMotionListen
     @Override
     public void actionPerformed(ActionEvent e) {
         repaint();
+        playAnim.runAnimation(change1);
+        exitAnim.runAnimation(change2);
+        titleAnim.runAnimationOnce();
     }
 
     @Override
@@ -74,8 +121,6 @@ public class MainPage extends JPanel implements MouseListener, MouseMotionListen
     public void doDrawing(Graphics g){
         Graphics2D g2d = (Graphics2D) g;
 
-        defaultStroke = g2d.getStroke();
-
         RenderingHints rh =
                 new RenderingHints(RenderingHints.KEY_ANTIALIASING,
                         RenderingHints.VALUE_ANTIALIAS_ON);
@@ -85,47 +130,19 @@ public class MainPage extends JPanel implements MouseListener, MouseMotionListen
 
         g2d.setRenderingHints(rh);
 
-        g2d.setColor(Color.white);
+        g2d.drawImage(background, 0, 0, null);
 
-        drawStuff(g2d);
-        drawButtons(g2d);
+        titleAnim.drawAnimation(g2d, (MyFrame.WIDTH - titleImages[0].getWidth()) / 2 - 16, 80);
 
-        g2d.setStroke(defaultStroke);
-    }
+        playAnim.drawAnimation(g2d, 0, playY);
+        /*g2d.setColor(Color.green);
+        g2d.draw(rect1);*/
 
-    public void drawStuff(Graphics2D g2d){
-        g2d.setFont(titleFont);
-        int titleWidth = g2d.getFontMetrics().stringWidth("GAME TEST V1");
-        g2d.drawString("GAME TEST V1", (MyFrame.WIDTH - titleWidth) / 2, 100);
-    }
+        exitAnim.drawAnimation(g2d, 0, exitY);
+        /*g2d.setColor(Color.cyan);
+        g2d.draw(rect2);*/
 
-    public void drawButtons(Graphics2D g2d){
-        g2d.setFont(buttonsFont);
-        int button1W = g2d.getFontMetrics().stringWidth("PLAY");
-        int button2W = g2d.getFontMetrics().stringWidth("EXIT");
-        if(change1){
-            g2d.setColor(Color.white);
-            g2d.fillRect(x1, y1, width1, height1);
-            g2d.setColor(Color.black);
-            g2d.drawString("PLAY",x1 + (width1 - button1W)/2, y1 + height1/2 + 8);
-        } else{
-            g2d.setColor(Color.white);
-            g2d.drawRect(x1, y1, width1, height1);
-            g2d.setColor(Color.white);
-            g2d.drawString("PLAY",x1 + (width1 - button1W)/2, y1 + height1/2 + 8);
-        }
-
-        if(change2){
-            g2d.setColor(Color.white);
-            g2d.fillRect(x1, y2, width1, height1);
-            g2d.setColor(Color.black);
-            g2d.drawString("EXIT",x1 + (width1 - button2W)/2, y2 + height1/2 + 8);
-        } else{
-            g2d.setColor(Color.white);
-            g2d.drawRect(x1, y2, width1, height1);
-            g2d.setColor(Color.white);
-            g2d.drawString("EXIT",x1 + (width1 - button2W)/2, y2 + height1/2 + 8);
-        }
+        g2d.dispose();
     }
 
     @Override
@@ -152,10 +169,26 @@ public class MainPage extends JPanel implements MouseListener, MouseMotionListen
         int y = e.getY();
 
         if (rect1.contains(x, y)) {
+            if(!change1){
+                try {
+                    buttonAudio.createAudio();
+                    buttonAudio.playTrack();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
             change1 = true;
         } else change1 = false;
 
         if (rect2.contains(x, y)) {
+            if(!change2){
+                try {
+                    buttonAudio.createAudio();
+                    buttonAudio.playTrack();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
             change2 = true;
         } else change2 = false;
     }
