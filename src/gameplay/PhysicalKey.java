@@ -15,18 +15,10 @@ public class PhysicalKey extends GameObject{
 
     private int RCoordinateX, RCoordinateY, rectHeight, heightR, heightY, heightG, heightB; //for drawing stuff
 
-    //private gameplay.HUD hud; //just for CPU tests
-    private Handler handler;
-    private long timeShow[]; // ""
-    private static int DELAY = 120;
-    private boolean pressed[];
 
     public PhysicalKey(float x, float y, ID_PHY idPHY, char c, int Rowbase, int Colbase, int Rowhover, int Colhover) {
         super(x, y, idPHY);
         this.c = c;
-        //this.handler = handler; //used just for tests
-        timeShow = new long[26];
-        pressed = new boolean[26];
 
         SpriteSheet ss = new SpriteSheet(Game.spriteSheet);
 
@@ -49,13 +41,6 @@ public class PhysicalKey extends GameObject{
 
     @Override
     public void render(Graphics2D g2d) {
-        /*g2d.setColor(Color.blue);
-        g2d.drawRect((int)x - 1, (int)y - 1, 65, 65);*/
-
-        /////-------------tests-------------/////
-
-        /////-------------tests-------------/////
-
         //real gameplay
         if(Game.keyInput.pressedKeys.get(c + "") != null && Game.keyInput.pressedKeys.get(c + ""))
             g2d.drawImage(PY_Key_img_h, (int)x, (int)y, null);

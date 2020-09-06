@@ -54,7 +54,7 @@ public class ShowHitScores {
             if(showHitScore[i] != -1){
                 if(timeShow[i] - Game.stopWatch.getTime() >= 0){
                     g2d.setColor(colors[i]);
-                    g2d.drawString(showHitScore[i] != 0 ? showHitScore[i] + "" : "  X  ", Xvalues[i] + 15, Game.REDLINESY + 90);
+                    g2d.drawString(showHitScore[i] != 0 ? showHitScore[i] + "" : "  X  ", Xvalues[i] + 15, Game.REDLINESY + 88);
                 } else{
                     showHitScore[i] = -1;
                     colors[i] = Color.black;

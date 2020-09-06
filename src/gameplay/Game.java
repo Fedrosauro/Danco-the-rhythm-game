@@ -21,6 +21,7 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
 
     private Thread thread;
     private boolean running = false;
+    public static int gameLaunched = -1;
     private int frames;
 
     public static KeyInput keyInput;
@@ -94,7 +95,7 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
         this.selectedSong = selectedSong;
         this.checkAutoMode = checkAutoMode;
 
-        REDLINESY = 210;
+        REDLINESY = 380 - 110;
 
         for(int i = 0; i < 26; i++){
             LettersTiming[i] = new ArrayList<>();
@@ -135,6 +136,7 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
         change2 = false;
 
         stopClick = false;
+        gameLaunched++;
     }
 
     public synchronized void start() {
@@ -244,8 +246,10 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
         hud.render(g2d);
 
         g2d.setColor(new Color(45, 45, 45));
-        g2d.drawLine(posINX, REDLINESY + 64 / 2 + 32, posINX + 70 * 10, REDLINESY + 64 / 2 + 32);
-        g2d.drawLine(posINX, REDLINESY + 64 / 2 - 32, posINX + 70 * 10, REDLINESY + 64 / 2 - 32);
+        int yWLine = REDLINESY + 64 / 8 + 10;
+
+        g2d.drawLine(posINX, yWLine + 32, posINX + 70 * 10, yWLine + 32);
+        g2d.drawLine(posINX, yWLine - 32, posINX + 70 * 10, yWLine - 32);
 
         g2d.setFont(new Font("Arial", Font.PLAIN, 18));
         g2d.setColor(Color.white);
@@ -253,7 +257,7 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
         g2d.drawString("FPS : " + checkFPS, MyFrame.WIDTH - 130, MyFrame.HEIGHT - 10);
         g2d.drawString(stopWatch.toString() + "", 8, 45);
 
-        g2d.drawLine(posINX, REDLINESY + 64 / 8 + 10, posINX + 70 * 10, REDLINESY + 64 / 8 + 10);
+        g2d.drawLine(posINX, yWLine, posINX + 70 * 10, yWLine);
 
         if (stopWatch.getTime() <= 6000) {
             g2d.setFont(new Font("Arial", Font.BOLD, 25));
@@ -335,7 +339,7 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
         }
         fillPosLetters();
 
-        posX = 150; posY = 340;
+        posX = 210; posY = 380;
         posINX = posX;
         for(int j = 0; j < 26; j++){
             if(positionLetters[j] == 'A'){
@@ -378,9 +382,9 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
         if(started) {
             if (!checkAutoMode) {
                 if (rect1.contains(x, y)) {
+                    stopClick = true;
                     stopWatch.stop();
                     song.clip.stop();
-                    stopClick = true;
                     running = false;
                     Game game = new Game(jFrame, selectedSong, false);
                     jFrame.setContentPane(game);
@@ -390,9 +394,9 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
             }
 
             if (rect2.contains(x, y)) {
+                stopClick = true;
                 stopWatch.stop();
                 song.clip.stop();
-                stopClick = true;
                 SelectGlass selectGlass = new SelectGlass(jFrame);
                 jFrame.setContentPane(selectGlass);
                 jFrame.revalidate();

@@ -4,7 +4,7 @@ import javax.swing.*;
 
 public class MyFrame extends JFrame {
 
-    public static final int WIDTH = 1000, HEIGHT = 600;
+    public static final int WIDTH = 1100, HEIGHT = 625;
 
     public MyFrame(){
         initUI();

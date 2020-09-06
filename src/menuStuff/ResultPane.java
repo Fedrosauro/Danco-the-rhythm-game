@@ -1,13 +1,11 @@
 package menuStuff;
 
 import gameplay.Game;
-import gameplay.OverlayPanel;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.Rectangle2D;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;

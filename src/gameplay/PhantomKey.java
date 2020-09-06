@@ -16,8 +16,6 @@ public class PhantomKey extends GamePhantomObject{
 
     private ID_PHY id_phy;
 
-    private MusicPlayer clickSound;
-
     private int RCoordinateY, rectHeight, heightR, heightY, heightG, heightB;
 
     private char c;
@@ -42,14 +40,6 @@ public class PhantomKey extends GamePhantomObject{
             if (tempObject.getId() == id_phy) {
                 RCoordinateY = (int)tempObject.getLine().getP2().getY();
             }
-        }
-
-        clickSound = new MusicPlayer("res/clickSoundReal.wav");
-
-        try {
-            clickSound.createAudio();
-        } catch (Exception e) {
-            e.printStackTrace();
         }
 
         rectHeight = 48;
@@ -81,11 +71,6 @@ public class PhantomKey extends GamePhantomObject{
                             && getLine().getY1() < RCoordinateY + heightR + heightY + heightG) scoreHIT = 250;
                     else if (getLine().getY1() >= RCoordinateY + heightR + heightY + heightG
                             && getLine().getY1() < RCoordinateY + heightR + heightY + heightG + heightB) scoreHIT = 500;
-                    try {
-                        clickSound.playTrack();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
                 }
             }
         }
@@ -110,15 +95,7 @@ public class PhantomKey extends GamePhantomObject{
 
     @Override
     public void render(Graphics2D g2d) {
-        /*g2d.setColor(Color.green);
-        g2d.drawRect((int)x - 1, (int)y - 1, 65, 65);*/
-
         g2d.drawImage(PH_Key_img, (int)x, (int)y, null);
-
-        g2d.setColor(Color.magenta);
-
-        g2d.setColor(Color.magenta);
-        //g2d.draw(getLine());
     }
 
     @Override

@@ -27,9 +27,9 @@ public class Spawn {
                 row = 1;
             }
             if (!lettersTiming[i].isEmpty()) {
-                switch (OverlayPanel.gameLaunched){
-                    case 0 : { calcDelay = - 1325 - 4000; break; }
-                    default : { calcDelay = - 1575 - 4000; break; }
+                switch (Game.gameLaunched){ // thing that we will need later
+                    case 0 : { calcDelay = - 1605 - 4000; break; }
+                    default : { calcDelay = - 1905 - 4000; break; }
                 }
                 if (Game.stopWatch.getTime() >= lettersTiming[i].get(0).getStart() + calcDelay) {
                     GENERAL = new PhantomKey(Game.ArrayLetters[i].getX(),- 50,
@@ -39,7 +39,7 @@ public class Spawn {
                 }
             }
             row++;
-        } // 1325 delay first run
-          // 1575 delay after the first run
+        } // 1605 delay first run
+          // 1905 delay after the first run
     }
 }

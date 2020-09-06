@@ -196,24 +196,26 @@ public class SubSongSelectionP extends JPanel implements MouseListener, MouseMot
             jFrame.revalidate();
         }
 
-        if(rect2.contains(x, y)){
-            timer.stop();
-            Game game = new Game(jFrame, (String)songSelectionP.getjList().getSelectedValue(), jCheckBox.isSelected());
-            jFrame.setContentPane(game);
-            jFrame.revalidate();
-            game.start();
-        }
-
-        if(rect3.contains(x, y)){
-            ScoreGlass scoreGlass = null;
-            try {
-                scoreGlass = new ScoreGlass(jFrame, (String)songSelectionP.getjList().getSelectedValue());
-            } catch (IOException ioException) {
-                ioException.printStackTrace();
+        if(songSelectionP.getjList().getSelectedValue() != null) {
+            if (rect2.contains(x, y)) {
+                timer.stop();
+                Game game = new Game(jFrame, (String) songSelectionP.getjList().getSelectedValue(), jCheckBox.isSelected());
+                jFrame.setContentPane(game);
+                jFrame.revalidate();
+                game.start();
             }
-            timer.stop();
-            jFrame.setContentPane(scoreGlass);
-            jFrame.revalidate();
+
+            if (rect3.contains(x, y)) {
+                ScoreGlass scoreGlass = null;
+                try {
+                    scoreGlass = new ScoreGlass(jFrame, (String) songSelectionP.getjList().getSelectedValue());
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                }
+                timer.stop();
+                jFrame.setContentPane(scoreGlass);
+                jFrame.revalidate();
+            }
         }
     }
 
