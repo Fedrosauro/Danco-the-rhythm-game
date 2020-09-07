@@ -26,7 +26,7 @@ public class ResultPane extends JPanel implements ActionListener, MouseListener,
 
     private boolean CAM;
 
-    private final int DELAY = 10;
+    private final int DELAY = 5;
     private Timer timer;
 
     public static Stroke defaultStroke;

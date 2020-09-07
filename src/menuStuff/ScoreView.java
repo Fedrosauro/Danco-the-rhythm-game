@@ -1,5 +1,6 @@
 package menuStuff;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
@@ -15,7 +16,7 @@ public class ScoreView extends JPanel {
 
     private String scoresPath;
 
-    public static int WIDTH = MyFrame.WIDTH - 100, HEIGHT = 420;
+    public static int WIDTH = MyFrame.WIDTH - 100, HEIGHT = 430;
 
     private MyJScrollPane jScrollPane;
     private String[] columns = {"SCORE", "NOTES", "VOTE", "ACCURACY", "DATE"};
@@ -31,7 +32,7 @@ public class ScoreView extends JPanel {
         setBackground(new Color(113, 113, 113));
         setOpaque(true);
         setLayout(null);
-        setBounds((MyFrame.WIDTH - WIDTH) / 2, (MyFrame.HEIGHT - HEIGHT) / 2 - 20, WIDTH, HEIGHT);
+        setBounds((MyFrame.WIDTH - WIDTH) / 2, 15, WIDTH, HEIGHT);
 
         preData = new ArrayList<>();
         readScores();
@@ -108,7 +109,7 @@ public class ScoreView extends JPanel {
 
         public MyJTable(String[][] data, String[] columns){
             super(data, columns);
-            setFont(new Font("Arial", Font.PLAIN, 18));
+            setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 18));
 
             DefaultTableCellRenderer dtcr = new DefaultTableCellRenderer();
             dtcr.setHorizontalAlignment(JLabel.CENTER);
@@ -119,7 +120,7 @@ public class ScoreView extends JPanel {
             setBackground(Color.black);
             setForeground(Color.white);
             setShowVerticalLines(false);
-            setRowHeight(40);
+            setRowHeight(45);
             setCellSelectionEnabled(false);
 
             getTableHeader().setOpaque(false);
@@ -127,8 +128,8 @@ public class ScoreView extends JPanel {
             getTableHeader().setBackground(Color.black);
             getTableHeader().setReorderingAllowed(false);
             getTableHeader().setResizingAllowed(false);
+            getTableHeader().setFont(new Font("youre gone", Font.PLAIN, 22));
             ((DefaultTableCellRenderer)getTableHeader().getDefaultRenderer()).setHorizontalAlignment(JLabel.CENTER);
-            getTableHeader().setFont(new Font("Arial", Font.BOLD, 23));
 
             DefaultTableCellRenderer dtcr1 = new DefaultTableCellRenderer();
             dtcr1.setHorizontalAlignment(JLabel.CENTER);
@@ -140,6 +141,9 @@ public class ScoreView extends JPanel {
         public Component prepareRenderer(TableCellRenderer renderer, int row, int col) {
             Component comp = super.prepareRenderer(renderer, row, col);
             Object value = getModel().getValueAt(row, col);
+            if(value.equals("P") || value.equals("A") || value.equals("B") || value.equals("C") ||
+                    value.equals("D") || value.equals("E"))
+                comp.setFont(new Font("youre gone", Font.PLAIN, 25));
             if(value.equals("P")) comp.setForeground(new Color(255, 0, 244));
             if(value.equals("A")) comp.setForeground(new Color(246, 255, 21));
             if(value.equals("B")) comp.setForeground(new Color(33, 224, 122));

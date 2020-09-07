@@ -28,14 +28,4 @@ public class MusicPlayer {
         clip.open(audioInput);
         clip.start();
     }
-
-    public void stopTrack(){
-        if(clip != null) clip.stop();
-    }
-
-    public void startFromPos(int songPos){
-        clip.setFramePosition(songPos);
-        clip.start();
-    }
-
 }

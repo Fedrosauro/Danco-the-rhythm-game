@@ -119,7 +119,6 @@ public class SubSongSelectionP extends JPanel implements MouseListener, MouseMot
         jCheckBox.setOpaque(false);
         jCheckBox.setIcon(new ImageIcon("res/images/checkBoxIm/unchecked.png"));
         jCheckBox.setSelectedIcon(new ImageIcon("res/images/checkBoxIm/checked.png"));
-        jCheckBox.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 15));
         add(jCheckBox);
 
         jTextField = new JTextField();
