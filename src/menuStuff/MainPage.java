@@ -96,7 +96,7 @@ public class MainPage extends JPanel implements MouseListener, MouseMotionListen
                 titleImages[24], titleImages[25], titleImages[26], titleImages[27], titleImages[28], titleImages[29],
                 titleImages[30]);
 
-        buttonAudio = new MusicPlayer("res/songs/audioButton.wav");
+        buttonAudio = new MusicPlayer("res/audioButton.wav");
     }
 
     public void initTimer(){
@@ -141,8 +141,6 @@ public class MainPage extends JPanel implements MouseListener, MouseMotionListen
         exitAnim.drawAnimation(g2d, 0, exitY);
         /*g2d.setColor(Color.cyan);
         g2d.draw(rect2);*/
-
-        g2d.dispose();
     }
 
     @Override

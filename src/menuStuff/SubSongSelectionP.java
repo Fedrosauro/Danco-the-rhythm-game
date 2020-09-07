@@ -1,12 +1,14 @@
 package menuStuff;
 
 import gameplay.Game;
+import gameplay.MusicPlayer;
 
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 public class SubSongSelectionP extends JPanel implements MouseListener, MouseMotionListener, ActionListener {
@@ -14,12 +16,16 @@ public class SubSongSelectionP extends JPanel implements MouseListener, MouseMot
     private JFrame jFrame;
     private SongSelectionP songSelectionP;
 
-    private Font buttonsFont;
-
-    private final int DELAY = 10;
+    private final int DELAY = 5;
     private Timer timer;
 
-    private Stroke defaultStroke;
+    private MusicPlayer buttonAudio;
+
+    private BufferedImageLoader loader;
+
+    private BufferedImage background;
+    private BufferedImage[] goBackImages, playSImages, viewSImages;
+    private Animation goBackAnim, playSAnim, viewSAnim;
 
     private Rectangle2D rect1; //go back
     private int x1, y1;
@@ -33,6 +39,8 @@ public class SubSongSelectionP extends JPanel implements MouseListener, MouseMot
     private Rectangle2D rect3; //view scores of that song
     private int x3;
     private boolean change3;
+
+    private int backX, playX, scoresX;
 
     private JCheckBox jCheckBox;
     private JTextField jTextField;
@@ -50,43 +58,77 @@ public class SubSongSelectionP extends JPanel implements MouseListener, MouseMot
         addMouseListener(this);
         addMouseMotionListener(this);
 
-        setBackground(Color.black);
         setLayout(null);
         setOpaque(true);
         setBounds(0, 0, MyFrame.WIDTH,  MyFrame.HEIGHT);
 
-        buttonsFont = new Font("Arial", Font.PLAIN, 20);
+        loader = new BufferedImageLoader();
 
-        width1 = 200;
+        background = loader.loadImage("res/images/backgrounds/background_songs.png");
+
+        backX = 57;
+        width1 = 275;
         height1 = 50;
-        x1 = 190;
-        y1 = 500;
-        rect1= new Rectangle2D.Float(x1, y1, width1, height1);
+        x1 = backX + 45;
+        y1 = 480;
+        rect1= new Rectangle2D.Float(x1, y1 + 19, width1, height1);
 
-        x2 = x1 + width1 + 20;
-        rect2= new Rectangle2D.Float(x2, y1, width1, height1);
+        playX = backX + 300;
+        x2 = playX + 45;
+        rect2= new Rectangle2D.Float(x2, y1 + 19, width1, height1);
 
-        x3 = x2 + width1 + 20;
-        rect3= new Rectangle2D.Float(x3, y1, width1, height1);
+        scoresX = playX + 300;
+        x3 = scoresX + 45;
+        rect3= new Rectangle2D.Float(x3, y1 + 19, width1, height1);
 
         change1 = false;
         change2 = false;
         change3 = false;
 
-        jCheckBox = new JCheckBox("AutoMode", false);
-        jCheckBox.setBounds(x2 + 50, 450, 150, 20);
-        jCheckBox.setBackground(Color.black);
-        jCheckBox.setForeground(Color.yellow);
-        jCheckBox.setFont(new Font("Arial", Font.BOLD, 15));
+        goBackImages = new BufferedImage[7];
+        for(int i = 0; i < 7; i++) {
+            goBackImages[i] = loader.loadImage("res/images/goBackButton/goback000" + i + ".png");
+        }
+
+        goBackAnim = new Animation(1, this
+                , goBackImages[0],  goBackImages[1], goBackImages[2], goBackImages[3]
+                , goBackImages[4],  goBackImages[5], goBackImages[6]);
+
+        playSImages = new BufferedImage[7];
+        for(int i = 0; i < 7; i++) {
+            playSImages[i] = loader.loadImage("res/images/playSongButton/playsong_button000" + i + ".png");
+        }
+
+        playSAnim = new Animation(1, this
+                , playSImages[0],  playSImages[1], playSImages[2], playSImages[3]
+                , playSImages[4],  playSImages[5], playSImages[6]);
+
+        viewSImages = new BufferedImage[7];
+        for(int i = 0; i < 7; i++) {
+            viewSImages[i] = loader.loadImage("res/images/viewScoresButton/viewscore_button000" + i + ".png");
+        }
+
+        viewSAnim = new Animation(1, this
+                , viewSImages[0],  viewSImages[1], viewSImages[2], viewSImages[3]
+                , viewSImages[4],  viewSImages[5], viewSImages[6]);
+
+        buttonAudio = new MusicPlayer("res/audioButton.wav");
+
+        jCheckBox = new JCheckBox("", false);
+        jCheckBox.setBounds(x2 + 65, 446, 150, 29);
+        jCheckBox.setOpaque(false);
+        jCheckBox.setIcon(new ImageIcon("res/images/checkBoxIm/unchecked.png"));
+        jCheckBox.setSelectedIcon(new ImageIcon("res/images/checkBoxIm/checked.png"));
+        jCheckBox.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 15));
         add(jCheckBox);
 
         jTextField = new JTextField();
-        jTextField.setBounds((MyFrame.WIDTH - SongSelectionP.WIDTH) / 2 + 400
+        jTextField.setBounds((MyFrame.WIDTH - SongSelectionP.WIDTH) / 2 + 550
                 ,(MyFrame.HEIGHT - SongSelectionP.HEIGHT) / 2 - 97
-                , ((MyFrame.WIDTH - SongSelectionP.WIDTH) / 2 + SongSelectionP.WIDTH) - ((MyFrame.WIDTH - SongSelectionP.WIDTH) / 2 + 400), 30);
+                , ((MyFrame.WIDTH - SongSelectionP.WIDTH) / 2 + SongSelectionP.WIDTH) - ((MyFrame.WIDTH - SongSelectionP.WIDTH) / 2 + 550), 30);
         jTextField.setBackground(Color.black);
         jTextField.setForeground(Color.white);
-        jTextField.setFont(buttonsFont);
+        jTextField.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 20));
         Border border = BorderFactory.createLineBorder(Color.white);
         jTextField.setBorder(BorderFactory.createCompoundBorder(border,
                 BorderFactory.createEmptyBorder(1, 10, 1, 1)));
@@ -104,6 +146,9 @@ public class SubSongSelectionP extends JPanel implements MouseListener, MouseMot
     @Override
     public void actionPerformed(ActionEvent e) {
         repaint();
+        playSAnim.runAnimation(change2);
+        goBackAnim.runAnimation(change1);
+        viewSAnim.runAnimation(change3);
         newText = jTextField.getText();
         if(!oldText.equals(newText)) {
             songSelectionP.updateList(newText, true);
@@ -120,8 +165,6 @@ public class SubSongSelectionP extends JPanel implements MouseListener, MouseMot
     public void doDrawing(Graphics g){
         Graphics2D g2d = (Graphics2D) g;
 
-        defaultStroke = g2d.getStroke();
-
         RenderingHints rh =
                 new RenderingHints(RenderingHints.KEY_ANTIALIASING,
                         RenderingHints.VALUE_ANTIALIAS_ON);
@@ -131,57 +174,20 @@ public class SubSongSelectionP extends JPanel implements MouseListener, MouseMot
 
         g2d.setRenderingHints(rh);
 
-        drawButtons(g2d);
+        g2d.drawImage(background, 0, 0, null);
 
-        g2d.setColor(Color.white);
+        goBackAnim.drawAnimation(g2d, backX, y1);
+        /*g2d.setColor(Color.red);
+        g2d.draw(rect1);*/
 
-        g2d.drawString("Song list :", (MyFrame.WIDTH - SongSelectionP.WIDTH) / 2, (MyFrame.HEIGHT - SongSelectionP.HEIGHT) / 2 - 75);
-        g2d.drawString("Search :", jTextField.getX() - 90, (MyFrame.HEIGHT - SongSelectionP.HEIGHT) / 2 - 75);
+        playSAnim.drawAnimation(g2d, playX, y1);
+        /*g2d.setColor(Color.blue);
+        g2d.draw(rect2);*/
 
-        g2d.setStroke(defaultStroke);
-    }
+        viewSAnim.drawAnimation(g2d, scoresX, y1);
+        /*g2d.setColor(Color.magenta);
+        g2d.draw(rect3);*/
 
-    public void drawButtons(Graphics2D g2d){
-        g2d.setFont(buttonsFont);
-        int button1W = g2d.getFontMetrics().stringWidth("GO BACK");
-        int button2W = g2d.getFontMetrics().stringWidth("PLAY SONG");
-        int button3W = g2d.getFontMetrics().stringWidth("VIEW SCORES");
-
-        if(change1){
-            g2d.setColor(Color.white);
-            g2d.fillRect(x1, y1, width1, height1);
-            g2d.setColor(Color.black);
-            g2d.drawString("GO BACK",x1 + (width1 - button1W)/2, y1 + height1/2 + 8);
-        } else{
-            g2d.setColor(Color.white);
-            g2d.drawRect(x1, y1, width1, height1);
-            g2d.setColor(Color.white);
-            g2d.drawString("GO BACK",x1 + (width1 - button1W)/2, y1 + height1/2 + 8);
-        }
-
-        if(change2){
-            g2d.setColor(Color.white);
-            g2d.fillRect(x2, y1, width1, height1);
-            g2d.setColor(Color.black);
-            g2d.drawString("PLAY SONG",x2 + (width1 - button2W)/2, y1 + height1/2 + 8);
-        } else{
-            g2d.setColor(Color.white);
-            g2d.drawRect(x2, y1, width1, height1);
-            g2d.setColor(Color.white);
-            g2d.drawString("PLAY SONG",x2 + (width1 - button2W)/2, y1 + height1/2 + 8);
-        }
-
-        if(change3){
-            g2d.setColor(Color.white);
-            g2d.fillRect(x3, y1, width1, height1);
-            g2d.setColor(Color.black);
-            g2d.drawString("VIEW SCORES",x3 + (width1 - button3W)/2, y1 + height1/2 + 8);
-        } else{
-            g2d.setColor(Color.white);
-            g2d.drawRect(x3, y1, width1, height1);
-            g2d.setColor(Color.white);
-            g2d.drawString("VIEW SCORES",x3 + (width1 - button3W)/2, y1 + height1/2 + 8);
-        }
     }
 
     @Override
@@ -225,14 +231,38 @@ public class SubSongSelectionP extends JPanel implements MouseListener, MouseMot
         int y = e.getY();
 
         if (rect1.contains(x, y)) {
+            if(!change1){
+                try {
+                    buttonAudio.createAudio();
+                    buttonAudio.playTrack();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
             change1 = true;
         } else change1 = false;
 
         if (rect2.contains(x, y)) {
+            if(!change2){
+                try {
+                    buttonAudio.createAudio();
+                    buttonAudio.playTrack();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
             change2 = true;
         } else change2 = false;
 
         if (rect3.contains(x, y)) {
+            if(!change3){
+                try {
+                    buttonAudio.createAudio();
+                    buttonAudio.playTrack();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
             change3 = true;
         } else change3 = false;
     }

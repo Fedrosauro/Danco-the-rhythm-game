@@ -5,7 +5,7 @@ import java.io.File;
 
 public class SongSelectionP extends JPanel {
 
-    public static int WIDTH = 700, HEIGHT = 350;
+    public static int WIDTH = 900, HEIGHT = 350;
 
     private MyJList jList;
     private MyJScrollPane jScrollPane;
@@ -49,9 +49,5 @@ public class SongSelectionP extends JPanel {
 
     public MyJList getjList() {
         return jList;
-    }
-
-    public MyJScrollPane getjScrollPane() {
-        return jScrollPane;
     }
 }
