@@ -101,11 +101,11 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
             LettersTiming[i] = new ArrayList<>();
         }
 
-        try { //gets notes from a file.txt
+        /*try { //gets notes from a file.txt
             getNotes("res/notes/notes_" + selectedSong + ".txt");
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
 
         physicalLettersCreation();
 
@@ -115,12 +115,12 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
 
         showHitScores = new ShowHitScores(handler);
 
-        song = new MusicPlayer("res/songs/" + selectedSong + ".wav");
+        /*song = new MusicPlayer("res/songs/" + selectedSong + ".wav");
         try {
             song.createAudio();
         } catch (Exception e) {
             e.printStackTrace();
-        }
+        }*/
 
         buttonsFont = new Font("Arial", Font.PLAIN, 25);
 
@@ -202,11 +202,11 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
     private void tick(){
         if (stopWatch2.getTime() >= 2000 && !started) {
             stopWatch.start();
-            try {
+            /*try {
                 song.playTrack();
             } catch (Exception e) {
                 e.printStackTrace();
-            }
+            }*/
             started = true;
             stopWatch2.stop();
         }
@@ -216,13 +216,13 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
         hud.tick();
         spawn.tick();
 
-        if (stopWatch.getTime() >= 10000 && song.clip != null && !song.clip.isActive() && !stopClick) { //the game ends (OK)
+        /*if (stopWatch.getTime() >= 10000 && song.clip != null && !song.clip.isActive() && !stopClick) { //the game ends (OK)
             stopWatch.stop();
             ResultPane resultPane = new ResultPane(jFrame, selectedSong, checkAutoMode, hud.getScore(), hud.getScoreCounts());
             jFrame.setContentPane(resultPane);
             jFrame.revalidate();
             running = false;
-        }
+        }*/
     }
 
     private void render(Graphics g){
@@ -245,6 +245,10 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
         showHitScores.render(g2d);
         hud.render(g2d);
 
+        g2d.setFont(new Font("youre gone", Font.PLAIN, 23));
+        g2d.setColor(new Color(241, 81, 82));
+        g2d.drawString((gameLaunched + 1) + "", 153, 227);
+
         g2d.setColor(new Color(45, 45, 45));
         int yWLine = REDLINESY + 64 / 8 + 10;
 
@@ -255,7 +259,8 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
         g2d.setColor(Color.white);
 
         g2d.drawString("FPS : " + checkFPS, MyFrame.WIDTH - 130, MyFrame.HEIGHT - 10);
-        g2d.drawString(stopWatch.toString() + "", 8, 45);
+        g2d.setFont(new Font("youre gone", Font.PLAIN, 20));
+        g2d.drawString(stopWatch.toString() + "", 22, 105);
 
         g2d.drawLine(posINX, yWLine, posINX + 70 * 10, yWLine);
 

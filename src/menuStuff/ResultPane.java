@@ -246,7 +246,7 @@ public class ResultPane extends JPanel implements ActionListener, MouseListener,
     public void saveScore() throws IOException {
         output = new OutputStreamWriter(new FileOutputStream("res/scores/scores_" + songName + ".txt", true));
         output.write(score + "|" + scoreCounts[3] + "," + scoreCounts[2] + "," + scoreCounts[1] + ","
-                + scoreCounts[0] + "#" + vote + "@" + acc + "[" + dateNow + "-" + "\n");
+                + scoreCounts[0] + "#" + vote + "@" + new BigDecimal(String.valueOf(acc)).setScale(2, BigDecimal.ROUND_FLOOR) + "[" + dateNow + "-" + "\n");
         output.close();
     }
 

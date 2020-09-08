@@ -1,10 +1,17 @@
 package gameplay;
 
+import menuStuff.BufferedImageLoader;
+
 import java.awt.*;
+import java.awt.image.BufferedImage;
 
 public class HUD {
 
     private Handler handler;
+
+    private BufferedImageLoader loader;
+
+    private BufferedImage score_panel;
 
     private int score;
 
@@ -15,6 +22,9 @@ public class HUD {
     public HUD(Handler handler){
         this.handler = handler;
         scoreCounts = new int[4];
+        loader = new BufferedImageLoader();
+
+        score_panel = loader.loadImage("res/images/backgrounds/background_HUD.png");
     }
 
     public void tick(){
@@ -48,17 +58,16 @@ public class HUD {
     }
 
     public void render(Graphics2D g2d){
-        g2d.setFont(new Font("Arial", Font.PLAIN, 18));
+        g2d.drawImage(score_panel, 5, 0, null);
+        g2d.setFont(new Font("youre gone", Font.PLAIN, 20));
         g2d.setColor(Color.white);
-        g2d.drawString("Total score : " + score, 5, 20);
+        g2d.drawString(score + "", 22, 40);
 
-        g2d.setFont(new Font("Arial", Font.PLAIN, 14));
-
-        int xPos = 20;
+        g2d.setFont(new Font("youre gone", Font.PLAIN, 15));
+        int xPos = 22;
         for(int i = 3; i >= 0; i--){
-            g2d.drawString((i == 3 ? 500 : i == 2 ? 250 : i == 1 ? 100 : " X ") + "", xPos, 70);
-            g2d.drawString(scoreCounts[i] + "", xPos + 5, 90);
-            xPos += 30;
+            g2d.drawString(scoreCounts[i] + "", xPos, 167);
+            xPos += 42;
         }
 
         g2d.setFont(new Font("Arial", Font.PLAIN, 18));

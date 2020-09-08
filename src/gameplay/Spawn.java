@@ -17,6 +17,7 @@ public class Spawn {
         this.handler = handler;
         this.lettersTiming = lettersTiming;
         this.CAM = checkAutoMode;
+        calcDelay = - 1915 - 4000;
     }
 
     public void tick(){
@@ -27,10 +28,10 @@ public class Spawn {
                 row = 1;
             }
             if (!lettersTiming[i].isEmpty()) {
-                switch (Game.gameLaunched){ // thing that we will need later
-                    case 0 : { calcDelay = - 1605 - 4000; break; }
-                    default : { calcDelay = - 1905 - 4000; break; }
-                }
+                /*switch (Game.gameLaunched){ // maybe we don't need this
+                    case 0 : { calcDelay = - 1915 - 4000; break; }
+                    default : { calcDelay = - 1915 - 4000; break; }
+                }*/
                 if (Game.stopWatch.getTime() >= lettersTiming[i].get(0).getStart() + calcDelay) {
                     GENERAL = new PhantomKey(Game.ArrayLetters[i].getX(),- 50,
                             ID_PHA.values()[i], ID_PHY.values()[i], handler, 3, (char)(i + 65), row, col, CAM);
@@ -39,7 +40,6 @@ public class Spawn {
                 }
             }
             row++;
-        } // 1605 delay first run
-          // 1905 delay after the first run
+        }
     }
 }
