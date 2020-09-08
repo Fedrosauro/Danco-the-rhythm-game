@@ -19,8 +19,8 @@ public class SubScoreView extends JPanel implements MouseListener, MouseMotionLi
 
     private BufferedImageLoader loader;
 
-    private BufferedImage[] goBackImages;
-    private Animation goBackAnim;
+    private BufferedImage[] goBackImages, background;
+    private Animation goBackAnim, backgroundAnim;
 
     private Rectangle2D rect1; //go back
     private int x1, y1;
@@ -55,6 +55,20 @@ public class SubScoreView extends JPanel implements MouseListener, MouseMotionLi
 
         change1 = false;
 
+        background = new BufferedImage[26];
+        for(int i = 0; i < 26; i++) {
+            if(i <= 9) background[i] = loader.loadImage("res/images/backgrounds/b_viewScores/b_viewscores000" + i + ".png");
+            else background[i] = loader.loadImage("res/images/backgrounds/b_viewScores/b_viewscores00" + i + ".png");
+        }
+
+        backgroundAnim = new Animation(1, this
+                , background[0], background[1], background[2], background[3], background[4]
+                , background[5], background[6], background[7], background[8], background[9]
+                , background[10], background[11], background[12], background[13], background[14]
+                , background[15], background[16], background[17], background[18], background[19]
+                , background[20], background[21], background[22], background[23], background[24]
+                , background[25]);
+
         goBackImages = new BufferedImage[7];
         for(int i = 0; i < 7; i++) {
             goBackImages[i] = loader.loadImage("res/images/goBackButton/goback000" + i + ".png");
@@ -77,6 +91,7 @@ public class SubScoreView extends JPanel implements MouseListener, MouseMotionLi
     @Override
     public void actionPerformed(ActionEvent e) {
         repaint();
+        backgroundAnim.runAnimation();
         goBackAnim.runAnimation(change1);
     }
 
@@ -97,6 +112,8 @@ public class SubScoreView extends JPanel implements MouseListener, MouseMotionLi
                 RenderingHints.VALUE_RENDER_QUALITY);
 
         g2d.setRenderingHints(rh);
+
+        backgroundAnim.drawAnimation(g2d, 0, 0);
 
         goBackAnim.drawAnimation(g2d, backX, y1);
         /*g2d.setColor(Color.red);

@@ -25,6 +25,14 @@ public class Animation {
         this.frames = images.length;
     }
 
+    public void runAnimation(){
+        index++;
+        if(index > speed) {
+            index = 0;
+            nextFrame();
+        }
+    }
+
     public void runAnimation(boolean change){
         index++;
         if(index > speed) {
@@ -56,6 +64,12 @@ public class Animation {
             for (int j = frames - 1; j >= 0; j--) if (count == j) currentImg = images[j];
             if (count > 0) count--;
         }
+    }
+
+    private void nextFrame(){ //repeating the animation once it's over
+        for (int i = 0; i < frames; i++) if (count == i) currentImg = images[i];
+        count++;
+        if(count > frames) count = 0;
     }
 
     public void drawAnimation(Graphics2D g2d, int x, int y){
