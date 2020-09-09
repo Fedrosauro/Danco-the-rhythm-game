@@ -1,11 +1,13 @@
 package menuStuff;
 
 import gameplay.Game;
+import gameplay.MusicPlayer;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -24,14 +26,21 @@ public class ResultPane extends JPanel implements ActionListener, MouseListener,
     private char vote;
     private String songName;
 
+    private BufferedImageLoader loader;
+    private BufferedImage background, backgroundText;
+
     private boolean CAM;
 
     private final int DELAY = 5;
     private Timer timer;
 
-    public static Stroke defaultStroke;
+    private BufferedImage[] goBackImages, saveScoreImages, retryImages;
+    private Animation goBackAnim, saveScoreAnim, retryAnim;
 
-    private Font buttonsFont;
+    private MusicPlayer buttonAudio;
+
+    private int backX, saveX, retryX;
+
     private Font textFont;
 
     private Rectangle2D rect1; //go back
@@ -68,27 +77,62 @@ public class ResultPane extends JPanel implements ActionListener, MouseListener,
 
         setBounds(0, 0, MyFrame.WIDTH, MyFrame.HEIGHT); //for the real game
 
-        setBackground(Color.black);
         setOpaque(true);
 
-        buttonsFont = new Font("Arial", Font.PLAIN, 25);
-        textFont = new Font("Arial", Font.PLAIN, 30);
+        loader = new BufferedImageLoader();
 
-        width1 = 200;
+        background = loader.loadImage("res/images/backgrounds/background_ResultPane.png");
+        backgroundText = loader.loadImage("res/images/backgrounds/background_resultPane_text.png");
+
+        textFont = new Font("Arial Rounded MT Bold", Font.PLAIN, 30);
+
+        backX = 57;
+        width1 = 275;
         height1 = 50;
-        x1 = 190;
-        y1 = 500;
-        rect1= new Rectangle2D.Float(x1, y1, width1, height1);
+        x1 = backX + 45;
+        y1 = 480;
+        rect1= new Rectangle2D.Float(x1, y1 + 19, width1, height1);
 
-        x2 = x1 + width1 + 20;
-        rect2= new Rectangle2D.Float(x2, y1, width1, height1);
+        saveX = backX + 300;
+        x2 = saveX + 45;
+        rect2= new Rectangle2D.Float(x2, y1 + 19, width1, height1);
 
-        x3 = x2 + width1 + 20;
-        rect3= new Rectangle2D.Float(x3, y1, width1, height1);
+        retryX = saveX + 300;
+        x3 = retryX + 45;
+        rect3= new Rectangle2D.Float(x3, y1 + 19, width1, height1);
 
         change1 = false;
         change2 = false;
         change3 = false;
+
+        goBackImages = new BufferedImage[7];
+        for(int i = 0; i < 7; i++) {
+            goBackImages[i] = loader.loadImage("res/images/goBackButton/goback000" + i + ".png");
+        }
+
+        goBackAnim = new Animation(1, this
+                , goBackImages[0],  goBackImages[1], goBackImages[2], goBackImages[3]
+                , goBackImages[4],  goBackImages[5], goBackImages[6]);
+
+        saveScoreImages = new BufferedImage[7];
+        for(int i = 0; i < 7; i++) {
+            saveScoreImages[i] = loader.loadImage("res/images/saveScoreButton/savescore_button000" + i + ".png");
+        }
+
+        saveScoreAnim = new Animation(1, this
+                , saveScoreImages[0],  saveScoreImages[1], saveScoreImages[2], saveScoreImages[3]
+                , saveScoreImages[4],  saveScoreImages[5], saveScoreImages[6]);
+
+        retryImages = new BufferedImage[7];
+        for(int i = 0; i < 7; i++) {
+            retryImages[i] = loader.loadImage("res/images/retryButton/retry_button000" + i + ".png");
+        }
+
+        retryAnim = new Animation(1, this
+                , retryImages[0],  retryImages[1], retryImages[2], retryImages[3]
+                , retryImages[4],  retryImages[5], retryImages[6]);
+
+        buttonAudio = new MusicPlayer("res/audioButton.wav");
 
         acc = (((scoreCounts[3] * 500) + (scoreCounts[2] * 250) + (scoreCounts[1] * 100)) /
                 (IntStream.of(3, 2, 1, 0).map(i -> scoreCounts[i]).sum())) * 0.2;
@@ -108,6 +152,9 @@ public class ResultPane extends JPanel implements ActionListener, MouseListener,
     @Override
     public void actionPerformed(ActionEvent e) {
         repaint();
+        saveScoreAnim.runAnimation(change2);
+        goBackAnim.runAnimation(change1);
+        retryAnim.runAnimation(change3);
     }
 
     @Override
@@ -119,8 +166,6 @@ public class ResultPane extends JPanel implements ActionListener, MouseListener,
     public void doDrawing(Graphics g){
         Graphics2D g2d = (Graphics2D) g;
 
-        defaultStroke = g2d.getStroke();
-
         RenderingHints rh =
                 new RenderingHints(RenderingHints.KEY_ANTIALIASING,
                         RenderingHints.VALUE_ANTIALIAS_ON);
@@ -130,80 +175,49 @@ public class ResultPane extends JPanel implements ActionListener, MouseListener,
 
         g2d.setRenderingHints(rh);
 
-        g2d.setFont(textFont);
+        g2d.drawImage(background, 0, 0, null);
+        g2d.drawImage(backgroundText,0, 0, null);
 
+        g2d.setFont(textFont);
         g2d.setColor(Color.white);
 
         int songNameWidth = g2d.getFontMetrics().stringWidth(songName);
         if(x1 + songNameWidth >= MyFrame.WIDTH) {
-            g2d.drawString("Song : " + songName.substring(0, songName.length() - 18) + "...", x1, 60);
-        } else g2d.drawString("Song : " + songName, x1, 60);
+            g2d.drawString(songName.substring(0, songName.length() - 42) + "...", 173, 51);
+        } else g2d.drawString(songName, x1, 60);
 
-        g2d.drawString("Your score : " + score, x1, 100);
-        int xPos = x1;
+        g2d.drawString(score + "", 193, 123);
+        int xPos = 190;
         for(int i = 3; i >= 0; i--){
-            g2d.drawString((i == 3 ? 500 : i == 2 ? 250 : i == 1 ? 100 : "X") + "", xPos, 150);
-            g2d.drawString(scoreCounts[i] + "", xPos, 200);
-            xPos += 120;
+            g2d.drawString(scoreCounts[i] + "", xPos, 226);
+            xPos += 94;
         }
 
-        g2d.drawString("Accuracy : "
-                + new BigDecimal(String.valueOf(acc)).setScale(2, BigDecimal.ROUND_FLOOR)
-                + "%", x1, 240);
+        g2d.drawString("" + new BigDecimal(String.valueOf(acc)).setScale(2, BigDecimal.ROUND_FLOOR)
+                + "%", 260, 296);
 
-        g2d.drawString("Vote : " + vote, x1, 280);
-        g2d.drawString("Date : " + dateNow + "", x1, 330);
+        g2d.drawString("" + dateNow + "", 195, 430);
 
-        drawButtons(g2d);
+        if(vote == 'P') g2d.setColor(new Color(255, 0, 244));
+        if(vote == 'A') g2d.setColor(new Color(246, 255, 21));
+        if(vote == 'B') g2d.setColor(new Color(33, 224, 122));
+        if(vote == 'C') g2d.setColor(new Color(0, 102, 255));
+        if(vote == 'D') g2d.setColor(new Color(255, 140, 0));
+        if(vote == 'E') g2d.setColor(new Color(255, 0, 0));
+        g2d.drawString("" + vote, 193, 363);
 
-        g2d.setStroke(defaultStroke);
-    }
+        goBackAnim.drawAnimation(g2d, backX, y1);
+        /*g2d.setColor(Color.red);
+        g2d.draw(rect1);*/
 
-    public void drawButtons(Graphics2D g2d){
-        g2d.setFont(buttonsFont);
-        int button1W = g2d.getFontMetrics().stringWidth("SAVE SCORE");
-        int button2W = g2d.getFontMetrics().stringWidth("RETRY");
-        int button3W = g2d.getFontMetrics().stringWidth("GO BACK");
+        saveScoreAnim.drawAnimation(g2d, saveX, y1);
+        /*g2d.setColor(Color.blue);
+        g2d.draw(rect2);*/
 
-        if(!CAM) {
-            if (change1) {
-                g2d.setColor(Color.white);
-                g2d.fillRect(x1, y1, width1, height1);
-                g2d.setColor(Color.black);
-                g2d.drawString("SAVE SCORE", x1 + (width1 - button1W) / 2, y1 + height1 / 2 + 8);
-            } else {
-                g2d.setColor(Color.white);
-                g2d.drawRect(x1, y1, width1, height1);
-                g2d.setColor(Color.white);
-                g2d.drawString("SAVE SCORE", x1 + (width1 - button1W) / 2, y1 + height1 / 2 + 8);
-            }
-        }
+        retryAnim.drawAnimation(g2d, retryX, y1);
+        /*g2d.setColor(Color.magenta);
+        g2d.draw(rect3);*/
 
-        if(!CAM) {
-            if (change2) {
-                g2d.setColor(Color.white);
-                g2d.fillRect(x2, y1, width1, height1);
-                g2d.setColor(Color.black);
-                g2d.drawString("RETRY", x2 + (width1 - button2W) / 2, y1 + height1 / 2 + 8);
-            } else {
-                g2d.setColor(Color.white);
-                g2d.drawRect(x2, y1, width1, height1);
-                g2d.setColor(Color.white);
-                g2d.drawString("RETRY", x2 + (width1 - button2W) / 2, y1 + height1 / 2 + 8);
-            }
-        }
-
-        if(change3){
-            g2d.setColor(Color.white);
-            g2d.fillRect(x3, y1, width1, height1);
-            g2d.setColor(Color.black);
-            g2d.drawString("GO BACK",x3 + (width1 - button3W)/2, y1 + height1/2 + 8);
-        } else{
-            g2d.setColor(Color.white);
-            g2d.drawRect(x3, y1, width1, height1);
-            g2d.setColor(Color.white);
-            g2d.drawString("GO BACK",x3 + (width1 - button3W)/2, y1 + height1/2 + 8);
-        }
     }
 
     @Override
@@ -256,14 +270,38 @@ public class ResultPane extends JPanel implements ActionListener, MouseListener,
         int y = e.getY();
 
         if (rect1.contains(x, y)) {
+            if(!change1){
+                try {
+                    buttonAudio.createAudio();
+                    buttonAudio.playTrack();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
             change1 = true;
         } else change1 = false;
 
         if (rect2.contains(x, y)) {
+            if(!change2){
+                try {
+                    buttonAudio.createAudio();
+                    buttonAudio.playTrack();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
             change2 = true;
         } else change2 = false;
 
         if (rect3.contains(x, y)) {
+            if(!change3){
+                try {
+                    buttonAudio.createAudio();
+                    buttonAudio.playTrack();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
             change3 = true;
         } else change3 = false;
     }
