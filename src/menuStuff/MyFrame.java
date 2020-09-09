@@ -12,15 +12,9 @@ public class MyFrame extends JFrame {
     }
 
     public void initUI(){
-        //MainPage mainPage = new MainPage(this);
+        MainPage mainPage = new MainPage(this);
 
-        String selectedSong = "akldsflaskdfjlaskjflskajfkasSDFSDFSFDDFSFDSFDSFDSFSFDFDSDFSfaskfdlsd";
-        int score = 70000;
-        int[] scoreCounts = {0, 0, 0, 123};
-        ResultPane resultPane = new ResultPane(this, selectedSong, false, score, scoreCounts);
-        resultPane.setPreferredSize(new Dimension(WIDTH, HEIGHT));
-
-        setContentPane(resultPane);
+        setContentPane(mainPage);
 
         setTitle("DANCO");
         setResizable(false);
