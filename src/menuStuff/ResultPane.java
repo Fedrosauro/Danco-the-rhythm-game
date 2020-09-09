@@ -184,7 +184,7 @@ public class ResultPane extends JPanel implements ActionListener, MouseListener,
         int songNameWidth = g2d.getFontMetrics().stringWidth(songName);
         if(x1 + songNameWidth >= MyFrame.WIDTH) {
             g2d.drawString(songName.substring(0, songName.length() - 42) + "...", 173, 51);
-        } else g2d.drawString(songName, x1, 60);
+        } else g2d.drawString(songName, 173, 51);
 
         g2d.drawString(score + "", 193, 123);
         int xPos = 190;
@@ -226,7 +226,16 @@ public class ResultPane extends JPanel implements ActionListener, MouseListener,
         int y = e.getY();
 
         if(!CAM) {
-            if (rect1.contains(x, y)) { //ACCEPT
+            if (rect1.contains(x, y)) {
+                SelectGlass selectGlass = new SelectGlass(jFrame);
+                timer.stop();
+                jFrame.setContentPane(selectGlass);
+                jFrame.revalidate();
+            }
+        }
+
+        if(!CAM) {
+            if (rect2.contains(x, y)) { //RETRY / RESTART
                 try {
                     saveScore();
                 } catch (IOException fileNotFoundException) {
@@ -239,21 +248,12 @@ public class ResultPane extends JPanel implements ActionListener, MouseListener,
             }
         }
 
-        if(!CAM) {
-            if (rect2.contains(x, y)) { //RETRY / RESTART
-                timer.stop();
-                Game game = new Game(jFrame, songName, false);
-                jFrame.setContentPane(game);
-                jFrame.revalidate();
-                game.start();
-            }
-        }
-
         if(rect3.contains(x, y)){ //BACK TO SONG SELECTION = REFUSE
-            SelectGlass selectGlass = new SelectGlass(jFrame);
             timer.stop();
-            jFrame.setContentPane(selectGlass);
+            Game game = new Game(jFrame, songName, false);
+            jFrame.setContentPane(game);
             jFrame.revalidate();
+            game.start();
         }
     }
 
