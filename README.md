@@ -1,4 +1,4 @@
-# Rhythm-Game-TST1
+# DANCO (rhythm game)
 
 Similar to osu!mania, but you play with all the keyboard. ***The songs were just used for TESTING the game, I do not own any of the songs
 that are in the res/songs/ folder. I gain nothing from them*** (except for the testing.wav song). MyFrame.java is the "main class" . There is a "score saving" system. And everything is "local" (for now). So notes for each songs are stored into files. Scores are stored into files etc.. I'm still trying to find a
