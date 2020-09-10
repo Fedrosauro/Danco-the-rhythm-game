@@ -55,10 +55,10 @@ public class SubScoreView extends JPanel implements MouseListener, MouseMotionLi
 
         change1 = false;
 
-        background = new BufferedImage[26];
-        for(int i = 0; i < 26; i++) {
-            if(i <= 9) background[i] = loader.loadImage("res/images/backgrounds/b_viewScores/b_viewscores000" + i + ".png");
-            else background[i] = loader.loadImage("res/images/backgrounds/b_viewScores/b_viewscores00" + i + ".png");
+        background = new BufferedImage[24];
+        for(int i = 0; i < 24; i++) {
+            if(i <= 9) background[i] = loader.loadImage("res/images/backgrounds/b_viewScores/b_viewscore000" + i + ".png");
+            else background[i] = loader.loadImage("res/images/backgrounds/b_viewScores/b_viewscore00" + i + ".png");
         }
 
         backgroundAnim = new Animation(1, this
@@ -66,8 +66,7 @@ public class SubScoreView extends JPanel implements MouseListener, MouseMotionLi
                 , background[5], background[6], background[7], background[8], background[9]
                 , background[10], background[11], background[12], background[13], background[14]
                 , background[15], background[16], background[17], background[18], background[19]
-                , background[20], background[21], background[22], background[23], background[24]
-                , background[25]);
+                , background[20], background[21], background[22], background[23]);
 
         goBackImages = new BufferedImage[7];
         for(int i = 0; i < 7; i++) {

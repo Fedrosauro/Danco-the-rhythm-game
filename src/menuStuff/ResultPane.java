@@ -152,9 +152,11 @@ public class ResultPane extends JPanel implements ActionListener, MouseListener,
     @Override
     public void actionPerformed(ActionEvent e) {
         repaint();
-        saveScoreAnim.runAnimation(change2);
         goBackAnim.runAnimation(change1);
-        retryAnim.runAnimation(change3);
+        if(!CAM) {
+            saveScoreAnim.runAnimation(change2);
+            retryAnim.runAnimation(change3);
+        }
     }
 
     @Override
@@ -210,13 +212,15 @@ public class ResultPane extends JPanel implements ActionListener, MouseListener,
         /*g2d.setColor(Color.red);
         g2d.draw(rect1);*/
 
-        saveScoreAnim.drawAnimation(g2d, saveX, y1);
+        if(!CAM) {
+            saveScoreAnim.drawAnimation(g2d, saveX, y1);
         /*g2d.setColor(Color.blue);
         g2d.draw(rect2);*/
 
-        retryAnim.drawAnimation(g2d, retryX, y1);
+            retryAnim.drawAnimation(g2d, retryX, y1);
         /*g2d.setColor(Color.magenta);
         g2d.draw(rect3);*/
+        }
 
     }
 
@@ -225,17 +229,14 @@ public class ResultPane extends JPanel implements ActionListener, MouseListener,
         int x = e.getX();
         int y = e.getY();
 
-        if(!CAM) {
-            if (rect1.contains(x, y)) {
-                SelectGlass selectGlass = new SelectGlass(jFrame);
-                timer.stop();
-                jFrame.setContentPane(selectGlass);
-                jFrame.revalidate();
-            }
+        if (rect1.contains(x, y)) {
+            SelectGlass selectGlass = new SelectGlass(jFrame);
+            timer.stop();
+            jFrame.setContentPane(selectGlass);
+            jFrame.revalidate();
         }
-
         if(!CAM) {
-            if (rect2.contains(x, y)) { //RETRY / RESTART
+            if (rect2.contains(x, y)) {
                 try {
                     saveScore();
                 } catch (IOException fileNotFoundException) {
@@ -246,14 +247,14 @@ public class ResultPane extends JPanel implements ActionListener, MouseListener,
                 jFrame.setContentPane(selectGlass);
                 jFrame.revalidate();
             }
-        }
 
-        if(rect3.contains(x, y)){ //BACK TO SONG SELECTION = REFUSE
-            timer.stop();
-            Game game = new Game(jFrame, songName, false);
-            jFrame.setContentPane(game);
-            jFrame.revalidate();
-            game.start();
+            if (rect3.contains(x, y)) { //BACK TO SONG SELECTION = REFUSE
+                timer.stop();
+                Game game = new Game(jFrame, songName, false);
+                jFrame.setContentPane(game);
+                jFrame.revalidate();
+                game.start();
+            }
         }
     }
 
@@ -270,7 +271,7 @@ public class ResultPane extends JPanel implements ActionListener, MouseListener,
         int y = e.getY();
 
         if (rect1.contains(x, y)) {
-            if(!change1){
+            if (!change1) {
                 try {
                     buttonAudio.createAudio();
                     buttonAudio.playTrack();
@@ -281,29 +282,31 @@ public class ResultPane extends JPanel implements ActionListener, MouseListener,
             change1 = true;
         } else change1 = false;
 
-        if (rect2.contains(x, y)) {
-            if(!change2){
-                try {
-                    buttonAudio.createAudio();
-                    buttonAudio.playTrack();
-                } catch (Exception ex) {
-                    ex.printStackTrace();
+        if(!CAM) {
+            if (rect2.contains(x, y)) {
+                if (!change2) {
+                    try {
+                        buttonAudio.createAudio();
+                        buttonAudio.playTrack();
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
                 }
-            }
-            change2 = true;
-        } else change2 = false;
+                change2 = true;
+            } else change2 = false;
 
-        if (rect3.contains(x, y)) {
-            if(!change3){
-                try {
-                    buttonAudio.createAudio();
-                    buttonAudio.playTrack();
-                } catch (Exception ex) {
-                    ex.printStackTrace();
+            if (rect3.contains(x, y)) {
+                if (!change3) {
+                    try {
+                        buttonAudio.createAudio();
+                        buttonAudio.playTrack();
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
                 }
-            }
-            change3 = true;
-        } else change3 = false;
+                change3 = true;
+            } else change3 = false;
+        }
     }
 
     ////////////////////////////////////////////////////
