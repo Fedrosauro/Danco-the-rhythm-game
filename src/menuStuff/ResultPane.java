@@ -27,15 +27,13 @@ public class ResultPane extends JPanel implements ActionListener, MouseListener,
     private String songName;
 
     private BufferedImageLoader loader;
-    private BufferedImage background, backgroundText;
+    private BufferedImage background, background_hud,
+            goBack_h, goBack_nh, saveScore_h, saveScore_nh, retry_h, retry_nh;
 
-    private boolean CAM;
+    private boolean checkAutoMode;
 
     private final int DELAY = 5;
     private Timer timer;
-
-    private BufferedImage[] goBackImages, saveScoreImages, retryImages;
-    private Animation goBackAnim, saveScoreAnim, retryAnim;
 
     private MusicPlayer buttonAudio;
 
@@ -61,12 +59,12 @@ public class ResultPane extends JPanel implements ActionListener, MouseListener,
     private LocalDateTime ldt;
     private String dateNow;
 
-    public ResultPane(JFrame jFrame, String songName, boolean CAM, int score, int[] scoreCounts){
+    public ResultPane(JFrame jFrame, String songName, boolean checkAutoMode, int score, int[] scoreCounts){
         this.jFrame = jFrame;
         this.score = score;
         this.scoreCounts = scoreCounts;
         this.songName = songName;
-        this.CAM = CAM;
+        this.checkAutoMode = checkAutoMode;
         setup();
         initTimer();
     }
@@ -82,15 +80,21 @@ public class ResultPane extends JPanel implements ActionListener, MouseListener,
         loader = new BufferedImageLoader();
 
         background = loader.loadImage("res/images/backgrounds/background_ResultPane.png");
-        backgroundText = loader.loadImage("res/images/backgrounds/background_resultPane_text.png");
+        background_hud = loader.loadImage("res/images/backgrounds/background_resultPane_text.png");
+        goBack_h = loader.loadImage("res/images/buttons/GoBackB/goBackB1.png");
+        goBack_nh = loader.loadImage("res/images/buttons/GoBackB/goBackB0.png");
+        saveScore_h = loader.loadImage("res/images/buttons/SaveScoreB/saveScoreB1.png");
+        saveScore_nh = loader.loadImage("res/images/buttons/SaveScoreB/saveScoreB0.png");
+        retry_h = loader.loadImage("res/images/buttons/RetryB/retryB1.png");
+        retry_nh = loader.loadImage("res/images/buttons/RetryB/retryB0.png");
 
         textFont = new Font("Arial Rounded MT Bold", Font.PLAIN, 30);
 
         backX = 57;
-        width1 = 275;
+        width1 = 271;
         height1 = 50;
-        x1 = backX + 45;
-        y1 = 480;
+        x1 = backX + 42;
+        y1 = 490;
         rect1= new Rectangle2D.Float(x1, y1 + 19, width1, height1);
 
         saveX = backX + 300;
@@ -104,33 +108,6 @@ public class ResultPane extends JPanel implements ActionListener, MouseListener,
         change1 = false;
         change2 = false;
         change3 = false;
-
-        goBackImages = new BufferedImage[7];
-        for(int i = 0; i < 7; i++) {
-            goBackImages[i] = loader.loadImage("res/images/goBackButton/goback000" + i + ".png");
-        }
-
-        goBackAnim = new Animation(1, this
-                , goBackImages[0],  goBackImages[1], goBackImages[2], goBackImages[3]
-                , goBackImages[4],  goBackImages[5], goBackImages[6]);
-
-        saveScoreImages = new BufferedImage[7];
-        for(int i = 0; i < 7; i++) {
-            saveScoreImages[i] = loader.loadImage("res/images/saveScoreButton/savescore_button000" + i + ".png");
-        }
-
-        saveScoreAnim = new Animation(1, this
-                , saveScoreImages[0],  saveScoreImages[1], saveScoreImages[2], saveScoreImages[3]
-                , saveScoreImages[4],  saveScoreImages[5], saveScoreImages[6]);
-
-        retryImages = new BufferedImage[7];
-        for(int i = 0; i < 7; i++) {
-            retryImages[i] = loader.loadImage("res/images/retryButton/retry_button000" + i + ".png");
-        }
-
-        retryAnim = new Animation(1, this
-                , retryImages[0],  retryImages[1], retryImages[2], retryImages[3]
-                , retryImages[4],  retryImages[5], retryImages[6]);
 
         buttonAudio = new MusicPlayer("res/audioButton.wav");
 
@@ -152,11 +129,6 @@ public class ResultPane extends JPanel implements ActionListener, MouseListener,
     @Override
     public void actionPerformed(ActionEvent e) {
         repaint();
-        goBackAnim.runAnimation(change1);
-        if(!CAM) {
-            saveScoreAnim.runAnimation(change2);
-            retryAnim.runAnimation(change3);
-        }
     }
 
     @Override
@@ -178,7 +150,7 @@ public class ResultPane extends JPanel implements ActionListener, MouseListener,
         g2d.setRenderingHints(rh);
 
         g2d.drawImage(background, 0, 0, null);
-        g2d.drawImage(backgroundText,0, 0, null);
+        g2d.drawImage(background_hud,0, 0, null);
 
         g2d.setFont(textFont);
         g2d.setColor(Color.white);
@@ -208,20 +180,25 @@ public class ResultPane extends JPanel implements ActionListener, MouseListener,
         if(vote == 'E') g2d.setColor(new Color(255, 0, 0));
         g2d.drawString("" + vote, 193, 363);
 
-        goBackAnim.drawAnimation(g2d, backX, y1);
-        /*g2d.setColor(Color.red);
-        g2d.draw(rect1);*/
+        if(change1) g2d.drawImage(goBack_h, backX, y1, null);
+        else g2d.drawImage(goBack_nh, backX, y1, null);
 
-        if(!CAM) {
-            saveScoreAnim.drawAnimation(g2d, saveX, y1);
-        /*g2d.setColor(Color.blue);
-        g2d.draw(rect2);*/
+        g2d.setColor(Color.red);
+        g2d.draw(rect1);
 
-            retryAnim.drawAnimation(g2d, retryX, y1);
-        /*g2d.setColor(Color.magenta);
-        g2d.draw(rect3);*/
+        if(!checkAutoMode) {
+            if (change2) g2d.drawImage(saveScore_h, saveX, y1, null);
+            else g2d.drawImage(saveScore_nh, saveX, y1, null);
+
+            g2d.setColor(Color.blue);
+            g2d.draw(rect2);
+
+            if (change3) g2d.drawImage(retry_h, retryX, y1, null);
+            else g2d.drawImage(retry_nh, retryX, y1, null);
+
+            g2d.setColor(Color.magenta);
+            g2d.draw(rect3);
         }
-
     }
 
     @Override
@@ -235,7 +212,7 @@ public class ResultPane extends JPanel implements ActionListener, MouseListener,
             jFrame.setContentPane(selectGlass);
             jFrame.revalidate();
         }
-        if(!CAM) {
+        if(!checkAutoMode) {
             if (rect2.contains(x, y)) {
                 try {
                     saveScore();
@@ -282,7 +259,7 @@ public class ResultPane extends JPanel implements ActionListener, MouseListener,
             change1 = true;
         } else change1 = false;
 
-        if(!CAM) {
+        if(!checkAutoMode) {
             if (rect2.contains(x, y)) {
                 if (!change2) {
                     try {

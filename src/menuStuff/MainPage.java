@@ -19,9 +19,9 @@ public class MainPage extends JPanel implements MouseListener, MouseMotionListen
 
     private BufferedImageLoader loader;
 
-    private BufferedImage background;
-    private BufferedImage[] playImages, exitImages, titleImages;
-    private Animation playAnim, exitAnim, titleAnim;
+    private BufferedImage background, PLAYB_h, EXITB_h, PLAYB_nh, EXITB_nh;
+    private BufferedImage[] titleImages;
+    private Animation titleAnim;
 
     private Rectangle2D rect1;
     private int x1, y1;
@@ -50,6 +50,10 @@ public class MainPage extends JPanel implements MouseListener, MouseMotionListen
         loader = new BufferedImageLoader();
 
         background = loader.loadImage("res/images/backgrounds/background_menu.png");
+        PLAYB_nh = loader.loadImage("res/images/buttons/PLAYB/playB0.png");
+        PLAYB_h = loader.loadImage("res/images/buttons/PLAYB/playB1.png");
+        EXITB_nh = loader.loadImage("res/images/buttons/EXITB/exitB0.png");
+        EXITB_h = loader.loadImage("res/images/buttons/EXITB/exitB1.png");
 
         playY = 340;
         width1 = 150; //things for buttons
@@ -63,24 +67,6 @@ public class MainPage extends JPanel implements MouseListener, MouseMotionListen
         y2 = exitY + 19;
         rect2= new Rectangle2D.Float(x1, y2, width1, height1);
         change2 = false;
-
-        playImages = new BufferedImage[7];
-        for(int i = 0; i < 7; i++) {
-            playImages[i] = loader.loadImage("res/images/playButton/play_button_white000" + i + ".png");
-        }
-
-        playAnim = new Animation(1, this
-                , playImages[0],  playImages[1], playImages[2], playImages[3]
-                , playImages[4],  playImages[5], playImages[6]);
-
-        exitImages = new BufferedImage[7];
-        for(int i = 0; i < 7; i++) {
-            exitImages[i] = loader.loadImage("res/images/exitButton/exit_button_white000" + i + ".png");
-        }
-
-        exitAnim = new Animation(1, this
-                , exitImages[0],  exitImages[1], exitImages[2], exitImages[3]
-                , exitImages[4],  exitImages[5], exitImages[6]);
 
         titleImages = new BufferedImage[31];
         for(int i = 0; i < 31; i++){
@@ -107,8 +93,6 @@ public class MainPage extends JPanel implements MouseListener, MouseMotionListen
     @Override
     public void actionPerformed(ActionEvent e) {
         repaint();
-        playAnim.runAnimation(change1);
-        exitAnim.runAnimation(change2);
         titleAnim.runAnimationOnce();
     }
 
@@ -134,13 +118,17 @@ public class MainPage extends JPanel implements MouseListener, MouseMotionListen
 
         titleAnim.drawAnimation(g2d, (MyFrame.WIDTH - titleImages[0].getWidth()) / 2 - 16, 80);
 
-        playAnim.drawAnimation(g2d, 0, playY);
-        /*g2d.setColor(Color.green);
-        g2d.draw(rect1);*/
+        if(change1) g2d.drawImage(PLAYB_h, 0, playY, null);
+        else g2d.drawImage(PLAYB_nh, 0, playY, null);
 
-        exitAnim.drawAnimation(g2d, 0, exitY);
-        /*g2d.setColor(Color.cyan);
-        g2d.draw(rect2);*/
+        g2d.setColor(Color.green);
+        g2d.draw(rect1);
+
+        if(change2) g2d.drawImage(EXITB_h, 0, exitY, null);
+        else g2d.drawImage(EXITB_nh, 0, exitY, null);
+
+        g2d.setColor(Color.cyan);
+        g2d.draw(rect2);
     }
 
     @Override

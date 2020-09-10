@@ -19,8 +19,9 @@ public class SubScoreView extends JPanel implements MouseListener, MouseMotionLi
 
     private BufferedImageLoader loader;
 
-    private BufferedImage[] goBackImages, background;
-    private Animation goBackAnim, backgroundAnim;
+    private BufferedImage goBack_h, goBack_nh;
+    private BufferedImage[] scorePanel;
+    private Animation scorePanelAnim;
 
     private Rectangle2D rect1; //go back
     private int x1, y1;
@@ -46,39 +47,32 @@ public class SubScoreView extends JPanel implements MouseListener, MouseMotionLi
 
         loader = new BufferedImageLoader();
 
+        goBack_h = loader.loadImage("res/images/buttons/GoBackB/goBackB1.png");
+        goBack_nh = loader.loadImage("res/images/buttons/GoBackB/goBackB0.png");
+
         backX = 357;
-        width1 = 275;
+        width1 = 271;
         height1 = 50;
-        x1 = backX + 45;
-        y1 = 480;
+        x1 = backX + 42;
+        y1 = 490;
         rect1= new Rectangle2D.Float(x1, y1 + 19, width1, height1);
 
         change1 = false;
 
-        background = new BufferedImage[24];
+        scorePanel = new BufferedImage[24];
         for(int i = 0; i < 24; i++) {
-            if(i <= 9) background[i] = loader.loadImage("res/images/backgrounds/b_viewScores/b_viewscore000" + i + ".png");
-            else background[i] = loader.loadImage("res/images/backgrounds/b_viewScores/b_viewscore00" + i + ".png");
+            if(i <= 9) scorePanel[i] = loader.loadImage("res/images/backgrounds/b_viewScores/b_viewscore000" + i + ".png");
+            else scorePanel[i] = loader.loadImage("res/images/backgrounds/b_viewScores/b_viewscore00" + i + ".png");
         }
 
-        backgroundAnim = new Animation(1, this
-                , background[0], background[1], background[2], background[3], background[4]
-                , background[5], background[6], background[7], background[8], background[9]
-                , background[10], background[11], background[12], background[13], background[14]
-                , background[15], background[16], background[17], background[18], background[19]
-                , background[20], background[21], background[22], background[23]);
-
-        goBackImages = new BufferedImage[7];
-        for(int i = 0; i < 7; i++) {
-            goBackImages[i] = loader.loadImage("res/images/goBackButton/goback000" + i + ".png");
-        }
-
-        goBackAnim = new Animation(1, this
-                , goBackImages[0],  goBackImages[1], goBackImages[2], goBackImages[3]
-                , goBackImages[4],  goBackImages[5], goBackImages[6]);
+        scorePanelAnim = new Animation(1, this
+                , scorePanel[0], scorePanel[1], scorePanel[2], scorePanel[3], scorePanel[4]
+                , scorePanel[5], scorePanel[6], scorePanel[7], scorePanel[8], scorePanel[9]
+                , scorePanel[10], scorePanel[11], scorePanel[12], scorePanel[13], scorePanel[14]
+                , scorePanel[15], scorePanel[16], scorePanel[17], scorePanel[18], scorePanel[19]
+                , scorePanel[20], scorePanel[21], scorePanel[22], scorePanel[23]);
 
         buttonAudio = new MusicPlayer("res/audioButton.wav");
-
     }
 
     public void initTimer(){
@@ -90,8 +84,7 @@ public class SubScoreView extends JPanel implements MouseListener, MouseMotionLi
     @Override
     public void actionPerformed(ActionEvent e) {
         repaint();
-        backgroundAnim.runAnimation();
-        goBackAnim.runAnimation(change1);
+        scorePanelAnim.runAnimation();
     }
 
     @Override
@@ -112,11 +105,13 @@ public class SubScoreView extends JPanel implements MouseListener, MouseMotionLi
 
         g2d.setRenderingHints(rh);
 
-        backgroundAnim.drawAnimation(g2d, 0, 0);
+        scorePanelAnim.drawAnimation(g2d, 0, 0);
 
-        goBackAnim.drawAnimation(g2d, backX, y1);
-        /*g2d.setColor(Color.red);
-        g2d.draw(rect1);*/
+        if(change1) g2d.drawImage(goBack_h, backX, y1, null);
+        else g2d.drawImage(goBack_nh, backX, y1, null);
+
+        g2d.setColor(Color.red);
+        g2d.draw(rect1);
     }
 
     @Override

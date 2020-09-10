@@ -23,9 +23,9 @@ public class SubSongSelectionP extends JPanel implements MouseListener, MouseMot
 
     private BufferedImageLoader loader;
 
-    private BufferedImage background;
-    private BufferedImage[] goBackImages, playSImages, viewSImages, songList_b;
-    private Animation goBackAnim, playSAnim, viewSAnim, songListAnim;
+    private BufferedImage background, goBack_h, goBack_nh, playSong_h, playSong_nh, viewScores_h, viewScores_nh;
+    private BufferedImage[] songList_b;
+    private Animation songListAnim;
 
     private Rectangle2D rect1; //go back
     private int x1, y1;
@@ -65,20 +65,26 @@ public class SubSongSelectionP extends JPanel implements MouseListener, MouseMot
         loader = new BufferedImageLoader();
 
         background = loader.loadImage("res/images/backgrounds/background_menu.png");
+        goBack_h = loader.loadImage("res/images/buttons/GoBackB/goBackB1.png");
+        goBack_nh = loader.loadImage("res/images/buttons/GoBackB/goBackB0.png");
+        playSong_h = loader.loadImage("res/images/buttons/PlaySongB/playSongB1.png");
+        playSong_nh = loader.loadImage("res/images/buttons/PlaySongB/playSongB0.png");
+        viewScores_h = loader.loadImage("res/images/buttons/ViewScoresB/viewScoresB1.png");
+        viewScores_nh = loader.loadImage("res/images/buttons/ViewScoresB/viewScoresB0.png");
 
         backX = 57;
-        width1 = 275;
+        width1 = 271;
         height1 = 50;
-        x1 = backX + 45;
-        y1 = 480;
+        x1 = backX + 42;
+        y1 = 490;
         rect1= new Rectangle2D.Float(x1, y1 + 19, width1, height1);
 
         playX = backX + 300;
-        x2 = playX + 45;
+        x2 = playX + 42;
         rect2= new Rectangle2D.Float(x2, y1 + 19, width1, height1);
 
         scoresX = playX + 300;
-        x3 = scoresX + 45;
+        x3 = scoresX + 42;
         rect3= new Rectangle2D.Float(x3, y1 + 19, width1, height1);
 
         change1 = false;
@@ -103,55 +109,16 @@ public class SubSongSelectionP extends JPanel implements MouseListener, MouseMot
                 , songList_b[32],  songList_b[33], songList_b[34], songList_b[35]
                 , songList_b[36],  songList_b[37], songList_b[38], songList_b[39]);
 
-        goBackImages = new BufferedImage[7];
-        for(int i = 0; i < 7; i++) {
-            goBackImages[i] = loader.loadImage("res/images/goBackButton/goback000" + i + ".png");
-        }
-
-        goBackAnim = new Animation(1, this
-                , goBackImages[0],  goBackImages[1], goBackImages[2], goBackImages[3]
-                , goBackImages[4],  goBackImages[5], goBackImages[6]);
-
-        playSImages = new BufferedImage[7];
-        for(int i = 0; i < 7; i++) {
-            playSImages[i] = loader.loadImage("res/images/playSongButton/playsong_button000" + i + ".png");
-        }
-
-        playSAnim = new Animation(1, this
-                , playSImages[0],  playSImages[1], playSImages[2], playSImages[3]
-                , playSImages[4],  playSImages[5], playSImages[6]);
-
-        viewSImages = new BufferedImage[7];
-        for(int i = 0; i < 7; i++) {
-            viewSImages[i] = loader.loadImage("res/images/viewScoresButton/viewscore_button000" + i + ".png");
-        }
-
-        viewSAnim = new Animation(1, this
-                , viewSImages[0],  viewSImages[1], viewSImages[2], viewSImages[3]
-                , viewSImages[4],  viewSImages[5], viewSImages[6]);
-
         buttonAudio = new MusicPlayer("res/audioButton.wav");
 
         jCheckBox = new JCheckBox("", false);
-        jCheckBox.setBounds(x2 + 65, 446, 150, 29);
-        jCheckBox.setOpaque(false);
-        jCheckBox.setIcon(new ImageIcon("res/images/checkBoxIm/unchecked.png"));
-        jCheckBox.setSelectedIcon(new ImageIcon("res/images/checkBoxIm/checked.png"));
+        setJBoxParameters();
         add(jCheckBox);
 
-        jTextField = new JTextField();
-        jTextField.setBounds((MyFrame.WIDTH - SongSelectionP.WIDTH) / 2 + 550
-                ,(MyFrame.HEIGHT - SongSelectionP.HEIGHT) / 2 - 97
-                , ((MyFrame.WIDTH - SongSelectionP.WIDTH) / 2 + SongSelectionP.WIDTH) - ((MyFrame.WIDTH - SongSelectionP.WIDTH) / 2 + 550), 30);
-        jTextField.setBackground(Color.black);
-        jTextField.setForeground(Color.white);
-        jTextField.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 20));
-        Border border = BorderFactory.createLineBorder(Color.white);
-        jTextField.setBorder(BorderFactory.createCompoundBorder(border,
-                BorderFactory.createEmptyBorder(1, 10, 1, 1)));
-        jTextField.setHorizontalAlignment(JLabel.LEFT);
-
         oldText = "";
+
+        jTextField = new JTextField();
+        setJTextParameters();
         add(jTextField);
     }
 
@@ -164,9 +131,6 @@ public class SubSongSelectionP extends JPanel implements MouseListener, MouseMot
     public void actionPerformed(ActionEvent e) {
         repaint();
         songListAnim.runAnimation();
-        playSAnim.runAnimation(change2);
-        goBackAnim.runAnimation(change1);
-        viewSAnim.runAnimation(change3);
         newText = jTextField.getText();
         if(!oldText.equals(newText)) {
             songSelectionP.updateList(newText, true);
@@ -196,18 +160,43 @@ public class SubSongSelectionP extends JPanel implements MouseListener, MouseMot
 
         songListAnim.drawAnimation(g2d, 0, -1);
 
-        goBackAnim.drawAnimation(g2d, backX, y1);
-        /*g2d.setColor(Color.red);
-        g2d.draw(rect1);*/
+        if(change1) g2d.drawImage(goBack_h, backX, y1, null);
+        else g2d.drawImage(goBack_nh, backX, y1, null);
 
-        playSAnim.drawAnimation(g2d, playX, y1);
-        /*g2d.setColor(Color.blue);
-        g2d.draw(rect2);*/
+        g2d.setColor(Color.red);
+        g2d.draw(rect1);
 
-        viewSAnim.drawAnimation(g2d, scoresX, y1);
-        /*g2d.setColor(Color.magenta);
-        g2d.draw(rect3);*/
+        if(change2) g2d.drawImage(playSong_h, playX, y1, null);
+        else g2d.drawImage(playSong_nh, playX, y1, null);
 
+        g2d.setColor(Color.blue);
+        g2d.draw(rect2);
+
+        if(change3) g2d.drawImage(viewScores_h, scoresX, y1, null);
+        else g2d.drawImage(viewScores_nh, scoresX, y1, null);
+
+        g2d.setColor(Color.magenta);
+        g2d.draw(rect3);
+    }
+
+    public void setJTextParameters(){
+        jTextField.setBounds((MyFrame.WIDTH - SongSelectionP.WIDTH) / 2 + 550
+                ,(MyFrame.HEIGHT - SongSelectionP.HEIGHT) / 2 - 97
+                , ((MyFrame.WIDTH - SongSelectionP.WIDTH) / 2 + SongSelectionP.WIDTH) - ((MyFrame.WIDTH - SongSelectionP.WIDTH) / 2 + 550), 30);
+        jTextField.setBackground(Color.black);
+        jTextField.setForeground(Color.white);
+        jTextField.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 20));
+        Border border = BorderFactory.createLineBorder(Color.white);
+        jTextField.setBorder(BorderFactory.createCompoundBorder(border,
+                BorderFactory.createEmptyBorder(1, 10, 1, 1)));
+        jTextField.setHorizontalAlignment(JLabel.LEFT);
+    }
+
+    public void setJBoxParameters(){
+        jCheckBox.setBounds(x2 + 65, 446, 150, 29);
+        jCheckBox.setOpaque(false);
+        jCheckBox.setIcon(new ImageIcon("res/images/checkBoxIm/unchecked.png"));
+        jCheckBox.setSelectedIcon(new ImageIcon("res/images/checkBoxIm/checked.png"));
     }
 
     @Override

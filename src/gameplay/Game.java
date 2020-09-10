@@ -15,7 +15,7 @@ import org.apache.commons.lang3.time.StopWatch;
 
 import javax.swing.*;
 
-public class Game extends JPanel implements Runnable, MouseListener, MouseMotionListener{
+public class Game extends JPanel implements Runnable, MouseListener, MouseMotionListener, ActionListener{
 
     private JFrame jFrame;
 
@@ -24,11 +24,16 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
     public static int gameLaunched = -1;
     private int frames;
 
+    private final int DELAY = 5;
+    private Timer timer;
+
     public static KeyInput keyInput;
 
     public Handler handler;
 
     public static BufferedImage spriteSheet;
+    private BufferedImage[] stopImages, resetImages;
+    private Animation stopAnim, resetAnim;
 
     private ArrayList<Coordinate>[] LettersTiming;
 
@@ -71,6 +76,8 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
 
     private boolean stopClick;
 
+    private MusicPlayer buttonAudio;
+
     public Game(JFrame jFrame, String selectedSong, boolean checkAutoMode){
         addMouseListener(this);
         addMouseMotionListener(this);
@@ -82,7 +89,28 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
         BufferedImageLoader loader = new BufferedImageLoader();
         spriteSheet = loader.loadImage("/spriteSheet.png");
 
+        stopImages = new BufferedImage[7];
+        for(int i = 0; i < 7; i++) {
+            stopImages[i] = loader.loadImageV2("res/images/abortButton/abortButton000" + i + ".png");
+        }
+
+        stopAnim = new Animation(1, this
+                , stopImages[0],  stopImages[1], stopImages[2], stopImages[3]
+                , stopImages[4],  stopImages[5]);
+
+        resetImages = new BufferedImage[7];
+        for(int i = 0; i < 7; i++) {
+            resetImages[i] = loader.loadImageV2("res/images/resetButton/resetButton000" + i + ".png");
+        }
+
+        resetAnim = new Animation(1, this
+                , resetImages[0],  resetImages[1], resetImages[2], resetImages[3]
+                , resetImages[4],  resetImages[5]);
+
+        buttonAudio = new MusicPlayer("res/audioButton.wav");
+
         this.jFrame = jFrame;
+        initTimer();
 
         handler = new Handler();
 
@@ -104,7 +132,7 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
         try { //gets notes from a file.txt
             getNotes("res/notes/notes_" + selectedSong + ".txt");
         } catch (IOException e) {
-            e.printStackTrace();
+           e.printStackTrace();
         }
 
         physicalLettersCreation();
@@ -137,6 +165,11 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
 
         stopClick = false;
         gameLaunched++;
+    }
+
+    public void initTimer(){
+        timer = new Timer(DELAY, this);
+        timer.start();
     }
 
     public synchronized void start() {
@@ -255,8 +288,8 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
         g2d.setColor(Color.white);
 
         g2d.drawString("FPS : " + checkFPS, MyFrame.WIDTH - 130, MyFrame.HEIGHT - 10);
-        g2d.setFont(new Font("youre gone", Font.PLAIN, 19));
-        g2d.drawString(stopWatch.toString() + "", 20, 105);
+        g2d.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 23));
+        g2d.drawString(stopWatch.toString() + "", 26, 104);
 
         g2d.drawLine(posINX, yWLine, posINX + 70 * 10, yWLine);
 
@@ -267,7 +300,15 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
 
         drawButtons(g2d);
 
-        g2d.dispose();
+        stopAnim.drawAnimation(g2d, MyFrame.WIDTH - 200, 530);
+        g2d.setColor(Color.green);
+        g2d.draw(rect1);
+
+        if(!checkAutoMode) {
+            resetAnim.drawAnimation(g2d, MyFrame.WIDTH - 200, 450);
+            g2d.setColor(Color.blue);
+            g2d.draw(rect2);
+        }
     }
 
     public void drawButtons(Graphics2D g2d){
@@ -413,11 +454,27 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
 
         if(!checkAutoMode) {
             if (rect1.contains(x, y)) {
+                if (!change1) {
+                    try {
+                        buttonAudio.createAudio();
+                        buttonAudio.playTrack();
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
                 change1 = true;
             } else change1 = false;
         }
 
         if (rect2.contains(x, y)) {
+            if (!change2) {
+                try {
+                    buttonAudio.createAudio();
+                    buttonAudio.playTrack();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
             change2 = true;
         } else change2 = false;
     }
@@ -429,5 +486,11 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
     @Override public void mouseExited(MouseEvent e) { }
     @Override public void mouseDragged(MouseEvent e) { }
     ////////////////////////////////////////////////////
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if(!checkAutoMode) resetAnim.runAnimation(change1);
+        stopAnim.runAnimation(change2);
+    }
 
 }

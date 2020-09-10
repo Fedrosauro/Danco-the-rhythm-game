@@ -59,12 +59,12 @@ public class HUD {
 
     public void render(Graphics2D g2d){
         g2d.drawImage(score_panel, 5, 0, null);
-        g2d.setFont(new Font("youre gone", Font.PLAIN, 20));
+        g2d.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 21));
         g2d.setColor(Color.white);
-        g2d.drawString(score + "", 22, 40);
+        g2d.drawString(score + "", 22, 41);
 
-        g2d.setFont(new Font("youre gone", Font.PLAIN, 15));
-        int xPos = 22;
+        g2d.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 18));
+        int xPos = 21   ;
         for(int i = 3; i >= 0; i--){
             g2d.drawString(scoreCounts[i] + "", xPos, 167);
             xPos += 42;
