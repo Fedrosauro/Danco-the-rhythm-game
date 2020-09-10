@@ -24,8 +24,8 @@ public class SubSongSelectionP extends JPanel implements MouseListener, MouseMot
     private BufferedImageLoader loader;
 
     private BufferedImage background;
-    private BufferedImage[] goBackImages, playSImages, viewSImages;
-    private Animation goBackAnim, playSAnim, viewSAnim;
+    private BufferedImage[] goBackImages, playSImages, viewSImages, songList_b;
+    private Animation goBackAnim, playSAnim, viewSAnim, songListAnim;
 
     private Rectangle2D rect1; //go back
     private int x1, y1;
@@ -64,7 +64,7 @@ public class SubSongSelectionP extends JPanel implements MouseListener, MouseMot
 
         loader = new BufferedImageLoader();
 
-        background = loader.loadImage("res/images/backgrounds/background_songs.png");
+        background = loader.loadImage("res/images/backgrounds/background_menu.png");
 
         backX = 57;
         width1 = 275;
@@ -84,6 +84,24 @@ public class SubSongSelectionP extends JPanel implements MouseListener, MouseMot
         change1 = false;
         change2 = false;
         change3 = false;
+
+        songList_b = new BufferedImage[40];
+        for(int i = 0; i < 40; i++) {
+            if(i <= 9) songList_b[i] = loader.loadImage("res/images/backgrounds/b_songList/b_songlist000" + i + ".png");
+            else songList_b[i] = loader.loadImage("res/images/backgrounds/b_songList/b_songlist00" + i + ".png");
+        }
+
+        songListAnim = new Animation(1, this
+                , songList_b[0],  songList_b[1], songList_b[2], songList_b[3]
+                , songList_b[4],  songList_b[5], songList_b[6], songList_b[7]
+                , songList_b[8],  songList_b[9], songList_b[10], songList_b[11]
+                , songList_b[12],  songList_b[13], songList_b[14], songList_b[15]
+                , songList_b[16],  songList_b[17], songList_b[18], songList_b[19]
+                , songList_b[20],  songList_b[21], songList_b[22], songList_b[23]
+                , songList_b[24],  songList_b[25], songList_b[26], songList_b[27]
+                , songList_b[28],  songList_b[29], songList_b[30], songList_b[31]
+                , songList_b[32],  songList_b[33], songList_b[34], songList_b[35]
+                , songList_b[36],  songList_b[37], songList_b[38], songList_b[39]);
 
         goBackImages = new BufferedImage[7];
         for(int i = 0; i < 7; i++) {
@@ -145,6 +163,7 @@ public class SubSongSelectionP extends JPanel implements MouseListener, MouseMot
     @Override
     public void actionPerformed(ActionEvent e) {
         repaint();
+        songListAnim.runAnimation();
         playSAnim.runAnimation(change2);
         goBackAnim.runAnimation(change1);
         viewSAnim.runAnimation(change3);
@@ -174,6 +193,8 @@ public class SubSongSelectionP extends JPanel implements MouseListener, MouseMot
         g2d.setRenderingHints(rh);
 
         g2d.drawImage(background, 0, 0, null);
+
+        songListAnim.drawAnimation(g2d, 0, -1);
 
         goBackAnim.drawAnimation(g2d, backX, y1);
         /*g2d.setColor(Color.red);
