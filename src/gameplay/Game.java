@@ -15,7 +15,7 @@ import org.apache.commons.lang3.time.StopWatch;
 
 import javax.swing.*;
 
-public class Game extends JPanel implements Runnable, MouseListener, MouseMotionListener, ActionListener{
+public class Game extends JPanel implements Runnable, MouseListener, MouseMotionListener{
 
     private JFrame jFrame;
 
@@ -31,9 +31,7 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
 
     public Handler handler;
 
-    public static BufferedImage spriteSheet;
-    private BufferedImage[] stopImages, resetImages;
-    private Animation stopAnim, resetAnim;
+    public static BufferedImage spriteSheet, abort_h, abort_nh, reset_h, reset_nh;
 
     private ArrayList<Coordinate>[] LettersTiming;
 
@@ -88,29 +86,14 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
 
         BufferedImageLoader loader = new BufferedImageLoader();
         spriteSheet = loader.loadImage("/spriteSheet.png");
-
-        stopImages = new BufferedImage[7];
-        for(int i = 0; i < 7; i++) {
-            stopImages[i] = loader.loadImageV2("res/images/abortButton/abortButton000" + i + ".png");
-        }
-
-        stopAnim = new Animation(1, this
-                , stopImages[0],  stopImages[1], stopImages[2], stopImages[3]
-                , stopImages[4],  stopImages[5]);
-
-        resetImages = new BufferedImage[7];
-        for(int i = 0; i < 7; i++) {
-            resetImages[i] = loader.loadImageV2("res/images/resetButton/resetButton000" + i + ".png");
-        }
-
-        resetAnim = new Animation(1, this
-                , resetImages[0],  resetImages[1], resetImages[2], resetImages[3]
-                , resetImages[4],  resetImages[5]);
+        abort_h = loader.loadImageV2("res/images/buttons/AbortB/abortB1.png");
+        abort_nh = loader.loadImageV2("res/images/buttons/AbortB/abortB0.png");
+        reset_h = loader.loadImageV2("res/images/buttons/ResetB/resetB1.png");
+        reset_nh = loader.loadImageV2("res/images/buttons/ResetB/resetB0.png");
 
         buttonAudio = new MusicPlayer("res/audioButton.wav");
 
         this.jFrame = jFrame;
-        initTimer();
 
         handler = new Handler();
 
@@ -152,24 +135,19 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
 
         buttonsFont = new Font("Arial", Font.PLAIN, 25);
 
-        width1 = 80;
-        height1 = 80;
-        x1 = MyFrame.WIDTH - width1 - 10;
-        y1 = 50;
+        width1 = 155;
+        height1 = 60;
+        x1 = MyFrame.WIDTH - 185;
+        y1 = 450;
         rect1= new Rectangle2D.Float(x1, y1, width1, height1);
         change1 = false;
 
-        y2 = y1 + height1 + 60;
+        y2 = y1 + height1 + 10;
         rect2= new Rectangle2D.Float(x1, y2, width1, height1);
         change2 = false;
 
         stopClick = false;
         gameLaunched++;
-    }
-
-    public void initTimer(){
-        timer = new Timer(DELAY, this);
-        timer.start();
     }
 
     public synchronized void start() {
@@ -298,48 +276,19 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
             g2d.drawString((((stopWatch.getTime() - 6000) / 1000) * -1) + "", 470, 100);
         }
 
-        drawButtons(g2d);
-
-        stopAnim.drawAnimation(g2d, MyFrame.WIDTH - 200, 530);
-        g2d.setColor(Color.green);
-        g2d.draw(rect1);
-
         if(!checkAutoMode) {
-            resetAnim.drawAnimation(g2d, MyFrame.WIDTH - 200, 450);
-            g2d.setColor(Color.blue);
-            g2d.draw(rect2);
-        }
-    }
+            if (change1) g2d.drawImage(reset_h, x1 - 15, y1 - 6, null);
+            else g2d.drawImage(reset_nh, x1 - 15, y1 - 6, null);
 
-    public void drawButtons(Graphics2D g2d){
-        g2d.setFont(buttonsFont);
-        int button1W = g2d.getFontMetrics().stringWidth("RESET");
-        int button2W = g2d.getFontMetrics().stringWidth("ABORT");
-        if(!checkAutoMode) {
-            if (change1) {
-                g2d.setColor(Color.white);
-                g2d.fillRect(x1, y1, width1, height1);
-                g2d.setColor(Color.black);
-                g2d.drawString("RESET", x1 + (width1 - button1W) / 2, y1 + height1 / 2 + 8);
-            } else {
-                g2d.setColor(Color.white);
-                g2d.drawRect(x1, y1, width1, height1);
-                g2d.setColor(Color.white);
-                g2d.drawString("RESET", x1 + (width1 - button1W) / 2, y1 + height1 / 2 + 8);
-            }
+            g2d.setColor(Color.red);
+            g2d.draw(rect1);
         }
 
-        if(change2){
-            g2d.setColor(Color.white);
-            g2d.fillRect(x1, y2, width1, height1);
-            g2d.setColor(Color.black);
-            g2d.drawString("ABORT",x1 + (width1 - button2W)/2, y2 + height1/2 + 8);
-        } else{
-            g2d.setColor(Color.white);
-            g2d.drawRect(x1, y2, width1, height1);
-            g2d.setColor(Color.white);
-            g2d.drawString("ABORT",x1 + (width1 - button2W)/2, y2 + height1/2 + 8);
-        }
+        if (change2) g2d.drawImage(abort_h, x1 - 15, y2 - 6, null);
+        else g2d.drawImage(abort_nh, x1 - 15, y2 - 6, null);
+
+        g2d.setColor(Color.cyan);
+        g2d.draw(rect2);
     }
 
     public void getNotes(String file) throws IOException {
@@ -486,11 +435,4 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
     @Override public void mouseExited(MouseEvent e) { }
     @Override public void mouseDragged(MouseEvent e) { }
     ////////////////////////////////////////////////////
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        if(!checkAutoMode) resetAnim.runAnimation(change1);
-        stopAnim.runAnimation(change2);
-    }
-
 }

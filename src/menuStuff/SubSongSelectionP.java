@@ -195,8 +195,8 @@ public class SubSongSelectionP extends JPanel implements MouseListener, MouseMot
     public void setJBoxParameters(){
         jCheckBox.setBounds(x2 + 65, 446, 150, 29);
         jCheckBox.setOpaque(false);
-        jCheckBox.setIcon(new ImageIcon("res/images/checkBoxIm/unchecked.png"));
-        jCheckBox.setSelectedIcon(new ImageIcon("res/images/checkBoxIm/checked.png"));
+        jCheckBox.setIcon(new ImageIcon("res/images/checkBoxImages/unchecked.png"));
+        jCheckBox.setSelectedIcon(new ImageIcon("res/images/checkBoxImages/checked.png"));
     }
 
     @Override
