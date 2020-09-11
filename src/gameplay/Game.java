@@ -24,14 +24,11 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
     public static int gameLaunched = -1;
     private int frames;
 
-    private final int DELAY = 5;
-    private Timer timer;
-
     public static KeyInput keyInput;
 
     public Handler handler;
 
-    public static BufferedImage spriteSheet, abort_h, abort_nh, reset_h, reset_nh;
+    public static BufferedImage spriteSheet, game_graphics, abort_h, abort_nh, reset_h, reset_nh;
 
     private ArrayList<Coordinate>[] LettersTiming;
 
@@ -86,6 +83,7 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
 
         BufferedImageLoader loader = new BufferedImageLoader();
         spriteSheet = loader.loadImage("/spriteSheet.png");
+        game_graphics = loader.loadImageV2("res/images/backgrounds/game_graphics.png");
         abort_h = loader.loadImageV2("res/images/buttons/AbortB/abortB1.png");
         abort_nh = loader.loadImageV2("res/images/buttons/AbortB/abortB0.png");
         reset_h = loader.loadImageV2("res/images/buttons/ResetB/resetB1.png");
@@ -252,15 +250,17 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
         g2d.setColor(Color.black);
         g2d.fillRect(0, 0, MyFrame.WIDTH, MyFrame.HEIGHT);
 
+        g2d.drawImage(game_graphics, 0, 0, null);
+
         handler.render(g2d);
         showHitScores.render(g2d);
         hud.render(g2d);
 
-        g2d.setColor(new Color(45, 45, 45));
+        /*g2d.setColor(new Color(45, 45, 45));
         int yWLine = REDLINESY + 64 / 8 + 10;
 
         g2d.drawLine(posINX, yWLine + 32, posINX + 70 * 10, yWLine + 32);
-        g2d.drawLine(posINX, yWLine - 32, posINX + 70 * 10, yWLine - 32);
+        g2d.drawLine(posINX, yWLine - 32, posINX + 70 * 10, yWLine - 32);*/
 
         g2d.setFont(new Font("Arial", Font.PLAIN, 18));
         g2d.setColor(Color.white);
@@ -269,7 +269,7 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
         g2d.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 23));
         g2d.drawString(stopWatch.toString() + "", 26, 104);
 
-        g2d.drawLine(posINX, yWLine, posINX + 70 * 10, yWLine);
+        //g2d.drawLine(posINX, yWLine, posINX + 70 * 10, yWLine);
 
         if (stopWatch.getTime() <= 6000) {
             g2d.setFont(new Font("Arial", Font.BOLD, 25));

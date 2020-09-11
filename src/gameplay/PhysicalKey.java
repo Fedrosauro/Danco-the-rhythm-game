@@ -47,10 +47,10 @@ public class PhysicalKey extends GameObject{
         else g2d.drawImage(PY_Key_img_b, (int)x, (int)y, null);
 
         //useful part for testing
-        if(c == 'Q') {
+        /*if(c == 'Q') {
             /*g2d.setColor(Color.white);
             g2d.drawRect(RCoordinateX - 1, RCoordinateY - 1, 11, rectHeight + 1); //160 height 10 width
-*/
+
             g2d.setColor(Color.red);
             g2d.fillRect(RCoordinateX, RCoordinateY, 10, heightR);
 
@@ -62,10 +62,10 @@ public class PhysicalKey extends GameObject{
 
             g2d.setColor(Color.cyan);
             g2d.fillRect(RCoordinateX, RCoordinateY + heightR + heightY + heightG, 10, heightB);
-        }
+        }*/
 
-        g2d.setColor(Color.red);
-        g2d.draw(getLine());
+        /*g2d.setColor(Color.red);
+        g2d.draw(getLine());*/
     }
 
     @Override

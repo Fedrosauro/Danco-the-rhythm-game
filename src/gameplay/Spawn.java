@@ -28,7 +28,7 @@ public class Spawn {
                 row = 1;
             }
             if (!lettersTiming[i].isEmpty()) {
-                /*switch (Game.gameLaunched){ // maybe we don't need this
+                /*switch (Game.gameLaunched){ // maybe we don't need this, but I will let it here just in case
                     case 0 : { calcDelay = - 1915 - 4000; break; }
                     default : { calcDelay = - 1915 - 4000; break; }
                 }*/
