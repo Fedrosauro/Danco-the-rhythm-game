@@ -110,8 +110,8 @@ public class SubScoreView extends JPanel implements MouseListener, MouseMotionLi
         if(change1) g2d.drawImage(goBack_h, backX, y1, null);
         else g2d.drawImage(goBack_nh, backX, y1, null);
 
-        g2d.setColor(Color.red);
-        g2d.draw(rect1);
+        /*g2d.setColor(Color.red);
+        g2d.draw(rect1);*/
     }
 
     @Override

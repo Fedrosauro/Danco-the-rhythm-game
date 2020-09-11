@@ -121,14 +121,14 @@ public class MainPage extends JPanel implements MouseListener, MouseMotionListen
         if(change1) g2d.drawImage(PLAYB_h, 0, playY, null);
         else g2d.drawImage(PLAYB_nh, 0, playY, null);
 
-        g2d.setColor(Color.green);
-        g2d.draw(rect1);
+        /*g2d.setColor(Color.green);
+        g2d.draw(rect1);*/
 
         if(change2) g2d.drawImage(EXITB_h, 0, exitY, null);
         else g2d.drawImage(EXITB_nh, 0, exitY, null);
 
-        g2d.setColor(Color.cyan);
-        g2d.draw(rect2);
+        /*g2d.setColor(Color.cyan);
+        g2d.draw(rect2);*/
     }
 
     @Override

@@ -280,15 +280,15 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
             if (change1) g2d.drawImage(reset_h, x1 - 15, y1 - 6, null);
             else g2d.drawImage(reset_nh, x1 - 15, y1 - 6, null);
 
-            g2d.setColor(Color.red);
-            g2d.draw(rect1);
+            /*g2d.setColor(Color.red);
+            g2d.draw(rect1);*/
         }
 
         if (change2) g2d.drawImage(abort_h, x1 - 15, y2 - 6, null);
         else g2d.drawImage(abort_nh, x1 - 15, y2 - 6, null);
 
-        g2d.setColor(Color.cyan);
-        g2d.draw(rect2);
+        /*g2d.setColor(Color.cyan);
+        g2d.draw(rect2);*/
     }
 
     public void getNotes(String file) throws IOException {

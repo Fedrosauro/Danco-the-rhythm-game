@@ -65,12 +65,29 @@ public class ScoreView extends JPanel {
     public void fillData(){
         for(int i = 0; i < data.length; i++){
             for(int j = 0; j < data[i].length; j++){
-                switch (j){
-                    case 0 : { data[i][j] = getNumber(preData.get(i)) + ""; break; }
-                    case 1 : { data[i][j] = getSequence(preData.get(i), '|', '#'); break; }
-                    case 2 : { data[i][j] = getSequence(preData.get(i), '#', '@'); break; }
-                    case 3 : { data[i][j] = getSequence(preData.get(i), '@', '[') + "%"; break; }
-                    case 4 : { data[i][j] = getSequence(preData.get(i), '[', '-'); break; }
+                if(preData.get(i) != null) {
+                    switch (j) {
+                        case 0: {
+                            data[i][j] = getNumber(preData.get(i)) + "";
+                            break;
+                        }
+                        case 1: {
+                            data[i][j] = getSequence(preData.get(i), '|', '#');
+                            break;
+                        }
+                        case 2: {
+                            data[i][j] = getSequence(preData.get(i), '#', '@');
+                            break;
+                        }
+                        case 3: {
+                            data[i][j] = getSequence(preData.get(i), '@', '[') + "%";
+                            break;
+                        }
+                        case 4: {
+                            data[i][j] = getSequence(preData.get(i), '[', '-');
+                            break;
+                        }
+                    }
                 }
             }
         }
@@ -89,7 +106,8 @@ public class ScoreView extends JPanel {
         }
     }
 
-    public int getNumber(String s){
+    public Integer getNumber(String s){
+        if(s.equals("")) return null;
         String n = "";
         for(int i = 0; i < s.length() && s.charAt(i) != '|'; i++){
             n += s.charAt(i);

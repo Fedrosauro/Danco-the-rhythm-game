@@ -163,20 +163,20 @@ public class SubSongSelectionP extends JPanel implements MouseListener, MouseMot
         if(change1) g2d.drawImage(goBack_h, backX, y1, null);
         else g2d.drawImage(goBack_nh, backX, y1, null);
 
-        g2d.setColor(Color.red);
-        g2d.draw(rect1);
+        /*g2d.setColor(Color.red);
+        g2d.draw(rect1);*/
 
         if(change2) g2d.drawImage(playSong_h, playX, y1, null);
         else g2d.drawImage(playSong_nh, playX, y1, null);
 
-        g2d.setColor(Color.blue);
-        g2d.draw(rect2);
+        /*g2d.setColor(Color.blue);
+        g2d.draw(rect2);*/
 
         if(change3) g2d.drawImage(viewScores_h, scoresX, y1, null);
         else g2d.drawImage(viewScores_nh, scoresX, y1, null);
 
-        g2d.setColor(Color.magenta);
-        g2d.draw(rect3);
+        /*g2d.setColor(Color.magenta);
+        g2d.draw(rect3);*/
     }
 
     public void setJTextParameters(){
