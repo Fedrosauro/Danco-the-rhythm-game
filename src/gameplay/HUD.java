@@ -64,13 +64,11 @@ public class HUD {
         g2d.drawString(score + "", 22, 41);
 
         g2d.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 18));
-        int xPos = 21   ;
+        int xPos = 21;
         for(int i = 3; i >= 0; i--){
             g2d.drawString(scoreCounts[i] + "", xPos, 167);
             xPos += 42;
         }
-
-        g2d.setFont(new Font("Arial", Font.PLAIN, 18));
     }
 
     public int getScore() {

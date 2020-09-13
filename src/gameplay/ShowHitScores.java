@@ -1,6 +1,7 @@
 package gameplay;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 
 public class ShowHitScores {
 
@@ -11,9 +12,10 @@ public class ShowHitScores {
     public int[] showHitScore;
     public int[] Xvalues;
 
-    private long[] timeShow;
+    private BufferedImageLoader loader;
+    private BufferedImage[] scoreImage;
 
-    private Color[] colors;
+    private long[] timeShow;
 
     public ShowHitScores(Handler handler){
         this.handler = handler;
@@ -21,12 +23,14 @@ public class ShowHitScores {
         showHitScore = new int[26];
         Xvalues = new int[26];
         timeShow = new long[26];
-        colors = new Color[26];
+        scoreImage = new BufferedImage[26];
 
         for(int i = 0; i < 26; i++){
             showHitScore[i] = -1;
             Xvalues[i] = (int)Game.ArrayLetters[i].getX();
         }
+
+        loader = new BufferedImageLoader();
     }
 
     public void tick() {
@@ -37,10 +41,22 @@ public class ShowHitScores {
                     showHitScore[tempObject.getId().toString().charAt(0) - 65] = tempObject.scoreHIT;
                     timeShow[tempObject.getId().toString().charAt(0) - 65] = Game.stopWatch.getTime() + DELAY;
                     switch (tempObject.scoreHIT){
-                        case 0 : { colors[tempObject.getId().toString().charAt(0) - 65] = Color.red; break; }
-                        case 100 : { colors[tempObject.getId().toString().charAt(0) - 65] = Color.yellow; break; }
-                        case 250 : { colors[tempObject.getId().toString().charAt(0) - 65] = Color.green; break; }
-                        case 500 : { colors[tempObject.getId().toString().charAt(0) - 65] = Color.cyan; break; }
+                        case 0 : {
+                            scoreImage[tempObject.getId().toString().charAt(0) - 65] =
+                                    loader.loadImageV2("res/images/hud/X.png");
+                            break; }
+                        case 100 : {
+                            scoreImage[tempObject.getId().toString().charAt(0) - 65] =
+                                    loader.loadImageV2("res/images/hud/100.png");
+                            break; }
+                        case 250 : {
+                            scoreImage[tempObject.getId().toString().charAt(0) - 65] =
+                                    loader.loadImageV2("res/images/hud/250.png");
+                            break; }
+                        case 500 : {
+                            scoreImage[tempObject.getId().toString().charAt(0) - 65] =
+                                    loader.loadImageV2("res/images/hud/500.png");
+                            break; }
                     }
                 }
             }
@@ -48,16 +64,12 @@ public class ShowHitScores {
     }
 
     public void render(Graphics2D g2d) {
-        g2d.setFont(new Font("Arial", Font.PLAIN, 18));
-        g2d.setColor(Color.white);
         for(int i = 0; i < 26; i++){
             if(showHitScore[i] != -1){
                 if(timeShow[i] - Game.stopWatch.getTime() >= 0){
-                    g2d.setColor(colors[i]);
-                    g2d.drawString(showHitScore[i] != 0 ? showHitScore[i] + "" : "  X  ", Xvalues[i] + 15, Game.REDLINESY + 88);
+                    g2d.drawImage(scoreImage[i], Xvalues[i], Game.REDLINESY + 60, null);
                 } else{
                     showHitScore[i] = -1;
-                    colors[i] = Color.black;
                 }
             }
         }
