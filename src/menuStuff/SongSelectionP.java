@@ -5,7 +5,7 @@ import java.io.File;
 
 public class SongSelectionP extends JPanel {
 
-    public static int WIDTH = 900, HEIGHT = 320;
+    public static int WIDTH = 900, HEIGHT = 330;
 
     private MyJList jList;
     private MyJScrollPane jScrollPane;
@@ -44,7 +44,8 @@ public class SongSelectionP extends JPanel {
     public void setup() {
         setLayout(null);
         setOpaque(true);
-        setBounds((MyFrame.WIDTH - WIDTH) / 2, (MyFrame.HEIGHT - HEIGHT) / 2 - 50, WIDTH, HEIGHT);
+        setBounds((MyFrame.WIDTH - WIDTH) / 2, 87, WIDTH, HEIGHT);
+        //(MyFrame.HEIGHT - (HEIGHT)) / 2 - 50
     }
 
     public MyJList getjList() {

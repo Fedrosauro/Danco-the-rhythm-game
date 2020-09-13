@@ -34,11 +34,11 @@ public class SubSongSelectionP extends JPanel implements MouseListener, MouseMot
 
     private BufferedImageLoader loader;
 
-    private BufferedImage background, goBack_h, goBack_nh, playSong_h, playSong_nh, viewScores_h, viewScores_nh;
+    private BufferedImage background, info,
+            goBack_h, goBack_nh, playSong_h, playSong_nh, viewScores_h, viewScores_nh;
     private BufferedImage[] songList_b;
     private Animation songListAnim;
 
-    private long songLength;
     private String songTime;
     private int notesNumber;
 
@@ -85,6 +85,7 @@ public class SubSongSelectionP extends JPanel implements MouseListener, MouseMot
         loader = new BufferedImageLoader();
 
         background = loader.loadImage("res/images/backgrounds/background_menu.png");
+        info = loader.loadImage("res/images/backgrounds/length_notes_labels.png");
         goBack_h = loader.loadImage("res/images/buttons/GoBackB/goBackB1.png");
         goBack_nh = loader.loadImage("res/images/buttons/GoBackB/goBackB0.png");
         playSong_h = loader.loadImage("res/images/buttons/PlaySongB/playSongB1.png");
@@ -184,6 +185,8 @@ public class SubSongSelectionP extends JPanel implements MouseListener, MouseMot
 
         songListAnim.drawAnimation(g2d, 0, -1);
 
+        g2d.drawImage(info, 0, 0, null);
+
         if(change1) g2d.drawImage(goBack_h, backX, y1, null);
         else g2d.drawImage(goBack_nh, backX, y1, null);
 
@@ -202,18 +205,21 @@ public class SubSongSelectionP extends JPanel implements MouseListener, MouseMot
         /*g2d.setColor(Color.magenta);
         g2d.draw(rect3);*/
 
-        g2d.setColor(Color.white);
-        g2d.drawString(songTime + ", " + notesNumber + "", 20, 10);
+        g2d.setColor(Color.black);
+        g2d.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 23));
+        int xsongTime = 210;
+        g2d.drawString(songTime + "", xsongTime, 457);
+        g2d.drawString(notesNumber + "", xsongTime + 198, 457);
     }
 
     public void timeSongUpdate(){
         String selectedSong = (String)songSelectionP.getjList().getSelectedValue();
         if(selectedSong != null){
-            /*try {
+            try {
                 notesNumber = getNotes("res/notes/notes_" + selectedSong + ".txt");
             } catch (IOException e) {
                 e.printStackTrace();
-            }*/
+            }
             File song = new File("res/songs/" + selectedSong + ".wav");
             long frames = 0;
             try {
@@ -276,7 +282,7 @@ public class SubSongSelectionP extends JPanel implements MouseListener, MouseMot
 
     public void setJTextParameters(){
         jTextField.setBounds((MyFrame.WIDTH - SongSelectionP.WIDTH) / 2 + 550
-                ,(MyFrame.HEIGHT - SongSelectionP.HEIGHT) / 2 - 97
+                ,(MyFrame.HEIGHT - SongSelectionP.HEIGHT) / 2 - 107
                 , ((MyFrame.WIDTH - SongSelectionP.WIDTH) / 2 + SongSelectionP.WIDTH) - ((MyFrame.WIDTH - SongSelectionP.WIDTH) / 2 + 550), 30);
         jTextField.setBackground(Color.black);
         jTextField.setForeground(Color.white);
@@ -288,7 +294,7 @@ public class SubSongSelectionP extends JPanel implements MouseListener, MouseMot
     }
 
     public void setJBoxParameters(){
-        jCheckBox.setBounds(x2 + 65, 433, 185, 37);
+        jCheckBox.setBounds(x2 + 74, 430, 185, 37);
         jCheckBox.setOpaque(false);
         jCheckBox.setIcon(new ImageIcon("res/images/checkBoxImages/unchecked.png"));
         jCheckBox.setSelectedIcon(new ImageIcon("res/images/checkBoxImages/checked.png"));
