@@ -183,21 +183,21 @@ public class ResultPane extends JPanel implements ActionListener, MouseListener,
         if(change1) g2d.drawImage(goBack_h, backX, y1, null);
         else g2d.drawImage(goBack_nh, backX, y1, null);
 
-        g2d.setColor(Color.red);
-        g2d.draw(rect1);
+        /*g2d.setColor(Color.red);
+        g2d.draw(rect1);*/
 
         if(!checkAutoMode) {
             if (change2) g2d.drawImage(saveScore_h, saveX, y1, null);
             else g2d.drawImage(saveScore_nh, saveX, y1, null);
 
-            g2d.setColor(Color.blue);
-            g2d.draw(rect2);
+            /*g2d.setColor(Color.blue);
+            g2d.draw(rect2);*/
 
             if (change3) g2d.drawImage(retry_h, retryX, y1, null);
             else g2d.drawImage(retry_nh, retryX, y1, null);
 
-            g2d.setColor(Color.magenta);
-            g2d.draw(rect3);
+            /*g2d.setColor(Color.magenta);
+            g2d.draw(rect3);*/
         }
     }
 

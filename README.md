@@ -5,3 +5,5 @@ that are in the res/songs/ folder. I gain nothing from them*** (except for the t
 better method to sync the song with notes (atm I'm using a stopwatch of this [library](http://commons.apache.org/proper/commons-lang/download_lang.cgi))
 But it works pretty well for now. After 10 games played the songs are still in sync with notes, ...so great. I'm still fixing some bugs and I'm starting working on graphics too, but that is going to be the last thing I do. Thanks for reading this if you've really read hihi (Keep in mind that this game is not finished yet...  )
 
+
+(backgrounds for "game" and "scores panel" are coming soon)

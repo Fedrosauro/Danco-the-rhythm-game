@@ -265,15 +265,14 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
         g2d.setFont(new Font("Arial", Font.PLAIN, 18));
         g2d.setColor(Color.white);
 
-        g2d.drawString("FPS : " + checkFPS, MyFrame.WIDTH - 130, MyFrame.HEIGHT - 10);
         g2d.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 23));
         g2d.drawString(stopWatch.toString() + "", 26, 104);
 
         //g2d.drawLine(posINX, yWLine, posINX + 70 * 10, yWLine);
 
         if (stopWatch.getTime() <= 6000) {
-            g2d.setFont(new Font("Arial", Font.BOLD, 25));
-            g2d.drawString((((stopWatch.getTime() - 6000) / 1000) * -1) + "", 470, 100);
+            g2d.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 25));
+            g2d.drawString((((stopWatch.getTime() - 6000) / 1000) * -1) + "", 550, 100);
         }
 
         if(!checkAutoMode) {

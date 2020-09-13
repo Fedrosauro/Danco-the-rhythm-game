@@ -19,7 +19,7 @@ public class MainPage extends JPanel implements MouseListener, MouseMotionListen
 
     private BufferedImageLoader loader;
 
-    private BufferedImage background, PLAYB_h, EXITB_h, PLAYB_nh, EXITB_nh;
+    private BufferedImage background, PLAYB_h, EXITB_h, PLAYB_nh, EXITB_nh, HTP_h, HTP_nh;
     private BufferedImage[] titleImages;
     private Animation titleAnim;
 
@@ -32,7 +32,11 @@ public class MainPage extends JPanel implements MouseListener, MouseMotionListen
     private int y2;
     private boolean change2;
 
-    private int playY, exitY;
+    private Rectangle2D rect3;
+    private int y3;
+    private boolean change3;
+
+    private int playY, exitY, htpY;
 
     public MainPage(JFrame jFrame){
         this.jFrame = jFrame;
@@ -54,19 +58,26 @@ public class MainPage extends JPanel implements MouseListener, MouseMotionListen
         PLAYB_h = loader.loadImage("res/images/buttons/PLAYB/playB1.png");
         EXITB_nh = loader.loadImage("res/images/buttons/EXITB/exitB0.png");
         EXITB_h = loader.loadImage("res/images/buttons/EXITB/exitB1.png");
+        HTP_h = loader.loadImage("res/images/buttons/HowToPlayB/htpB1.png");
+        HTP_nh = loader.loadImage("res/images/buttons/HowToPlayB/htpB0.png");
 
-        playY = 340;
-        width1 = 150; //things for buttons
+        playY = 270;
+        width1 = 190; //things for buttons
         height1 = 80;
         x1 = (MyFrame.WIDTH - width1)/2;
         y1 = playY + 19;
-        rect1= new Rectangle2D.Float(x1, y1, width1, height1);
+        rect1 = new Rectangle2D.Float(x1, y1, width1, height1);
         change1 = false;
 
-        exitY = playY + 120;
+        exitY = playY + 100;
         y2 = exitY + 19;
-        rect2= new Rectangle2D.Float(x1, y2, width1, height1);
+        rect2 = new Rectangle2D.Float(x1, y2, width1, height1);
         change2 = false;
+
+        htpY = exitY + 100;
+        y3 = htpY + 19;
+        rect3 = new Rectangle2D.Float(x1 - 90, y3, width1 + 180, height1);
+        change3 = false;
 
         titleImages = new BufferedImage[31];
         for(int i = 0; i < 31; i++){
@@ -116,7 +127,7 @@ public class MainPage extends JPanel implements MouseListener, MouseMotionListen
 
         g2d.drawImage(background, 0, 0, null);
 
-        titleAnim.drawAnimation(g2d, (MyFrame.WIDTH - titleImages[0].getWidth()) / 2 - 16, 80);
+        titleAnim.drawAnimation(g2d, (MyFrame.WIDTH - titleImages[0].getWidth()) / 2 - 16, 30);
 
         if(change1) g2d.drawImage(PLAYB_h, 0, playY, null);
         else g2d.drawImage(PLAYB_nh, 0, playY, null);
@@ -129,6 +140,12 @@ public class MainPage extends JPanel implements MouseListener, MouseMotionListen
 
         /*g2d.setColor(Color.cyan);
         g2d.draw(rect2);*/
+
+        if(change3) g2d.drawImage(HTP_h, 0, htpY, null);
+        else g2d.drawImage(HTP_nh, 0, htpY, null);
+
+        /*g2d.setColor(Color.red);
+        g2d.draw(rect3);*/
     }
 
     @Override
@@ -146,6 +163,13 @@ public class MainPage extends JPanel implements MouseListener, MouseMotionListen
         if (rect2.contains(x, y)) {
             timer.stop();
             jFrame.dispatchEvent(new WindowEvent(jFrame, WindowEvent.WINDOW_CLOSING)); //X with custom button
+        }
+
+        if(rect3.contains(x, y)){
+            HTPPanel htpPanel = new HTPPanel(jFrame);
+            timer.stop();
+            jFrame.setContentPane(htpPanel);
+            jFrame.revalidate();
         }
     }
 
@@ -177,6 +201,18 @@ public class MainPage extends JPanel implements MouseListener, MouseMotionListen
             }
             change2 = true;
         } else change2 = false;
+
+        if (rect3.contains(x, y)) {
+            if(!change3){
+                try {
+                    buttonAudio.createAudio();
+                    buttonAudio.playTrack();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+            change3 = true;
+        } else change3 = false;
     }
 
     ////////////////////////////////////////////////////
