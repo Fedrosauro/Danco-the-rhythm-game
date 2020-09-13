@@ -17,4 +17,5 @@ public class MyJList extends JList{
         setSelectedIndex(0);
         setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     }
+
 }

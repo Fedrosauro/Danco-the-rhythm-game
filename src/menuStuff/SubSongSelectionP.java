@@ -1,15 +1,26 @@
 package menuStuff;
 
+import gameplay.Coordinate;
 import gameplay.Game;
 import gameplay.MusicPlayer;
+import org.apache.commons.lang3.time.StopWatch;
 
+import javax.sound.sampled.*;
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
+import java.util.ArrayList;
 
 public class SubSongSelectionP extends JPanel implements MouseListener, MouseMotionListener, ActionListener {
 
@@ -26,6 +37,10 @@ public class SubSongSelectionP extends JPanel implements MouseListener, MouseMot
     private BufferedImage background, goBack_h, goBack_nh, playSong_h, playSong_nh, viewScores_h, viewScores_nh;
     private BufferedImage[] songList_b;
     private Animation songListAnim;
+
+    private long songLength;
+    private String songTime;
+    private int notesNumber;
 
     private Rectangle2D rect1; //go back
     private int x1, y1;
@@ -46,6 +61,11 @@ public class SubSongSelectionP extends JPanel implements MouseListener, MouseMot
     private JTextField jTextField;
 
     private String oldText, newText;
+
+    private ArrayList<Coordinate>[] LettersTiming;
+    private InputStreamReader input;
+
+    private String previousValue;
 
     public SubSongSelectionP(SongSelectionP songSelectionP, JFrame jFrame){
         this.jFrame = jFrame;
@@ -136,6 +156,10 @@ public class SubSongSelectionP extends JPanel implements MouseListener, MouseMot
             songSelectionP.updateList(newText, true);
         }
         oldText = newText;
+        if(songSelectionP.getjList().getSelectedValue() != null) {
+            if (!songSelectionP.getjList().getSelectedValue().equals(previousValue)) timeSongUpdate();
+            previousValue = (String) songSelectionP.getjList().getSelectedValue();
+        }
     }
 
     @Override
@@ -177,6 +201,77 @@ public class SubSongSelectionP extends JPanel implements MouseListener, MouseMot
 
         /*g2d.setColor(Color.magenta);
         g2d.draw(rect3);*/
+
+        g2d.setColor(Color.white);
+        g2d.drawString(songTime + ", " + notesNumber + "", 20, 10);
+    }
+
+    public void timeSongUpdate(){
+        String selectedSong = (String)songSelectionP.getjList().getSelectedValue();
+        if(selectedSong != null){
+            /*try {
+                notesNumber = getNotes("res/notes/notes_" + selectedSong + ".txt");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }*/
+            File song = new File("res/songs/" + selectedSong + ".wav");
+            long frames = 0;
+            try {
+                AudioInputStream audioInputStream =
+                        AudioSystem.getAudioInputStream(song);
+                frames = audioInputStream.getFrameLength();
+            } catch (UnsupportedAudioFileException | IOException e) {
+                e.printStackTrace();
+            }
+
+            Timestamp timestamp = new Timestamp(frames);
+            LocalDateTime ldt = timestamp.toLocalDateTime();
+            songTime = ldt.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT));
+        } else{
+            notesNumber = 0;
+            Timestamp timestamp = new Timestamp(0);
+            LocalDateTime ldt = timestamp.toLocalDateTime();
+            songTime = ldt.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT));
+        }
+    }
+
+    public int getNotes(String file) throws IOException {
+        LettersTiming = new ArrayList[26];
+        for(int i = 0; i < 26; i++){
+            LettersTiming[i] = new ArrayList<>();
+        }
+        input = new InputStreamReader(new FileInputStream(file));
+        int data = input.read();
+        int indexRow = 0;
+        int indexCol = 0;
+        String word = "";
+        while(data != -1){
+            if((char)data != '\n') {
+                if ((char) data == '-') {
+                    indexRow++;
+                    indexCol = 0;
+                } else if ((char) data == '.') {
+                    LettersTiming[indexRow].add(new Coordinate());
+                    LettersTiming[indexRow].get(indexCol).setStart(Long.parseLong(word));
+                    word = "";
+                } else if ((char) data == '|') {
+                    LettersTiming[indexRow].get(indexCol).setFinish(Long.parseLong(word));
+                    indexCol++;
+                    word = "";
+                } else word += (char) data;
+            }
+            data = input.read();
+        } input.close();
+        return notesCount();
+    }
+
+    private int notesCount(){
+        int total = 0;
+        for(int i = 0; i < LettersTiming.length; i++){
+            for(int j = 0; j <  LettersTiming[i].size(); j++){
+                total += 1;
+            }
+        } return total;
     }
 
     public void setJTextParameters(){
@@ -193,7 +288,7 @@ public class SubSongSelectionP extends JPanel implements MouseListener, MouseMot
     }
 
     public void setJBoxParameters(){
-        jCheckBox.setBounds(x2 + 65, 446, 150, 29);
+        jCheckBox.setBounds(x2 + 65, 433, 185, 37);
         jCheckBox.setOpaque(false);
         jCheckBox.setIcon(new ImageIcon("res/images/checkBoxImages/unchecked.png"));
         jCheckBox.setSelectedIcon(new ImageIcon("res/images/checkBoxImages/checked.png"));
