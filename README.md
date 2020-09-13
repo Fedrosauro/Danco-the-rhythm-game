@@ -11,5 +11,3 @@ News :
 
 ***- some songs will be added soon***
 
-***- "HOW TO PLAY" section is in "work in progress" mode***
-
