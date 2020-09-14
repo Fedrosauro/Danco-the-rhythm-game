@@ -7,7 +7,7 @@ But it works pretty well for now. After 10 games played the songs are still in s
 
 News : 
 
-***- backgrounds for "in game" and "scores panel" are coming soon***
+***- backgrounds for "in game" are coming soon***
 
 ***- some songs will be added soon***
 
