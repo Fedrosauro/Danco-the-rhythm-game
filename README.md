@@ -11,3 +11,7 @@ News :
 
 ***- some songs will be added soon***
 
+***- "credits" section is coming soon***
+
+***- animation/graphics updates (work in progress)***
+
