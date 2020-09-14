@@ -19,7 +19,7 @@ public class SubScoreView extends JPanel implements MouseListener, MouseMotionLi
 
     private BufferedImageLoader loader;
 
-    private BufferedImage goBack_h, goBack_nh;
+    private BufferedImage goBack_h, goBack_nh, background;
     private BufferedImage[] scorePanel;
     private Animation scorePanelAnim;
 
@@ -47,6 +47,7 @@ public class SubScoreView extends JPanel implements MouseListener, MouseMotionLi
 
         loader = new BufferedImageLoader();
 
+        background = loader.loadImage("res/images/backgrounds/background_viewScores.png");
         goBack_h = loader.loadImage("res/images/buttons/GoBackB/goBackB1.png");
         goBack_nh = loader.loadImage("res/images/buttons/GoBackB/goBackB0.png");
 
@@ -104,6 +105,8 @@ public class SubScoreView extends JPanel implements MouseListener, MouseMotionLi
                 RenderingHints.VALUE_RENDER_QUALITY);
 
         g2d.setRenderingHints(rh);
+
+        g2d.drawImage(background, 0, 0, null);
 
         scorePanelAnim.drawAnimation(g2d, 0, 0);
 

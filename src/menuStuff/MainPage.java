@@ -19,9 +19,9 @@ public class MainPage extends JPanel implements MouseListener, MouseMotionListen
 
     private BufferedImageLoader loader;
 
-    private BufferedImage background, PLAYB_h, EXITB_h, PLAYB_nh, EXITB_nh, HTP_h, HTP_nh;
-    private BufferedImage[] titleImages;
-    private Animation titleAnim;
+    private BufferedImage background, PLAYB_h, EXITB_h, PLAYB_nh, EXITB_nh, HTP_h, HTP_nh, rocket_nh, rocket_h;
+    private BufferedImage[] titleImages, creditsImages;
+    private Animation titleAnim, creditsAnim;
 
     private Rectangle2D rect1;
     private int x1, y1;
@@ -35,6 +35,11 @@ public class MainPage extends JPanel implements MouseListener, MouseMotionListen
     private Rectangle2D rect3;
     private int y3;
     private boolean change3;
+
+    private Rectangle2D rect4;
+    private int x4, y4;
+    private int width4, height4;
+    private boolean change4;
 
     private int playY, exitY, htpY;
 
@@ -60,6 +65,8 @@ public class MainPage extends JPanel implements MouseListener, MouseMotionListen
         EXITB_h = loader.loadImage("res/images/buttons/EXITB/exitB1.png");
         HTP_h = loader.loadImage("res/images/buttons/HowToPlayB/htpB1.png");
         HTP_nh = loader.loadImage("res/images/buttons/HowToPlayB/htpB0.png");
+        rocket_h = loader.loadImage("res/images/rocketIm/rocket_h.png");
+        rocket_nh = loader.loadImage("res/images/rocketIm/rocket_nh.png");
 
         playY = 270;
         width1 = 190; //things for buttons
@@ -79,6 +86,13 @@ public class MainPage extends JPanel implements MouseListener, MouseMotionListen
         rect3 = new Rectangle2D.Float(x1 - 90, y3, width1 + 180, height1);
         change3 = false;
 
+        x4 = 535;
+        y4 = 21;
+        width4 = 155;
+        height4 = 56;
+        rect4 = new Rectangle2D.Float(x4, y4, width4, height4);
+        change4 = false;
+
         titleImages = new BufferedImage[31];
         for(int i = 0; i < 31; i++){
             if(i <= 9) titleImages[i] = loader.loadImage("res/images/title/title_anim000" + i + ".png");
@@ -93,6 +107,19 @@ public class MainPage extends JPanel implements MouseListener, MouseMotionListen
                 titleImages[24], titleImages[25], titleImages[26], titleImages[27], titleImages[28], titleImages[29],
                 titleImages[30]);
 
+        creditsImages = new BufferedImage[32];
+        for(int i = 0; i < 32; i++){
+            if(i <= 9) creditsImages[i] = loader.loadImage("res/images/creditsImages/creditsAnim_00000" + i + ".png");
+            else creditsImages[i] = loader.loadImage("res/images/creditsImages/creditsAnim_0000" + i + ".png");
+        }
+
+        creditsAnim = new Animation(1, this
+                , creditsImages[0], creditsImages[4],
+                creditsImages[8],
+                creditsImages[12], creditsImages[16],
+                creditsImages[20], creditsImages[24],
+                creditsImages[28], creditsImages[31]);
+
         buttonAudio = new MusicPlayer("res/audioButton.wav");
     }
 
@@ -105,6 +132,7 @@ public class MainPage extends JPanel implements MouseListener, MouseMotionListen
     public void actionPerformed(ActionEvent e) {
         repaint();
         titleAnim.runAnimationOnce();
+        creditsAnim.runAnimation(change4);
     }
 
     @Override
@@ -146,6 +174,17 @@ public class MainPage extends JPanel implements MouseListener, MouseMotionListen
 
         /*g2d.setColor(Color.red);
         g2d.draw(rect3);*/
+
+        if(change4) g2d.drawImage(rocket_h, x4 - 10, y4 - 8, null);
+        else g2d.drawImage(rocket_nh, x4 - 10, y4 - 8, null);
+
+        creditsAnim.drawAnimation(g2d, x4 + 30, y4 - 4);
+        /*g2d.setColor(Color.white);
+        g2d.draw(rect4);*/
+
+        g2d.setColor(new Color(177, 177, 177));
+        g2d.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 13));
+        g2d.drawString("For credits click the rocket", 5, MyFrame.HEIGHT - 5);
     }
 
     @Override
@@ -170,6 +209,13 @@ public class MainPage extends JPanel implements MouseListener, MouseMotionListen
             timer.stop();
             jFrame.setContentPane(htpPanel);
             jFrame.revalidate();
+        }
+
+        if(rect4.contains(x, y)){
+            /*CreditsPanel creditsPanel = new CreditsPanel(jFrame);
+            timer.stop();
+            jFrame.setContentPane(creditsPanel);
+            jFrame.revalidate();*/
         }
     }
 
@@ -213,6 +259,18 @@ public class MainPage extends JPanel implements MouseListener, MouseMotionListen
             }
             change3 = true;
         } else change3 = false;
+
+        if (rect4.contains(x, y)) {
+            if(!change4){
+                try {
+                    buttonAudio.createAudio();
+                    buttonAudio.playTrack();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+            change4 = true;
+        } else change4 = false;
     }
 
     ////////////////////////////////////////////////////

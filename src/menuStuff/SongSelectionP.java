@@ -45,7 +45,6 @@ public class SongSelectionP extends JPanel {
         setLayout(null);
         setOpaque(true);
         setBounds((MyFrame.WIDTH - WIDTH) / 2, 87, WIDTH, HEIGHT);
-        //(MyFrame.HEIGHT - (HEIGHT)) / 2 - 50
     }
 
     public MyJList getjList() {

@@ -18,6 +18,8 @@ public class ScoreView extends JPanel {
 
     public static int WIDTH = MyFrame.WIDTH - 100, HEIGHT = 430;
 
+    public Font font22, font25;
+
     private MyJScrollPane jScrollPane;
     private String[] columns = {"SCORE", "NOTES", "VOTE", "ACCURACY", "DATE"};
     private ArrayList<String> preData;
@@ -33,6 +35,20 @@ public class ScoreView extends JPanel {
         setOpaque(true);
         setLayout(null);
         setBounds((MyFrame.WIDTH - WIDTH) / 2, 15, WIDTH, HEIGHT);
+
+        font22 = null;
+        font25 = null;
+
+        try {
+            font22 = YoureGoneFont.createFont(22);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            font25 = YoureGoneFont.createFont(25);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         preData = new ArrayList<>();
         readScores();
@@ -146,7 +162,7 @@ public class ScoreView extends JPanel {
             getTableHeader().setBackground(Color.black);
             getTableHeader().setReorderingAllowed(false);
             getTableHeader().setResizingAllowed(false);
-            getTableHeader().setFont(new Font("youre gone", Font.PLAIN, 22));
+            getTableHeader().setFont(font22);
             ((DefaultTableCellRenderer)getTableHeader().getDefaultRenderer()).setHorizontalAlignment(JLabel.CENTER);
 
             DefaultTableCellRenderer dtcr1 = new DefaultTableCellRenderer();
@@ -161,7 +177,7 @@ public class ScoreView extends JPanel {
             Object value = getModel().getValueAt(row, col);
             if(value.equals("P") || value.equals("A") || value.equals("B") || value.equals("C") ||
                     value.equals("D") || value.equals("E"))
-                comp.setFont(new Font("youre gone", Font.PLAIN, 25));
+                comp.setFont(font25);
             if(value.equals("P")) comp.setForeground(new Color(255, 0, 244));
             if(value.equals("A")) comp.setForeground(new Color(246, 255, 21));
             if(value.equals("B")) comp.setForeground(new Color(33, 224, 122));
