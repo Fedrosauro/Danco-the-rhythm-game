@@ -8,7 +8,7 @@ import java.awt.event.*;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 
-public class SubScoreView extends JPanel implements MouseListener, MouseMotionListener, ActionListener {
+public class SubCreditsPanel extends JPanel implements MouseListener, MouseMotionListener, ActionListener {
 
     private JFrame jFrame;
 
@@ -20,8 +20,6 @@ public class SubScoreView extends JPanel implements MouseListener, MouseMotionLi
     private BufferedImageLoader loader;
 
     private BufferedImage goBack_h, goBack_nh, background;
-    private BufferedImage[] scorePanel;
-    private Animation scorePanelAnim;
 
     private Rectangle2D rect1; //go back
     private int x1, y1;
@@ -30,7 +28,7 @@ public class SubScoreView extends JPanel implements MouseListener, MouseMotionLi
 
     private int backX;
 
-    public SubScoreView(JFrame jFrame){
+    public SubCreditsPanel(JFrame jFrame){
         this.jFrame = jFrame;
         setup();
         initTimer();
@@ -47,7 +45,7 @@ public class SubScoreView extends JPanel implements MouseListener, MouseMotionLi
 
         loader = new BufferedImageLoader();
 
-        background = loader.loadImage("res/images/backgrounds/background_viewScores.png");
+        background = loader.loadImage("res/images/backgrounds/background_credits.png");
         goBack_h = loader.loadImage("res/images/buttons/GoBackB/goBackB1.png");
         goBack_nh = loader.loadImage("res/images/buttons/GoBackB/goBackB0.png");
 
@@ -60,37 +58,23 @@ public class SubScoreView extends JPanel implements MouseListener, MouseMotionLi
 
         change1 = false;
 
-        scorePanel = new BufferedImage[24];
-        for(int i = 0; i < 24; i++) {
-            if(i <= 9) scorePanel[i] = loader.loadImage("res/images/backgrounds/b_viewScores/b_viewscore000" + i + ".png");
-            else scorePanel[i] = loader.loadImage("res/images/backgrounds/b_viewScores/b_viewscore00" + i + ".png");
-        }
-
-        scorePanelAnim = new Animation(1, this
-                , scorePanel[0], scorePanel[1], scorePanel[2], scorePanel[3], scorePanel[4]
-                , scorePanel[5], scorePanel[6], scorePanel[7], scorePanel[8], scorePanel[9]
-                , scorePanel[10], scorePanel[11], scorePanel[12], scorePanel[13], scorePanel[14]
-                , scorePanel[15], scorePanel[16], scorePanel[17], scorePanel[18], scorePanel[19]
-                , scorePanel[20], scorePanel[21], scorePanel[22], scorePanel[23]);
-
         buttonAudio = new MusicPlayer("res/audioButton.wav");
-    }
-
-    public void initTimer(){
-        timer = new Timer(DELAY, this);
-        timer.start();
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         repaint();
-        scorePanelAnim.runAnimation();
     }
 
     @Override
     public void paintComponent(Graphics g){
         super.paintComponent(g);
         doDrawing(g);
+    }
+
+    public void initTimer(){
+        timer = new Timer(DELAY, this);
+        timer.start();
     }
 
     public void doDrawing(Graphics g){
@@ -107,13 +91,12 @@ public class SubScoreView extends JPanel implements MouseListener, MouseMotionLi
 
         g2d.drawImage(background, 0, 0, null);
 
-        scorePanelAnim.drawAnimation(g2d, 0, 0);
-
         if(change1) g2d.drawImage(goBack_h, backX, y1, null);
         else g2d.drawImage(goBack_nh, backX, y1, null);
 
         /*g2d.setColor(Color.red);
         g2d.draw(rect1);*/
+
     }
 
     @Override
@@ -122,20 +105,20 @@ public class SubScoreView extends JPanel implements MouseListener, MouseMotionLi
         int y = e.getY();
 
         if (rect1.contains(x, y)) {
-            SelectGlass selectGlass = new SelectGlass(jFrame);
+            MainPage mainPage = new MainPage(jFrame);
             timer.stop();
-            jFrame.setContentPane(selectGlass);
+            jFrame.setContentPane(mainPage);
             jFrame.revalidate();
         }
     }
 
     @Override
-    public void mouseMoved(MouseEvent e) {
+    public void mouseMoved (MouseEvent e){
         int x = e.getX();
         int y = e.getY();
 
         if (rect1.contains(x, y)) {
-            if(!change1){
+            if (!change1) {
                 try {
                     buttonAudio.createAudio();
                     buttonAudio.playTrack();

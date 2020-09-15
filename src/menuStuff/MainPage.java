@@ -212,10 +212,10 @@ public class MainPage extends JPanel implements MouseListener, MouseMotionListen
         }
 
         if(rect4.contains(x, y)){
-            /*CreditsPanel creditsPanel = new CreditsPanel(jFrame);
+            CreditsGlass creditsGlass = new CreditsGlass(jFrame);
             timer.stop();
-            jFrame.setContentPane(creditsPanel);
-            jFrame.revalidate();*/
+            jFrame.setContentPane(creditsGlass);
+            jFrame.revalidate();
         }
     }
 
