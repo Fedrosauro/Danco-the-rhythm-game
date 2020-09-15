@@ -13,3 +13,5 @@ News :
 
 ***- animation/graphics updates (work in progress)***
 
+***- CREATING NEW SYSTEM FOR "notes creation"***
+
