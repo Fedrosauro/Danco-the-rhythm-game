@@ -28,7 +28,7 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
 
     public Handler handler;
 
-    public static BufferedImage spriteSheet, game_graphics, abort_h, abort_nh, reset_h, reset_nh;
+    public static BufferedImage background, spriteSheet, game_graphics, abort_h, abort_nh, reset_h, reset_nh;
 
     private ArrayList<Coordinate>[] LettersTiming;
 
@@ -83,6 +83,7 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
 
         BufferedImageLoader loader = new BufferedImageLoader();
         spriteSheet = loader.loadImage("/spriteSheet.png");
+        background = loader.loadImageV2("res/images/backgrounds/background_gameplay.png");
         game_graphics = loader.loadImageV2("res/images/backgrounds/game_graphics.png");
         abort_h = loader.loadImageV2("res/images/buttons/AbortB/abortB1.png");
         abort_nh = loader.loadImageV2("res/images/buttons/AbortB/abortB0.png");
@@ -247,8 +248,7 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
 
         g2d.setRenderingHints(rh);
 
-        g2d.setColor(Color.black);
-        g2d.fillRect(0, 0, MyFrame.WIDTH, MyFrame.HEIGHT);
+        g2d.drawImage(background, 0, 0 , null);
 
         g2d.drawImage(game_graphics, 0, 0, null);
 
