@@ -17,7 +17,7 @@ public class Spawn {
         this.handler = handler;
         this.lettersTiming = lettersTiming;
         this.CAM = checkAutoMode;
-        calcDelay = - 1915 - 4000;
+        calcDelay = - 2115 - 4000;
     }
 
     public void tick(){

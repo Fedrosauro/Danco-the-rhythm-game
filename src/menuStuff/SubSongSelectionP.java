@@ -208,7 +208,7 @@ public class SubSongSelectionP extends JPanel implements MouseListener, MouseMot
         g2d.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 23));
         int xsongTime = 210;
         g2d.drawString(songTime + "", xsongTime, 457);
-        g2d.drawString(notesNumber + "", xsongTime + 198, 457);
+        g2d.drawString(notesNumber + "", xsongTime + 194, 457);
     }
 
     public void timeSongUpdate(){

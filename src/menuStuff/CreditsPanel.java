@@ -1,7 +1,6 @@
 package menuStuff;
 
 import javax.swing.*;
-import java.awt.*;
 
 public class CreditsPanel extends JPanel {
 
@@ -12,15 +11,17 @@ public class CreditsPanel extends JPanel {
 
     public CreditsPanel(){
         setup();
-        jLabel = new JLabel(new ImageIcon("res/redPlanet.png"));
+        jLabel = new JLabel(new ImageIcon("res/images/credits/credits.png"));
         jScrollPane = new MyJScrollPane(jLabel, 0, 0, WIDTH, HEIGHT);
-        jScrollPane.setBackground(Color.red);
+        jScrollPane.getViewport().setOpaque(false);
+        jScrollPane.setOpaque(false);
+        jLabel.setOpaque(false);
+
         add(jScrollPane);
     }
 
     public void setup(){
         setLayout(null);
-        setOpaque(true);
         setBounds((MyFrame.WIDTH - WIDTH) / 2, 20, WIDTH, HEIGHT);
     }
 }
