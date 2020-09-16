@@ -99,7 +99,7 @@ public class MainPage extends JPanel implements MouseListener, MouseMotionListen
             else titleImages[i] = loader.loadImage("res/images/title/title_anim00" + i + ".png");
         }
 
-        titleAnim = new Animation(2, this
+        titleAnim = new Animation(2
                 , titleImages[0], titleImages[1], titleImages[2], titleImages[3], titleImages[4], titleImages[5],
                 titleImages[6], titleImages[7], titleImages[8], titleImages[9], titleImages[10], titleImages[11],
                 titleImages[12], titleImages[13], titleImages[14], titleImages[15], titleImages[16], titleImages[17],
@@ -113,7 +113,7 @@ public class MainPage extends JPanel implements MouseListener, MouseMotionListen
             else creditsImages[i] = loader.loadImage("res/images/creditsImages/creditsAnim_0000" + i + ".png");
         }
 
-        creditsAnim = new Animation(1, this
+        creditsAnim = new Animation(1
                 , creditsImages[0], creditsImages[4],
                 creditsImages[8],
                 creditsImages[12], creditsImages[16],

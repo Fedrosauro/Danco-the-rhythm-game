@@ -13,11 +13,8 @@ public class Animation {
     private BufferedImage images[]; //how many images we have
     private BufferedImage currentImg;
 
-    private JPanel jPanel;
-
-    public Animation(int speed, JPanel jPanel, BufferedImage... images){
+    public Animation(int speed, BufferedImage... images){
         this.speed = speed;
-        this.jPanel = jPanel;
         this.images = new BufferedImage[images.length];
         for(int i = 0; i < images.length; i++){
             this.images[i] = images[i];
@@ -74,6 +71,10 @@ public class Animation {
 
     public void drawAnimation(Graphics2D g2d, int x, int y){
         g2d.drawImage(currentImg, x, y, null);
+    }
+
+    public int getCount() {
+        return count;
     }
 }
 

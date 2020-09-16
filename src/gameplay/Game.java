@@ -256,11 +256,11 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
         showHitScores.render(g2d);
         hud.render(g2d);
 
-        g2d.setColor(new Color(45, 45, 45));
+        /*g2d.setColor(new Color(45, 45, 45));
         int yWLine = REDLINESY + 64 / 8 + 10;
 
         g2d.drawLine(posINX, yWLine + 32, posINX + 70 * 10, yWLine + 32);
-        g2d.drawLine(posINX, yWLine - 32, posINX + 70 * 10, yWLine - 32);
+        g2d.drawLine(posINX, yWLine - 32, posINX + 70 * 10, yWLine - 32);*/
 
         g2d.setFont(new Font("Arial", Font.PLAIN, 18));
         g2d.setColor(Color.white);
@@ -268,7 +268,7 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
         g2d.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 23));
         g2d.drawString(stopWatch.toString() + "", 26, 104);
 
-        g2d.drawLine(posINX, yWLine, posINX + 70 * 10, yWLine);
+        //g2d.drawLine(posINX, yWLine, posINX + 70 * 10, yWLine);
 
         if (stopWatch.getTime() <= 6000) {
             g2d.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 25));

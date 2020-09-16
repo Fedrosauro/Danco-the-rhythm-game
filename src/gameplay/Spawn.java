@@ -18,6 +18,8 @@ public class Spawn {
         this.lettersTiming = lettersTiming;
         this.CAM = checkAutoMode;
         calcDelay = - 2115 - 4000;
+        // - 1915 - 4000 if using updateNotes;
+        // - 2195 - 4000 if using updatesNotesV2 (fix this later)
     }
 
     public void tick(){

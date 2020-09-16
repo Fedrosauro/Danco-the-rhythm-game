@@ -10,7 +10,8 @@ public class PhantomKey extends GamePhantomObject{
 
     private Line2D phline;
 
-    private BufferedImage PH_Key_img;
+    private BufferedImageLoader loader;
+    private BufferedImage PH_Key_img, phantomGlow;
 
     private float velY;
 
@@ -33,7 +34,9 @@ public class PhantomKey extends GamePhantomObject{
         phline = new Line2D.Double(x, y + 64 / 2, x + 64, y + 64 / 2);
 
         SpriteSheet ss = new SpriteSheet(Game.spriteSheet);
+        loader = new BufferedImageLoader();
         PH_Key_img = ss.grabImage(rb, cb, 64, 64);
+        phantomGlow = loader.loadImageV2("res/phantomGlow.png");
 
         for(int i = 0; i < handler.objects.size(); i++) {
             GameObject tempObject = handler.objects.get(i);
@@ -95,6 +98,7 @@ public class PhantomKey extends GamePhantomObject{
 
     @Override
     public void render(Graphics2D g2d) {
+        g2d.drawImage(phantomGlow, (int)x, (int)y - 19, null);
         g2d.drawImage(PH_Key_img, (int)x, (int)y, null);
     }
 

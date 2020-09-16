@@ -1,5 +1,6 @@
 package gameplay;
 
+import menuStuff.Animation;
 import menuStuff.BufferedImageLoader;
 
 import java.awt.*;

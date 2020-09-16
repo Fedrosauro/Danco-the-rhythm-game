@@ -66,7 +66,7 @@ public class SubScoreView extends JPanel implements MouseListener, MouseMotionLi
             else scorePanel[i] = loader.loadImage("res/images/backgrounds/b_viewScores/b_viewscore00" + i + ".png");
         }
 
-        scorePanelAnim = new Animation(1, this
+        scorePanelAnim = new Animation(1
                 , scorePanel[0], scorePanel[1], scorePanel[2], scorePanel[3], scorePanel[4]
                 , scorePanel[5], scorePanel[6], scorePanel[7], scorePanel[8], scorePanel[9]
                 , scorePanel[10], scorePanel[11], scorePanel[12], scorePanel[13], scorePanel[14]

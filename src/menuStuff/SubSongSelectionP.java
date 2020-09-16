@@ -117,8 +117,8 @@ public class SubSongSelectionP extends JPanel implements MouseListener, MouseMot
             else songList_b[i] = loader.loadImage("res/images/backgrounds/b_songList/b_songlist00" + i + ".png");
         }
 
-        songListAnim = new Animation(1, this
-                , songList_b[0],  songList_b[1], songList_b[2], songList_b[3]
+        songListAnim = new Animation(1,
+                 songList_b[0],  songList_b[1], songList_b[2], songList_b[3]
                 , songList_b[4],  songList_b[5], songList_b[6], songList_b[7]
                 , songList_b[8],  songList_b[9], songList_b[10], songList_b[11]
                 , songList_b[12],  songList_b[13], songList_b[14], songList_b[15]
