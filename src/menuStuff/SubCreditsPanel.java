@@ -19,7 +19,7 @@ public class SubCreditsPanel extends JPanel implements MouseListener, MouseMotio
 
     private BufferedImageLoader loader;
 
-    private BufferedImage goBack_h, goBack_nh, background;
+    private BufferedImage goBack_h, goBack_nh, background, credits_panel;
 
     private Rectangle2D rect1; //go back
     private int x1, y1;
@@ -46,6 +46,7 @@ public class SubCreditsPanel extends JPanel implements MouseListener, MouseMotio
         loader = new BufferedImageLoader();
 
         background = loader.loadImage("res/images/backgrounds/background_credits.png");
+        credits_panel = loader.loadImage("res/images/backgrounds/panel_credits.png");
         goBack_h = loader.loadImage("res/images/buttons/GoBackB/goBackB1.png");
         goBack_nh = loader.loadImage("res/images/buttons/GoBackB/goBackB0.png");
 
@@ -90,6 +91,7 @@ public class SubCreditsPanel extends JPanel implements MouseListener, MouseMotio
         g2d.setRenderingHints(rh);
 
         g2d.drawImage(background, 0, 0, null);
+        g2d.drawImage(credits_panel, 0, 0, null);
 
         if(change1) g2d.drawImage(goBack_h, backX, y1, null);
         else g2d.drawImage(goBack_nh, backX, y1, null);
