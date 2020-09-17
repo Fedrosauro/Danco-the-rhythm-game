@@ -11,6 +11,8 @@ News :
 
 ***- more songs will be added soon***
 
+***- have to fix problem with stringWidth() method***
+
 Songs used in game : 
 
 - Track : Debris & Jonth - Game Time [NCS Release]
