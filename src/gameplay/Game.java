@@ -329,7 +329,7 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
         }
         fillPosLetters();
 
-        posX = 210; posY = 380;
+        posX = 210; posY = 370;
         posINX = posX;
         for(int j = 0; j < 26; j++){
             if(positionLetters[j] == 'A'){

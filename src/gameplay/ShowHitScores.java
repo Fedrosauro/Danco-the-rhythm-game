@@ -45,19 +45,19 @@ public class ShowHitScores {
                     switch (tempObject.scoreHIT){
                         case 0 : {
                             scoreImage[tempObject.getId().toString().charAt(0) - 65] =
-                                    loader.loadImageV2("res/images/hud/X.png");
+                                    loader.loadImageV2("res/images/hud/X_line.png");
                             break; }
                         case 100 : {
                             scoreImage[tempObject.getId().toString().charAt(0) - 65] =
-                                    loader.loadImageV2("res/images/hud/100.png");
+                                    loader.loadImageV2("res/images/hud/100_line.png");
                             break; }
                         case 250 : {
                             scoreImage[tempObject.getId().toString().charAt(0) - 65] =
-                                    loader.loadImageV2("res/images/hud/250.png");
+                                    loader.loadImageV2("res/images/hud/250_line.png");
                             break; }
                         case 500 : {
                             scoreImage[tempObject.getId().toString().charAt(0) - 65] =
-                                    loader.loadImageV2("res/images/hud/500.png");
+                                    loader.loadImageV2("res/images/hud/500_line.png");
                             break; }
                     }
                 }
@@ -69,7 +69,7 @@ public class ShowHitScores {
         for(int i = 0; i < 26; i++){
             if(showHitScore[i] != -1){
                 if(timeShow[i] - Game.stopWatch.getTime() >= 0){
-                    g2d.drawImage(scoreImage[i], Xvalues[i], Game.REDLINESY + 60, null);
+                    g2d.drawImage(scoreImage[i], Xvalues[i] + (64 / 2) - 15, Game.REDLINESY + (64 / 8) + 10 - 8, null);
                 } else{
                     showHitScore[i] = -1;
                 }
