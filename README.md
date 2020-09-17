@@ -22,11 +22,18 @@ Songs used in game :
     Free Download / Stream : http://ncs.io/GameTime
 - Track : Hinkik - Skystrike
 
-    SoundCloud acc. of Hinkik : https://soundcloud.com/hinkik
+    SoundCloud : https://soundcloud.com/hinkik
     
     Watch : https://www.youtube.com/watch?v=V_QY0iwaMtA
 -  Track : Vexento - Jump
 
-    His YouTube channel : https://www.youtube.com/channel/UCYZ9rknEmE4R1J_HBJ2yBlQ
+    YouTube : https://www.youtube.com/channel/UCYZ9rknEmE4R1J_HBJ2yBlQ
     
-    Watch : https://www.youtube.com/watch?v=jODRcFq1bfI
+    Watch : https://www.youtube.com/watch?v=jODRcFq1bfI  
+- Track : Avenza - Explorer [JompaMusic Release]
+
+    SoundCloud : https://soundcloud.com/jompamusic
+    
+    Watch : https://www.youtube.com/watch?v=dDMNXoZEIFs
+    
+    Free Download :  https://www.toneden.io/avenza/post/explorer
