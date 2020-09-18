@@ -58,8 +58,6 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
     private String selectedSong;
     private boolean checkAutoMode;
 
-    private Font buttonsFont;
-
     private Rectangle2D rect1;
     private int x1, y1;
     private int width1, height1;
@@ -123,7 +121,7 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
 
         spawn = new Spawn(handler, LettersTiming, checkAutoMode);
 
-        showHitScores = new ShowHitScores(handler);
+        showHitScores = new ShowHitScores(handler, ArrayLetters);
 
         song = new MusicPlayer("res/songs/" + selectedSong + ".wav");
         try {
@@ -131,8 +129,6 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        buttonsFont = new Font("Arial", Font.PLAIN, 25);
 
         width1 = 155;
         height1 = 60;

@@ -31,7 +31,6 @@ public class PhysicalKey extends GameObject{
         heightY = 5;
         heightG = 5;
         heightB = rectHeight - heightR - heightY - heightG;
-
     }
 
     @Override
@@ -81,5 +80,23 @@ public class PhysicalKey extends GameObject{
 
     public char getC() {
         return c;
+    }
+
+    @Override
+    public float getX() {
+        return super.getX();
+    }
+
+    @Override
+    public float getY() {
+        return super.getY();
+    }
+
+    public BufferedImage getPY_Key_img_b() {
+        return PY_Key_img_b;
+    }
+
+    public BufferedImage getPY_Key_img_h() {
+        return PY_Key_img_h;
     }
 }

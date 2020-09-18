@@ -19,8 +19,11 @@ public class ShowHitScores {
 
     private long[] timeShow;
 
-    public ShowHitScores(Handler handler){
+    private PhysicalKey[] ArrayLetters;
+
+    public ShowHitScores(Handler handler, PhysicalKey[] ArrayLetters){
         this.handler = handler;
+        this.ArrayLetters = ArrayLetters;
 
         showHitScore = new int[26];
         Xvalues = new int[26];
@@ -70,8 +73,12 @@ public class ShowHitScores {
             if(showHitScore[i] != -1){
                 if(timeShow[i] - Game.stopWatch.getTime() >= 0){
                     g2d.drawImage(scoreImage[i], Xvalues[i] + (64 / 2) - 15, Game.REDLINESY + (64 / 8) + 10 - 8, null);
+                    g2d.drawImage(ArrayLetters[i].getPY_Key_img_h(), (int) ArrayLetters[i].getX()
+                            ,(int) ArrayLetters[i].getY(), null);
                 } else{
                     showHitScore[i] = -1;
+                    g2d.drawImage(ArrayLetters[i].getPY_Key_img_b(), (int) ArrayLetters[i].getX()
+                            ,(int) ArrayLetters[i].getY(), null);
                 }
             }
         }
