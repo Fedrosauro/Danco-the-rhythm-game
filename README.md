@@ -11,6 +11,8 @@ News :
 
 ***- more songs will be added soon***
 
+***- have to fix physical letter press in autoplay mode***
+
 Songs used in game (links): 
 
 - Track : Debris & Jonth - Game Time [NCS Release]
