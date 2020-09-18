@@ -92,10 +92,6 @@ public class PhysicalKey extends GameObject{
         return super.getY();
     }
 
-    public BufferedImage getPY_Key_img_b() {
-        return PY_Key_img_b;
-    }
-
     public BufferedImage getPY_Key_img_h() {
         return PY_Key_img_h;
     }
