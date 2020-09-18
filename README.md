@@ -11,8 +11,6 @@ News :
 
 ***- more songs will be added soon***
 
-***- have to fix song_length in song selection***
-
 Songs used in game (links): 
 
 - Track : Debris & Jonth - Game Time [NCS Release]
