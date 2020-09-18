@@ -11,7 +11,9 @@ News :
 
 ***- more songs will be added soon***
 
-Songs used in game : 
+***- have to fix song_length in song selection***
+
+Songs used in game (links): 
 
 - Track : Debris & Jonth - Game Time [NCS Release]
 
@@ -37,3 +39,10 @@ Songs used in game :
     Watch : https://www.youtube.com/watch?v=dDMNXoZEIFs
     
     Free Download :  https://www.toneden.io/avenza/post/explorer
+- Track : Tristan Lohengrin - Happy 8bit Loop 01
+
+    YouTube : https://www.youtube.com/channel/UC-t0mtx38daJoDMoiWrmIaw
+    
+    Watch : https://www.youtube.com/watch?v=w5GisyvQJ3Q
+    
+    Free Download : https://drive.google.com/file/d/1jJlVfarTLDbG6kx9dK5hHfKzsCRgvwkk/view
