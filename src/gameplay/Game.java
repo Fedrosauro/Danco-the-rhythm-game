@@ -83,7 +83,7 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
 
         BufferedImageLoader loader = new BufferedImageLoader();
         spriteSheet = loader.loadImage("/spriteSheet.png");
-        background = loader.loadImageV2("res/images/backgrounds/background_gameplay.png");
+        background = loader.loadImageV2("res/images/backgrounds/background_gameplay_2.png");
         game_graphics = loader.loadImageV2("res/images/backgrounds/game_graphics.png");
         abort_h = loader.loadImageV2("res/images/buttons/AbortB/abortB1.png");
         abort_nh = loader.loadImageV2("res/images/buttons/AbortB/abortB0.png");

@@ -16,10 +16,13 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.TimeZone;
 
 public class SubSongSelectionP extends JPanel implements MouseListener, MouseMotionListener, ActionListener {
 
@@ -220,18 +223,19 @@ public class SubSongSelectionP extends JPanel implements MouseListener, MouseMot
                 e.printStackTrace();
             }
             File song = new File("res/songs/" + selectedSong + ".wav");
-            long frames = 0;
+            int durationInSeconds = 0;
             try {
-                AudioInputStream audioInputStream =
-                        AudioSystem.getAudioInputStream(song);
-                frames = audioInputStream.getFrameLength();
+                AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(song);
+                AudioFormat format = audioInputStream.getFormat();
+                long frames = audioInputStream.getFrameLength();
+                durationInSeconds = (int) ((frames + 0.0) / format.getFrameRate());
+                Date d = new Date(durationInSeconds * 1000L);
+                SimpleDateFormat df = new SimpleDateFormat("mm:ss");
+                df.setTimeZone(TimeZone.getTimeZone("GMT"));
+                songTime = df.format(d);
             } catch (UnsupportedAudioFileException | IOException e) {
                 e.printStackTrace();
             }
-
-            Timestamp timestamp = new Timestamp(frames);
-            LocalDateTime ldt = timestamp.toLocalDateTime();
-            songTime = ldt.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT));
         } else{
             notesNumber = 0;
             Timestamp timestamp = new Timestamp(0);
