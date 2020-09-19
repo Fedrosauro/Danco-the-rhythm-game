@@ -46,3 +46,15 @@ Songs used in game (links):
     Watch : https://www.youtube.com/watch?v=w5GisyvQJ3Q
     
     Free Download : https://drive.google.com/file/d/1jJlVfarTLDbG6kx9dK5hHfKzsCRgvwkk/view
+- Track : TheFatRat - MAYDAY feat. Laura Brehm
+
+    YouTube : https://www.youtube.com/channel/UCa_UMppcMsHIzb5LDx1u9zQ
+    
+    Watch : https://www.youtube.com/watch?v=DT61L8hbbJ4
+- Track : Loki - Interlude
+
+    YouTube : https://www.youtube.com/channel/UC5HYJTpconGuwC8g-l1QXLg
+    
+    SoundCloud : https://soundcloud.com/loki-6
+    
+    Watch : https://www.youtube.com/watch?v=S3Bs0sLgPSY
